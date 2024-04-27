@@ -1,0 +1,17 @@
+{
+  "name": "ecommerce-app",
+  "version": "1.0.0",
+  "description": "It's a comprehensive online shopping portal that provides an interactive and seamless experience to users. From product discovery to checkout, the application ensures a smooth journey for the user, enhancing their engagement and boosting their purchasing confidence",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "eslint",
+    "prettier",
+    "jest"
+  ],
+  "author": "Trybukhouski (trybukhouskij@gmail.com)",
+  "license": "ISC"
+}
