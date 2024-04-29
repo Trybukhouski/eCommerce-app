@@ -48,6 +48,10 @@ module.exports = {
         test: /\.(png|svg|jpe?g|gif)$/i,
         type: 'asset/resource',
       },
+      {
+        test: /.html$/i,
+        loader: 'html-loader',
+      },
     ],
   },
 }
