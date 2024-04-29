@@ -57,6 +57,14 @@ module.exports = {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         loader: 'asset/resource',
       },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-sprite-loader',
+          }
+        ]
+      }
     ],
   },
 }
