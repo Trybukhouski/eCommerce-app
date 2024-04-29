@@ -1,3 +1,5 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 let mode = 'development';
 if (process.env.NODE_ENV === 'production') {
   mode = 'production';
@@ -5,7 +7,11 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   mode: mode,
-  plugins: [],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    }),
+  ],
   module: {
     rules: [],
   },
