@@ -12,7 +12,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './index.html'
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css'
+    }),
   ],
   module: {
     rules: [
