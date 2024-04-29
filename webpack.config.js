@@ -1,3 +1,4 @@
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -8,6 +9,14 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   mode: mode,
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      "@shared": path.resolve(__dirname, 'src/shared/'),
+      "@core": path.resolve(__dirname, 'src/modules/core/'),
+      "@sharedStyles": path.resolve(__dirname, 'src/shared/styles'),
+    },
+  },
   output: {
     assetModuleFilename: 'assets/[hash][ext][query]',
     clean: true,
