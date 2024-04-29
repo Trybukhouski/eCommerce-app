@@ -8,6 +8,9 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   mode: mode,
+  output: {
+    assetModuleFilename: 'assets/[hash][ext][query]',
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html'
@@ -40,6 +43,10 @@ module.exports = {
           },
           'sass-loader',
         ],
+      },
+      {
+        test: /\.(png|svg|jpe?g|gif)$/i,
+        type: 'asset/resource',
       },
     ],
   },
