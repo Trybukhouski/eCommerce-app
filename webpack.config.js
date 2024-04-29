@@ -10,6 +10,7 @@ module.exports = {
   mode: mode,
   output: {
     assetModuleFilename: 'assets/[hash][ext][query]',
+    clean: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
