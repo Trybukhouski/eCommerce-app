@@ -18,7 +18,7 @@ module.exports = {
     },
   },
   output: {
-    assetModuleFilename: 'assets/[hash][ext][query]',
+    assetModuleFilename: 'assets/[name][hash][ext][query]',
     clean: true,
   },
   plugins: [
@@ -44,7 +44,11 @@ module.exports = {
                   [
                     'postcss-preset-env',
                     {
-                      // Options
+                      stage: 3, 
+                      features: {
+                        'custom-properties': false,
+                      },
+                      autoprefixer: { grid: true },
                     },
                   ],
                 ],
