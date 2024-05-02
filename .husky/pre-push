@@ -1,0 +1,4 @@
+#!/bin/sh
+. "${0%/*}/h"
+
+npx eslint && npx validate-branch-name

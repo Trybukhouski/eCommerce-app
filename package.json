@@ -6,7 +6,15 @@
   "scripts": {
     "start": "set NODE_ENV=development&&webpack serve --open",
     "dev": "set NODE_ENV=development&&webpack",
-    "build": "set NODE_ENV=production&&webpack"
+    "build": "set NODE_ENV=production&&webpack",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,css,scss,less,json}": "npx prettier --write ./src "
+  },
+  "validate-branch-name": {
+    "pattern": "^(feat|fix|init|docs|refactor){1}/RSS-ECOMM-\\d{1,2}_C?\\d{2,4}/[a-zA-Z0-9-]*$",
+    "errorMsg": "Illegal branch name"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +27,8 @@
     "eslint-plugin-prettier": "^5.1.3",
     "html-loader": "^5.0.0",
     "html-webpack-plugin": "^5.6.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "mini-css-extract-plugin": "^2.9.0",
     "module-alias": "^2.2.3",
     "postcss": "^8.4.38",
@@ -31,6 +41,7 @@
     "svg-sprite-loader": "^6.0.11",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
+    "validate-branch-name": "^1.3.0",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.2"

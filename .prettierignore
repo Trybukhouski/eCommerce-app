@@ -1,0 +1,9 @@
+.eslintrc.cjs
+package.json
+package-lock.json
+tsconfig.json
+webpack.config.js
+README.md
+index.html
+**/node_modules
+**/dist
