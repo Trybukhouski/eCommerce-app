@@ -38,6 +38,6 @@
     "noUncheckedIndexedAccess": true,                   /* Add 'undefined' to a type when accessed using an index. */
     "noPropertyAccessFromIndexSignature": true,         /* Enforces using indexed accessors for keys declared using an indexed type. */
 
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                               /* Skip type checking all .d.ts files. */
   }
 }
