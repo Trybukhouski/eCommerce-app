@@ -22,6 +22,8 @@ const config = {
       '<rootDir>/__mocks__/fileMock.js',
     '\\.(css|less)$': 'identity-obj-proxy',
   },
+
+  testEnvironment: 'jsdom',
 };
 
 export default config;
