@@ -31,41 +31,106 @@ The purpose of this application is to offer a robust digital solution for online
 
 1. **start**:
    - **Usage**: This script is used to start the development server.
-   - **Command**: `npm start`
+   - **Command**:
+     ```bash
+     npm start
+     ```
    - **Description**: It sets the environment variable `NODE_ENV` to `development` and then runs webpack to serve the application. The `--open` flag automatically opens the default browser to the served application.
 
 2. **dev**:
    - **Usage**: This script is used to build the application in development mode.
-   - **Command**: `npm run dev`
+   - **Command**:
+     ```bash
+     npm run dev
+     ```
    - **Description**: Similar to the `start` script, it sets the `NODE_ENV` variable to `development` and runs webpack to build the application. However, it does not start a development server.
 
 3. **build**:
    - **Usage**: This script is used to build the application for production.
-   - **Command**: `npm run build`
+   - **Command**:
+     ```bash
+     npm run build
+     ```
    - **Description**: Sets the `NODE_ENV` variable to `production` and runs webpack to build the application optimized for production deployment.
 
 4. **lint**:
    - **Usage**: This script is used to run linting on the source code files.
-   - **Command**: `npm run lint`
+   - **Command**:
+     ```bash
+     npm run lint
+     ```
    - **Description**: It uses ESLint to perform linting on JavaScript (`*.js`), JSX (`*.jsx`), TypeScript (`*.ts`), and TypeScript JSX (`*.tsx`) files within the `src` directory. The `--quiet` flag suppresses output of ESLint warnings.
 
 5. **lint:fix**:
    - **Usage**: This script is used to automatically fix linting issues in the source code files.
-   - **Command**: `npm run lint:fix`
+   - **Command**:
+       - To automatically fix linting issues, use:
+    ```bash
+    npm run lint:fix
+    ```
    - **Description**: Similar to the `lint` script, it runs ESLint on the source code files but with the `--fix` flag, which automatically fixes fixable issues.
 
 6. **format:check**:
    - **Usage**: This script is used to check if the code formatting meets the defined rules.
-   - **Command**: `npm run format:check`
+   - **Command**:
+     ```bash
+     npm run format:check
+     ```
    - **Description**: It uses Prettier to check if the formatting of JavaScript (`*.js`), JSX (`*.jsx`), TypeScript (`*.ts`), and TypeScript JSX (`*.tsx`) files within the `src` directory complies with the defined rules.
 
 7. **prepare**:
    - **Usage**: This script is used to set up Husky, a Git hook manager.
-   - **Command**: `npm run prepare`
+   - **Command**:
+     ```bash
+     npm run prepare
+     ```
    - **Description**: Husky is a tool used to manage Git hooks. This script is likely used to configure Husky for use within the project.
 
 8. **test**:
    - **Usage**: This script is used to run tests.
-   - **Command**: `npm test`
+   - **Command**:
+     ```bash
+     npm test
+     ```
    - **Description**: It runs Jest to execute tests within the project.
+  
+9. **Environment Variables**:
+  - The scripts use the `NODE_ENV` environment variable to distinguish between development and production environments. You can adjust other environment variables as needed for your specific setup.
 
+
+## Running the Project 🚀
+
+1. **Development Mode**:
+   - To start the development server and run the application in development mode, use the following command:
+     ```bash
+     npm start
+     ```
+   This command sets the environment variable `NODE_ENV` to `development` and starts the webpack development server. The application will automatically open in your default web browser.
+
+2. **Building for Development**:
+   - If you want to build the application for development without starting the development server, you can run:
+     ```bash
+     npm run dev
+     ```
+   This command sets the `NODE_ENV` variable to `development` and builds the application using webpack.
+
+3. **Building for Production**:
+   - To build the application for production, use the following command:
+     ```bash
+     npm run build
+     ```
+   This command sets the `NODE_ENV` variable to `production` and builds the application optimized for production deployment.
+
+## Project Team 🎉
+
+- Pavel Korshunau
+  - Project Mentor
+
+- Ruslan Trybukhouski
+  - Team Lead / Project Developer
+
+- Arina Talanova
+  - Project Developer
+
+- Dmitry Nikolayev
+  - Project Developer
