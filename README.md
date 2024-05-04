@@ -11,7 +11,6 @@ The purpose of this application is to offer a robust digital solution for online
 - **Linting and Formatting:** ESLint and Prettier ensure code consistency and style, while Husky manages pre-commit hooks to maintain code quality.
 - **Development Environment:** We employ modern development tools like Webpack for bundling our assets and managing different build environments efficiently.
 - **Testing Framework:** Jest is used to perform comprehensive testing to ensure code functionality and quality.
-- **Version Control Hooks:** Husky is used to manage Git hooks, automating tasks such as lint checks and code formatting to ensure code quality before commits.
 
 ## Key Features
 - User registration and login system.
