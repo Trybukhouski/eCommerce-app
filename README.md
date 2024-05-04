@@ -27,3 +27,45 @@ The purpose of this application is to offer a robust digital solution for online
 - **Basket Page:** Review items before purchase.
 - **About Us Page:** Learn more about the goals and vision of our platform.
 
+## Available Scripts and Usage
+
+1. **start**:
+   - **Usage**: This script is used to start the development server.
+   - **Command**: `npm start`
+   - **Description**: It sets the environment variable `NODE_ENV` to `development` and then runs webpack to serve the application. The `--open` flag automatically opens the default browser to the served application.
+
+2. **dev**:
+   - **Usage**: This script is used to build the application in development mode.
+   - **Command**: `npm run dev`
+   - **Description**: Similar to the `start` script, it sets the `NODE_ENV` variable to `development` and runs webpack to build the application. However, it does not start a development server.
+
+3. **build**:
+   - **Usage**: This script is used to build the application for production.
+   - **Command**: `npm run build`
+   - **Description**: Sets the `NODE_ENV` variable to `production` and runs webpack to build the application optimized for production deployment.
+
+4. **lint**:
+   - **Usage**: This script is used to run linting on the source code files.
+   - **Command**: `npm run lint`
+   - **Description**: It uses ESLint to perform linting on JavaScript (`*.js`), JSX (`*.jsx`), TypeScript (`*.ts`), and TypeScript JSX (`*.tsx`) files within the `src` directory. The `--quiet` flag suppresses output of ESLint warnings.
+
+5. **lint:fix**:
+   - **Usage**: This script is used to automatically fix linting issues in the source code files.
+   - **Command**: `npm run lint:fix`
+   - **Description**: Similar to the `lint` script, it runs ESLint on the source code files but with the `--fix` flag, which automatically fixes fixable issues.
+
+6. **format:check**:
+   - **Usage**: This script is used to check if the code formatting meets the defined rules.
+   - **Command**: `npm run format:check`
+   - **Description**: It uses Prettier to check if the formatting of JavaScript (`*.js`), JSX (`*.jsx`), TypeScript (`*.ts`), and TypeScript JSX (`*.tsx`) files within the `src` directory complies with the defined rules.
+
+7. **prepare**:
+   - **Usage**: This script is used to set up Husky, a Git hook manager.
+   - **Command**: `npm run prepare`
+   - **Description**: Husky is a tool used to manage Git hooks. This script is likely used to configure Husky for use within the project.
+
+8. **test**:
+   - **Usage**: This script is used to run tests.
+   - **Command**: `npm test`
+   - **Description**: It runs Jest to execute tests within the project.
+
