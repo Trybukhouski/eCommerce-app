@@ -8,6 +8,8 @@
     "dev": "set NODE_ENV=development&&webpack",
     "build": "set NODE_ENV=production&&webpack",
     "test": "jest --config=jest.config.mjs",
+    "lint": "npx eslint ./src",
+    "lint:fix": "npx eslint --fix ./src",
     "prepare": "husky"
   },
   "lint-staged": {
