@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
+  entry: './src/index.ts',
   mode: mode,
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -20,6 +21,8 @@ module.exports = {
   output: {
     assetModuleFilename: 'assets/[name][hash][ext][query]',
     clean: true,
+    filename: 'bundle.[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -59,7 +62,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|svg|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif)$/i,
         type: 'asset/resource',
       },
       {
@@ -77,7 +80,12 @@ module.exports = {
             loader: 'svg-sprite-loader',
           }
         ]
-      }
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
     ],
   },
 }
