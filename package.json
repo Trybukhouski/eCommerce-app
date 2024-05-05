@@ -15,7 +15,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,css,scss,less,json}": "npx prettier --write ./src "
+    "*.{ts,tsx,js,css,scss,less,json}": "npm run format"
   },
   "validate-branch-name": {
     "pattern": "^(feat|fix|init|docs|refactor){1}/RSS-ECOMM-\\d{1,2}_C?\\d{2,4}/[a-zA-Z0-9-]*$",
