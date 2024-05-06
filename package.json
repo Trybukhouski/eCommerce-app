@@ -8,10 +8,14 @@
     "dev": "set NODE_ENV=development&&webpack",
     "build": "set NODE_ENV=production&&webpack",
     "test": "jest --config=jest.config.mjs",
+    "lint": "npx eslint ./src",
+    "lint:fix": "npx eslint --fix ./src",
+    "format:check": "npx prettier --check ./src",
+    "format": "npx prettier --write ./src",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,css,scss,less,json}": "npx prettier --write ./src "
+    "*.{ts,tsx,js,css,scss,less,json}": "npm run format"
   },
   "validate-branch-name": {
     "pattern": "^(feat|fix|init|docs|refactor){1}/RSS-ECOMM-\\d{1,2}_C?\\d{2,4}/[a-zA-Z0-9-]*$",
