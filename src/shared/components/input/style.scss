@@ -1,51 +1,98 @@
+:root {
+  --wrong-input-color: rgba(237, 44, 32, 1);
+  --correct-input-color: rgba(28, 181, 53, 1);
+  --neutral-input-color: rgb(127, 127, 127);
+
+  --input-font-size: 16px;
+  --input-paddings: 18px 11px;
+  --input-label-margin-bottom: 14px;
+  --input-hint-pad-start: 17px;
+  --input-hint-margin-block: 17px;
+  --input-hint-height: 108px;
+  --input-border-radius: 5px;
+
+  --arched-cubic-bezier: cubic-bezier(0.06, 0.47, 0.42, 1.11);
+}
+
 .input {
   display: flex;
   flex-direction: column;
-  font-size: 16px;
+  font-size: var(--input-font-size);
 
   label {
-    margin-bottom: 14px;
+    margin-bottom: var(--input-label-margin-bottom);
   }
 
   .input__hint {
     height: 0;
     overflow: hidden;
-    transition: 0.7s height cubic-bezier(0.06, 0.47, 0.42, 1.11);
+    transition: 0.7s height var(--arched-cubic-bezier);
 
     ul {
-      padding-inline-start: 17px;
-      margin-block: 17px;
-
-      li.correct {
-        color: rgba(28, 181, 53, 1);
-      }
+      padding-inline-start: var(--input-hint-pad-start);
+      margin-block: var(--input-hint-margin-block);
 
       li {
         position: relative;
-        color: rgba(237, 44, 32, 1);
+        left: -100%;
+        transition: 0.5s left var(--arched-cubic-bezier);
       }
     }
   }
 }
 
 .input input {
-  font-size: 16px;
-  padding: 18px 11px;
-  border-radius: 5px;
+  font-size: var(--input-font-size);
+  padding: var(--input-paddings);
+  border-radius: var(--input-border-radius);
+  position: relative;
+
   &:invalid {
-    outline: rgba(237, 44, 32, 1) auto 1px;
+    outline: var(--wrong-input-color) auto 1px;
   }
 
-  &:invalid + .input__hint {
-    height: 108px;
+  &:invalid + .input__hint ul {
+    li {
+      color: var(--wrong-input-color);
+    }
+  }
+  & + .input__hint ul {
+    li {
+      color: var(--neutral-input-color);
+    }
+    li.correct {
+      color: var(--correct-input-color);
+    }
   }
 }
 
 .input {
+  input:invalid + .input__hint,
   input:focus + .input__hint {
-    height: 108px;
+    height: var(--input-hint-height);
 
     li {
+      left: 0;
     }
+  }
+}
+
+.input input:invalid:not(:focus) {
+  animation: wronginput 0.15s ease-in-out 2;
+}
+
+@keyframes wronginput {
+  0% {
+  }
+  25% {
+    transform: rotate(0.2deg);
+  }
+  50% {
+    transform: scale(1.005);
+  }
+  75% {
+    transform: rotate(-0.2deg);
+  }
+  100% {
   }
 }
