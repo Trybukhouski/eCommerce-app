@@ -1,9 +1,10 @@
 :root {
   --form-bg-color: rgba(230, 230, 230, 1);
 
+  --login-page-header-margin-bottom: 29px;
   --content-max-width: 664px;
   --form-paddings: 30px 70px 50px;
-  --form-button-margin-top: 29px;
+  --form-button-margin-top: 27px;
 
   --h2-font-size: 24px;
 }
@@ -35,11 +36,12 @@
 
   button {
     margin: auto;
-    margin-top: var(--form-margin-top);
+    margin-top: var(--form-button-margin-top);
   }
 
   h2 {
     margin: 0;
     font-size: var(--h2-font-size);
+    margin-bottom: var(--login-page-header-margin-bottom);
   }
 }

@@ -5,7 +5,7 @@ import './style.scss';
 
 const emailInputOptions = {
   labelText: 'Email:',
-  placeholder: 'example.com',
+  placeholder: 'example@gmail.com',
   name: 'email',
   hasHint: true,
   type: 'email',
@@ -13,7 +13,7 @@ const emailInputOptions = {
 
 const passwordInputOptions = {
   labelText: 'Password:',
-  placeholder: 'asdASD321!$',
+  placeholder: '2333Wd#sQ',
   name: 'passeard',
   hasHint: true,
   type: 'password',

@@ -2,7 +2,7 @@ import ValidationRule from './class/validation';
 
 const passwordValidation = new ValidationRule({
   minLength: 8,
-  pattern: `^\\S(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*]).*\\S$`,
+  pattern: `^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*])\\S.*\\S$`,
 });
 
 passwordValidation.addHints([
@@ -28,7 +28,7 @@ passwordValidation.addHints([
   },
   {
     text: 'Must not contain leading or trailing whitespace.',
-    callback: (s: string) => !!s.match(/^\S.*\S$/),
+    callback: (s: string) => (s.length < 3 ? !s.match(/\s/) : !!s.match(/^\S.*\S$/)),
   },
 ]);
 

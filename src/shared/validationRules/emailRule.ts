@@ -15,7 +15,7 @@ emailValidation.addHints([
   },
   {
     text: 'There should be a domain part',
-    callback: (s: string) => !!s.match(/@(\w|\d|\.|_|-){1,}\.(\w|\d|\.|_|-){1,}$/),
+    callback: (s: string) => !!s.match(/@(\w|\d|_|-){1}(\w|\d|\.|_|-)*\.(\w|\d|\.|_|-){1,}$/),
   },
   {
     text: 'Must contain an account name',
