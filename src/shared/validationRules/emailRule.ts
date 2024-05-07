@@ -1,7 +1,6 @@
 import ValidationRule from './class/validation';
 
 const emailValidation = new ValidationRule({
-  minLength: 5,
   pattern: `\\S{1,}@(\\w|\\d|\\.|_|-){1,}\\.(\\w|\\d|\\.|_|-){1,}$`,
 });
 

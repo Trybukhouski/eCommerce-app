@@ -29,12 +29,16 @@
     transition: 0.7s height var(--arched-cubic-bezier);
 
     ul {
+      box-sizing: border-box;
+      columns: 2;
+      height: var(--input-hint-height);
       padding-inline-start: var(--input-hint-pad-start);
       margin-block: var(--input-hint-margin-block);
 
       li {
+        break-after: avoid;
         position: relative;
-        left: -100%;
+        left: -200%;
         transition: 0.5s left var(--arched-cubic-bezier);
       }
     }
