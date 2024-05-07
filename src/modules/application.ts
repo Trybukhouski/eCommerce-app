@@ -1,3 +1,4 @@
 import LoginPage from './loginPage';
 
-export default LoginPage;
+const lp = new LoginPage();
+document.querySelector('body')?.append(lp.elem);
