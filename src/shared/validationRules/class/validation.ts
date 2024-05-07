@@ -53,7 +53,6 @@ class ValidationRule {
     }
 
     inputElem.addEventListener('input', this.checkHint.bind(this));
-    inputElem.addEventListener('keydown', this.checkHint.bind(this));
   }
 
   private checkHint(e: Event): void {
