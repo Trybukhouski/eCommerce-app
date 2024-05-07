@@ -26,7 +26,7 @@ class Form {
 
     const button = new Button(buttonOptions);
     this.button = button.button;
-    this.container.append(button.button);
+    this.form.append(button.button);
   }
 
   private addInputs(arr: InputsOptionsWithRule[]) {

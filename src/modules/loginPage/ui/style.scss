@@ -1,4 +1,45 @@
+:root {
+  --form-bg-color: rgba(230, 230, 230, 1);
+
+  --content-max-width: 664px;
+  --form-paddings: 30px 70px 50px;
+  --form-button-margin-top: 29px;
+
+  --h2-font-size: 24px;
+}
+
 .login-page {
   width: 100%;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  > * {
+    max-width: var(--content-max-width);
+  }
+
+  form {
+    background-color: var(--form-bg-color);
+    padding: var(--form-paddings);
+    display: flex;
+    flex-direction: column;
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  button {
+    margin: auto;
+    margin-top: var(--form-margin-top);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: var(--h2-font-size);
+  }
 }

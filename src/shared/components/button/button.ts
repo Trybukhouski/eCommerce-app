@@ -1,3 +1,5 @@
+import './style.scss';
+
 class Button {
   public button: HTMLButtonElement;
 

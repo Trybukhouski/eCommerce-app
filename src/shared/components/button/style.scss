@@ -1,0 +1,32 @@
+:root {
+  --disabled-button-bg-color: rgb(203 182 152);
+  --hover-button-bg-color: rgba(231, 139, 0, 1);
+  --normal-button-bg-color: rgb(255, 153, 0);
+  --button-color: white;
+
+  --button-width: 163px;
+  --button-padidings: 22px 0;
+  --button-font-size: 16px;
+  --button-border-radius: 10px;
+}
+
+button {
+  font-size: var(--button-font-size);
+  color: var(--button-color);
+  padding: var(--button-padidings);
+  width: var(--button-width);
+  background-color: var(--button-color);
+  border: none;
+  border-radius: var(--button-border-radius);
+  transition: 0.3s background-color;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--hover-button-bg-color);
+}
+
+button:disabled {
+  background-color: var(--disabled-button-bg-color);
+  cursor: auto;
+}

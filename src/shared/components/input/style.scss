@@ -4,12 +4,13 @@
   --neutral-input-color: rgb(127, 127, 127);
 
   --input-font-size: 16px;
-  --input-paddings: 18px 11px;
+  --input-input-paddings: 18px 11px;
   --input-label-margin-bottom: 14px;
   --input-hint-pad-start: 17px;
   --input-hint-margin-block: 17px;
-  --input-hint-height: 108px;
+  --input-hint-height: 133px;
   --input-border-radius: 5px;
+  --input-paddings: 20px;
 
   --arched-cubic-bezier: cubic-bezier(0.06, 0.47, 0.42, 1.11);
 }
@@ -18,6 +19,7 @@
   display: flex;
   flex-direction: column;
   font-size: var(--input-font-size);
+  padding: var(--input-paddings);
 
   label {
     margin-bottom: var(--input-label-margin-bottom);
@@ -30,13 +32,11 @@
 
     ul {
       box-sizing: border-box;
-      columns: 2;
       height: var(--input-hint-height);
       padding-inline-start: var(--input-hint-pad-start);
       margin-block: var(--input-hint-margin-block);
 
       li {
-        break-after: avoid;
         position: relative;
         left: -200%;
         transition: 0.5s left var(--arched-cubic-bezier);
@@ -47,7 +47,7 @@
 
 .input input {
   font-size: var(--input-font-size);
-  padding: var(--input-paddings);
+  padding: var(--input-input-paddings);
   border-radius: var(--input-border-radius);
   position: relative;
 

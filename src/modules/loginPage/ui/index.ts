@@ -53,6 +53,10 @@ class LoginPageUI {
     this.section = document.createElement('section');
     this.container = document.createElement('div');
 
+    const h = document.createElement('h2');
+    h.textContent = 'Create account';
+    this.section.append(h);
+
     const form = new Form(formOptions);
 
     this.inputArr = form.inputArr;
