@@ -27,6 +27,8 @@ class Form {
     const button = new Button(buttonOptions);
     this.button = button.button;
     this.form.append(button.button);
+
+    this.validityListener();
   }
 
   private addInputs(arr: InputsOptionsWithRule[]) {
@@ -39,6 +41,13 @@ class Form {
       if (i.rule) {
         i.rule.setRules(input);
       }
+    });
+  }
+
+  private validityListener() {
+    this.form.addEventListener('input', () => {
+      const isValid = !this.inputArr.some((i) => i.input.validity.valid === false);
+      this.button.disabled = !isValid;
     });
   }
 }
