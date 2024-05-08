@@ -36,30 +36,50 @@ module.exports = {
     rules: [
       {
         test: /\.(sa|sc|c)ss$/,
-        use: [
-          (mode === 'development') ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
+        oneOf: [
           {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    'postcss-preset-env',
-                    {
-                      stage: 3, 
-                      features: {
-                        'custom-properties': false,
-                      },
-                      autoprefixer: { grid: true },
-                    },
-                  ],
-                ],
+            test: /\.module\.(sa|sc|c)ss$/,
+            use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: "css-loader",
+                options: {
+                  importLoaders: 1,
+                  modules: {
+                      localIdentName: '[name]__[local]___[hash:base64:5]'
+                  }
+                },
               },
-            },
+              "sass-loader"
+            ]
           },
-          'sass-loader',
-        ],
+          {
+            use: [
+              (mode === 'development') ? 'style-loader' : MiniCssExtractPlugin.loader,
+              'css-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  postcssOptions: {
+                    plugins: [
+                      [
+                        'postcss-preset-env',
+                        {
+                          stage: 3, 
+                          features: {
+                            'custom-properties': false,
+                          },
+                          autoprefixer: { grid: true },
+                        },
+                      ],
+                    ],
+                  },
+                },
+              },
+              'sass-loader',
+            ],
+          }
+        ]
       },
       {
         test: /\.(png|jpe?g|gif)$/i,

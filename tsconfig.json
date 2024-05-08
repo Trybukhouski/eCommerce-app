@@ -1,6 +1,7 @@
 {
   "include": ["./src/**/*"],
   "compilerOptions": {
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "baseUrl": "./src",
     "paths": {
       "@shared/*": ["shared/*"],
