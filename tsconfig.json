@@ -5,7 +5,7 @@
     "paths": {
       "@shared/*": ["shared/*"],
       "@core/*": ["modules/core/*"],
-      "@sharedStyles/*": ["shared/styles/*"]
+      "@assets/*": ["assets/*"],
     },
     
     /* Language and Environment */
