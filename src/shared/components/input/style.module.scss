@@ -32,7 +32,7 @@
 
     ul {
       box-sizing: border-box;
-      height: var(--input-hint-height);
+      height: calc(var(--input-hint-height) - 2 * var(--input-hint-margin-block));
       padding-inline-start: var(--input-hint-pad-start);
       margin-block: var(--input-hint-margin-block);
 
