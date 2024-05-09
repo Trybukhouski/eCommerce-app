@@ -1,11 +1,12 @@
 {
   "include": ["./src/**/*"],
   "compilerOptions": {
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "baseUrl": "./src",
     "paths": {
       "@shared/*": ["shared/*"],
       "@core/*": ["modules/core/*"],
-      "@sharedStyles/*": ["shared/styles/*"]
+      "@assets/*": ["assets/*"],
     },
     
     /* Language and Environment */
