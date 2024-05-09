@@ -1,15 +1,5 @@
 import * as style from './style.module.scss';
 
-interface Options {
-  name: string;
-  type: string;
-  placeholder: string;
-  labelText: string;
-  value: string;
-  required: boolean;
-  disabled: boolean;
-}
-
 class Input {
   public input: HTMLInputElement;
 
@@ -67,7 +57,7 @@ class Input {
     value,
     required,
     disabled,
-  }: Options): void {
+  }: Required<Omit<InputOptions, 'hasHint'>>): void {
     const { label } = this;
     const { input } = this;
 

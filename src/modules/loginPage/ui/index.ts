@@ -15,7 +15,7 @@ const emailInputOptions = {
 const passwordInputOptions = {
   labelText: 'Password:',
   placeholder: '2333Wd#sQ',
-  name: 'passeard',
+  name: 'password',
   hasHint: true,
   require: true,
   type: 'password',
