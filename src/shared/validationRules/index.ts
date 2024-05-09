@@ -1,4 +1,3 @@
-import emailValidation from './emailRule';
-import passwordValidation from './passwordRule';
+export { default as emailValidation } from './emailRule';
+export { default as passwordValidation } from './passwordRule';
 
-export { emailValidation, passwordValidation };

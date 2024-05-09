@@ -1,0 +1,162 @@
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].oneOf[0].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/shared/components/input/style.module.scss ***!
+  \*****************************************************************************************************************************************************************************/
+:root {
+  --wrong-input-color: rgba(237, 44, 32, 1);
+  --correct-input-color: rgba(28, 181, 53, 1);
+  --neutral-input-color: rgb(127, 127, 127);
+  --input-font-size: 16px;
+  --input-input-paddings: 18px 11px;
+  --input-label-margin-bottom: 14px;
+  --input-hint-pad-start: 17px;
+  --input-hint-margin-block: 17px;
+  --input-hint-height: 133px;
+  --input-border-radius: 5px;
+  --input-paddings: 20px;
+  --arched-cubic-bezier: cubic-bezier(0.06, 0.47, 0.42, 1.11);
+}
+
+.style-module__input___E_e9t {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--input-font-size);
+  padding: var(--input-paddings);
+}
+.style-module__input___E_e9t label {
+  margin-bottom: var(--input-label-margin-bottom);
+}
+.style-module__input___E_e9t .style-module__input__hint___RguEm {
+  height: 0;
+  overflow: hidden;
+  transition: 0.7s height var(--arched-cubic-bezier);
+}
+.style-module__input___E_e9t .style-module__input__hint___RguEm ul {
+  box-sizing: border-box;
+  height: calc(var(--input-hint-height) - 2 * var(--input-hint-margin-block));
+  padding-inline-start: var(--input-hint-pad-start);
+  margin-block: var(--input-hint-margin-block);
+}
+.style-module__input___E_e9t .style-module__input__hint___RguEm ul li {
+  position: relative;
+  left: -200%;
+  transition: 0.5s left var(--arched-cubic-bezier);
+}
+.style-module__input___E_e9t input {
+  font-size: var(--input-font-size);
+  padding: var(--input-input-paddings);
+  border-radius: var(--input-border-radius);
+  position: relative;
+}
+.style-module__input___E_e9t input:invalid {
+  outline: var(--wrong-input-color) auto 1px;
+}
+.style-module__input___E_e9t input:invalid + .style-module__input__hint___RguEm ul li[data-correct=false] {
+  color: var(--wrong-input-color);
+}
+.style-module__input___E_e9t input + .style-module__input__hint___RguEm ul li {
+  color: var(--neutral-input-color);
+}
+.style-module__input___E_e9t input + .style-module__input__hint___RguEm ul li[data-correct=true] {
+  color: var(--correct-input-color);
+}
+.style-module__input___E_e9t input:invalid + .style-module__input__hint___RguEm,
+.style-module__input___E_e9t input:focus + .style-module__input__hint___RguEm {
+  height: var(--input-hint-height);
+}
+.style-module__input___E_e9t input:invalid + .style-module__input__hint___RguEm li,
+.style-module__input___E_e9t input:focus + .style-module__input__hint___RguEm li {
+  left: 0;
+}
+.style-module__input___E_e9t input:invalid:not(:focus) {
+  animation: style-module__wronginput___gg2OM 0.15s ease-in-out 2;
+}
+@keyframes style-module__wronginput___gg2OM {
+  25% {
+    transform: rotate(0.2deg);
+  }
+  50% {
+    transform: scale(1.005);
+  }
+  75% {
+    transform: rotate(-0.2deg);
+  }
+}
+/*!******************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].oneOf[0].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/shared/components/button/style.module.scss ***!
+  \******************************************************************************************************************************************************************************/
+:root {
+  --disabled-button-bg-color: rgb(203 182 152);
+  --hover-button-bg-color: rgba(231, 139, 0, 1);
+  --normal-button-bg-color: rgb(255, 153, 0);
+  --button-color: white;
+  --button-width: 163px;
+  --button-padidings: 22px 0;
+  --button-font-size: 16px;
+  --button-border-radius: 10px;
+}
+
+.style-module__simple-button___P9bGQ {
+  font-size: var(--button-font-size);
+  color: var(--button-color);
+  padding: var(--button-padidings);
+  width: var(--button-width);
+  background-color: var(--normal-button-bg-color);
+  border: none;
+  border-radius: var(--button-border-radius);
+  transition: 0.3s background-color;
+  cursor: pointer;
+}
+
+.style-module__simple-button___P9bGQ:hover {
+  background-color: var(--hover-button-bg-color);
+}
+
+.style-module__simple-button___P9bGQ:disabled {
+  background-color: var(--disabled-button-bg-color);
+  cursor: auto;
+}
+/*!**************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].oneOf[0].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/modules/loginPage/ui/style.module.scss ***!
+  \**************************************************************************************************************************************************************************/
+:root {
+  --form-bg-color: rgba(230, 230, 230, 1);
+  --form-border-radius: 10px;
+  --login-page-header-margin-bottom: 29px;
+  --content-max-width: 664px;
+  --form-paddings: 30px 70px 50px;
+  --form-button-margin-top: 27px;
+  --h2-font-size: 24px;
+}
+
+.style-module__login-page___GIvz9 {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.style-module__login-page___GIvz9 > * {
+  max-width: var(--content-max-width);
+}
+.style-module__login-page___GIvz9 form {
+  background-color: var(--form-bg-color);
+  padding: var(--form-paddings);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--form-border-radius);
+}
+.style-module__login-page___GIvz9 fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.style-module__login-page___GIvz9 button {
+  margin: auto;
+  margin-top: var(--form-button-margin-top);
+}
+.style-module__login-page___GIvz9 h2 {
+  margin: 0;
+  font-size: var(--h2-font-size);
+  margin-bottom: var(--login-page-header-margin-bottom);
+}

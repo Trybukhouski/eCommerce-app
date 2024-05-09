@@ -47,7 +47,7 @@ class LoginPageUI {
 
   public inputArr: Input[];
 
-  public loginButt: HTMLButtonElement;
+  public loginButton: HTMLButtonElement;
 
   public form: HTMLFormElement;
 
@@ -55,14 +55,14 @@ class LoginPageUI {
     this.section = document.createElement('section');
     this.container = document.createElement('div');
 
-    const h = document.createElement('h2');
-    h.textContent = 'Create account';
-    this.section.append(h);
+    const loginHeader = document.createElement('h2');
+    loginHeader.textContent = 'Create account';
+    this.section.append(loginHeader);
 
     const form = new Form(formOptions);
 
     this.inputArr = form.inputArr;
-    this.loginButt = form.button;
+    this.loginButton = form.button;
     this.form = form.form;
 
     this.section.append(this.container);

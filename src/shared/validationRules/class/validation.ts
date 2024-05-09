@@ -41,13 +41,13 @@ class ValidationRule {
       inputElem.setAttribute('minLength', minL.toString());
     }
     if (this.titleText) {
-      let minLenStroke = '';
+      let minLengthStroke = '';
       if (this.minLength > 0) {
-        minLenStroke = `Minimum line length: ${this.minLength}. `;
+        minLengthStroke = `Minimum line length: ${this.minLength}. `;
       }
 
-      const t = `${minLenStroke}${this.titleText}`;
-      inputElem.setAttribute('title', t);
+      const inputTitle = `${minLengthStroke}${this.titleText}`;
+      inputElem.setAttribute('title', inputTitle);
     }
     if (this.hints.length > 0 && hintElem) {
       this.hints.forEach((h) => {
@@ -62,9 +62,9 @@ class ValidationRule {
 
   private checkHint(e: Event): void {
     const { target } = e;
-    if (!target) return;
+    if (!target || !(target instanceof HTMLInputElement)) return;
 
-    const targetInput = target as HTMLInputElement;
+    const targetInput = target;
     const { value } = targetInput;
     const input = this.signedInputs.find((i) => i.input === targetInput);
     const liArr = input?.hint?.childNodes;
@@ -79,7 +79,7 @@ class ValidationRule {
     });
   }
 
-  public addHints(hints: Hint[]) {
+  public addHints(hints: Hint[]): void {
     this.hints.push(...hints);
   }
 }
