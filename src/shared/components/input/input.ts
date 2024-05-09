@@ -1,4 +1,4 @@
-import './style.scss';
+import * as style from './style.module.scss';
 
 interface Options {
   name: string;
@@ -33,7 +33,7 @@ class Input {
     this.label = document.createElement('label');
     this.input = document.createElement('input');
     this.container.append(this.input);
-    this.container.classList.add('input');
+    this.container.classList.add(style.input);
 
     if (hasHint) {
       this.addHint();
@@ -53,7 +53,7 @@ class Input {
   private addHint() {
     const hintContainer = document.createElement('div');
     const hint = document.createElement('ul');
-    hintContainer.classList.add('input__hint');
+    hintContainer.classList.add(style.input__hint);
     hintContainer.append(hint);
     this.container.append(hintContainer);
     this.hint = hint;

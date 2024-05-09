@@ -1,4 +1,4 @@
-import './style.scss';
+import * as style from './style.module.scss';
 
 class Button {
   public button: HTMLButtonElement;
@@ -17,6 +17,7 @@ class Button {
     const button = document.createElement('button');
     this.button = button;
     button.textContent = text;
+    button.classList.add(style['simple-button']);
 
     if (disabled) {
       button.disabled = true;

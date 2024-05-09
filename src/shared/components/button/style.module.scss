@@ -10,7 +10,7 @@
   --button-border-radius: 10px;
 }
 
-button {
+.simple-button {
   font-size: var(--button-font-size);
   color: var(--button-color);
   padding: var(--button-padidings);
@@ -22,11 +22,11 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.simple-button:hover {
   background-color: var(--hover-button-bg-color);
 }
 
-button:disabled {
+.simple-button:disabled {
   background-color: var(--disabled-button-bg-color);
   cursor: auto;
 }

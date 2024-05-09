@@ -67,9 +67,9 @@ class ValidationRule {
     this.hints.forEach((h, i) => {
       const li = liArr[i] as HTMLElement;
       if (h.callback(value)) {
-        li.classList.add('correct');
+        li.setAttribute('data-correct', 'true');
       } else {
-        li.classList.remove('correct');
+        li.setAttribute('data-correct', 'false');
       }
     });
   }

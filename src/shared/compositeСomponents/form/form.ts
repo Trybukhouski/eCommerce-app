@@ -46,7 +46,9 @@ class Form {
 
   private validityListener() {
     this.form.addEventListener('input', () => {
-      const isValid = !this.inputArr.some((i) => i.input.validity.valid === false);
+      const isValid = !this.inputArr.some((i) => {
+        return i.input.validity.valid === false || i.input.value.length === 0;
+      });
       this.button.disabled = !isValid;
     });
   }
