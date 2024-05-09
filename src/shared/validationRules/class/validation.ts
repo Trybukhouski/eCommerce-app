@@ -1,4 +1,9 @@
-import Input from '@shared/components/input/input';
+interface Input {
+  input: HTMLInputElement;
+  label: HTMLLabelElement;
+  container: HTMLDivElement;
+  hint: undefined | HTMLUListElement;
+}
 
 interface Hint {
   text: string;
