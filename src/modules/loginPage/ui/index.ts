@@ -1,7 +1,7 @@
 import Form from '@shared/compositeСomponents/form/form';
 import { Input } from '@shared/components';
 import { emailValidation, passwordValidation } from '@shared/validationRules';
-import * as style from './style.module.scss';
+import style from './style.module.scss';
 
 const emailInputOptions = {
   labelText: 'Email:',
@@ -47,7 +47,7 @@ class LoginPageUI {
 
   public inputArr: Input[];
 
-  public loginButton: HTMLButtonElement;
+  public submitButton: HTMLButtonElement;
 
   public form: HTMLFormElement;
 
@@ -62,13 +62,13 @@ class LoginPageUI {
     const form = new Form(formOptions);
 
     this.inputArr = form.inputArr;
-    this.loginButton = form.button;
+    this.submitButton = form.button;
     this.form = form.form;
 
     this.section.append(this.container);
     this.container.append(this.form);
 
-    this.section.classList.add(style['login-page']);
+    this.section.classList.add(style["login-page"]);
   }
 }
 
