@@ -1,17 +1,6 @@
 import { Input, Button } from '@shared/components';
 
-interface InputsOptionsWithRule {
-  options: InputOptions;
-  rule?: {
-    setRules(input: Input): void;
-  };
-}
-
-interface FormOptions {
-  hasFieldset?: boolean;
-  inputsOptions?: InputsOptionsWithRule[];
-  buttonOptions?: ButtonOptions;
-}
+type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
 
 class Form {
   public container: HTMLElement;
@@ -33,7 +22,7 @@ class Form {
     }
 
     this.inputArr = [];
-    if (inputsOptions.length > 0) {
+    if (inputsOptions.length > 0 && inputsOptions) {
       this.addInputs(inputsOptions);
     }
 
@@ -44,7 +33,7 @@ class Form {
     this.validityListener();
   }
 
-  private addInputs(arr: InputsOptionsWithRule[]): void {
+  private addInputs(arr: InputsOptionsWithRule): void {
     const { container } = this;
     arr.forEach((i) => {
       const input = new Input(i.options);

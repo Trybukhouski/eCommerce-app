@@ -20,3 +20,14 @@ interface InputOptions {
   hasHint?: boolean;
   disabled?: boolean;
 }
+
+interface FormOptions {
+  hasFieldset?: boolean;
+  inputsOptions?: {
+    options: InputOptions;
+    rule?: {
+      setRules(input: Input): void;
+    };
+  }[];
+  buttonOptions?: ButtonOptions;
+}
