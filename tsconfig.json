@@ -7,6 +7,7 @@
       "@shared/*": ["shared/*"],
       "@core/*": ["modules/core/*"],
       "@assets/*": ["assets/*"],
+      "@modules/*": ["modules/*"],
     },
     
     /* Language and Environment */
