@@ -1,19 +1,4 @@
-:root {
-  --wrong-input-color: rgba(237, 44, 32, 1);
-  --correct-input-color: rgba(28, 181, 53, 1);
-  --neutral-input-color: rgb(127, 127, 127);
-
-  --input-font-size: 16px;
-  --input-input-paddings: 18px 11px;
-  --input-label-margin-bottom: 14px;
-  --input-hint-pad-start: 17px;
-  --input-hint-margin-block: 17px;
-  --input-hint-height: 133px;
-  --input-border-radius: 5px;
-  --input-paddings: 20px;
-
-  --arched-cubic-bezier: cubic-bezier(0.06, 0.47, 0.42, 1.11);
-}
+@import '@assets/variables.scss';
 
 .input {
   display: flex;

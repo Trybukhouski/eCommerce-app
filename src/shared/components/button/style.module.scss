@@ -1,14 +1,4 @@
-:root {
-  --disabled-button-bg-color: rgb(203 182 152);
-  --hover-button-bg-color: rgba(231, 139, 0, 1);
-  --normal-button-bg-color: rgb(255, 153, 0);
-  --button-color: white;
-
-  --button-width: 163px;
-  --button-padidings: 22px 0;
-  --button-font-size: 16px;
-  --button-border-radius: 10px;
-}
+@import '@assets/variables.scss';
 
 .simple-button {
   font-size: var(--button-font-size);
@@ -17,7 +7,7 @@
   width: var(--button-width);
   background-color: var(--normal-button-bg-color);
   border: none;
-  border-radius: var(--button-border-radius);
+  border-radius: var(--big-border-radius);
   transition: 0.3s background-color;
   cursor: pointer;
 

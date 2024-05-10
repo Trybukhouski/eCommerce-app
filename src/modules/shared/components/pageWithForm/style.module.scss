@@ -1,14 +1,4 @@
-:root {
-  --form-bg-color: rgba(230, 230, 230, 1);
-  --form-border-radius: 10px;
-
-  --login-page-header-margin-bottom: 29px;
-  --content-max-width: 664px;
-  --form-paddings: 30px 70px 50px;
-  --form-button-margin-top: 27px;
-
-  --h2-font-size: 24px;
-}
+@import '@assets/variables.scss';
 
 .login-page {
   width: 100%;
@@ -27,7 +17,7 @@
     padding: var(--form-paddings);
     display: flex;
     flex-direction: column;
-    border-radius: var(--form-border-radius);
+    border-radius: var(--big-border-radius);
   }
 
   fieldset {
