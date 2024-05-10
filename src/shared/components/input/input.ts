@@ -82,4 +82,4 @@ class Input {
   }
 }
 
-export default Input;
+export { Input };

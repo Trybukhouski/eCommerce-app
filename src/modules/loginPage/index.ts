@@ -1,4 +1,4 @@
-import loginPageUI from './ui';
+import { loginPageUI } from './ui';
 
 class LoginPage {
   public elem = loginPageUI.section;
@@ -6,4 +6,4 @@ class LoginPage {
   public uiApi = loginPageUI;
 }
 
-export default LoginPage;
+export { LoginPage };

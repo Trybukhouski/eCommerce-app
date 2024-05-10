@@ -1,6 +1,6 @@
-import FormPageUI from '@modules/shared/components/pageWithForm/page';
-import formOptions from './config';
+import { FormPageUI } from '@modules/shared';
+import { formOptions } from './config';
 
 const loginPageUI = new FormPageUI(formOptions, 'Create account');
 
-export default loginPageUI;
+export { loginPageUI };

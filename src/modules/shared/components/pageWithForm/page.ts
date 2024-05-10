@@ -1,5 +1,4 @@
-import Form from '@shared/compositeСomponents/form/form';
-import { Input } from '@shared/components';
+import { Input, Form } from '@shared/index';
 import * as style from './style.module.scss';
 
 class FormPageUI {
@@ -34,4 +33,4 @@ class FormPageUI {
   }
 }
 
-export default FormPageUI;
+export { FormPageUI };

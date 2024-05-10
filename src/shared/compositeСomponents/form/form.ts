@@ -1,4 +1,4 @@
-import { Input, Button } from '@shared/components';
+import { Input, Button } from '@shared/index';
 
 type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
 
@@ -56,4 +56,4 @@ class Form {
   }
 }
 
-export default Form;
+export { Form };

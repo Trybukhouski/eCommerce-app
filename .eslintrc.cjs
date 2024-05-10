@@ -17,7 +17,8 @@ module.exports = {
     "import/no-unresolved": "off",
     "@typescript-eslint/no-this-alias": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "import/prefer-default-export": "off",
   },
   settings: {
   }

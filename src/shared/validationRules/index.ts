@@ -1,2 +1,2 @@
-export { default as emailValidation } from './emailRule';
-export { default as passwordValidation } from './passwordRule';
+export * from './emailRule';
+export * from './passwordRule';

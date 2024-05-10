@@ -1,4 +1,4 @@
-import ValidationRule from './class/validation';
+import { ValidationRule } from './class/validation';
 
 const passwordValidation = new ValidationRule({
   minLength: 8,
@@ -32,4 +32,4 @@ passwordValidation.addHints([
   },
 ]);
 
-export default passwordValidation;
+export { passwordValidation };

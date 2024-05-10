@@ -1,4 +1,4 @@
-import { emailValidation, passwordValidation } from '@shared/validationRules';
+import { emailValidation, passwordValidation } from '@shared/index';
 
 const emailInputOptions = {
   labelText: 'Email:',
@@ -37,4 +37,4 @@ const formOptions = {
   },
 };
 
-export default formOptions;
+export { formOptions };

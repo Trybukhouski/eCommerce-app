@@ -82,4 +82,4 @@ class ValidationRule {
   }
 }
 
-export default ValidationRule;
+export { ValidationRule };
