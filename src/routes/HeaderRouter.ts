@@ -11,14 +11,14 @@ class HeaderRouter {
 
   public observeHashChange(): void {
     window.addEventListener('hashchange', () => {
-      const hash = location.hash.slice(1) as pages;
+      const hash = window.location.hash.slice(1) as pages;
       const result = this.routes.has(hash) ? hash : 'error';
       this.subscribers.forEach((subscriber) => subscriber.inform(result));
     });
   }
 
   public setHash(hash: string): void {
-    location.hash = `#${hash}`;
+    window.location.hash = `#${hash}`;
   }
 
   public addSubscriber(subscriber: subscriber) {
