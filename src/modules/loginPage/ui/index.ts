@@ -1,7 +1,7 @@
 import Form from '@shared/compositeСomponents/form/form';
 import { Input } from '@shared/components';
 import { emailValidation, passwordValidation } from '@shared/validationRules';
-import style from './style.module.scss';
+import * as style from './style.module.scss';
 
 const emailInputOptions = {
   labelText: 'Email:',
