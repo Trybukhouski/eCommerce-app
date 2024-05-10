@@ -1,5 +1,18 @@
 import { Input, Button } from '@shared/components';
 
+interface InputsOptionsWithRule {
+  options: InputOptions;
+  rule?: {
+    setRules(input: Input): void;
+  };
+}
+
+interface FormOptions {
+  hasFieldset?: boolean;
+  inputsOptions?: InputsOptionsWithRule[];
+  buttonOptions?: ButtonOptions;
+}
+
 class Form {
   public container: HTMLElement;
 
@@ -9,7 +22,7 @@ class Form {
 
   public button: HTMLButtonElement;
 
-  constructor({ hasFieldset = false, inputsOptions = [], buttonOptions = {} } = {} as FormOptions) {
+  constructor({ hasFieldset = false, inputsOptions = [], buttonOptions = {} }: FormOptions = {}) {
     const form = document.createElement('form');
     this.container = form;
     this.form = form;
@@ -31,7 +44,7 @@ class Form {
     this.validityListener();
   }
 
-  private addInputs(arr: InputsOptionsWithRule[]) {
+  private addInputs(arr: InputsOptionsWithRule[]): void {
     const { container } = this;
     arr.forEach((i) => {
       const input = new Input(i.options);
@@ -44,7 +57,7 @@ class Form {
     });
   }
 
-  private validityListener() {
+  private validityListener(): void {
     this.form.addEventListener('input', () => {
       const isValid = !this.inputArr.some((i) => {
         return i.input.validity.valid === false || i.input.value.length === 0;

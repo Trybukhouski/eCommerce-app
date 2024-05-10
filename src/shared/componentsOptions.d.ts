@@ -2,7 +2,7 @@ interface ButtonOptions {
   text?: string;
   type?: 'submit' | 'reset' | 'button';
   icon?: {
-    sprite: BrowserSpriteSymbol | undefined;
+    sprite?: BrowserSpriteSymbol;
     towhere: 'start' | 'end';
   };
   disabled?: boolean;
@@ -19,17 +19,4 @@ interface InputOptions {
   required?: boolean;
   hasHint?: boolean;
   disabled?: boolean;
-}
-
-interface InputsOptionsWithRule {
-  options: InputOptions;
-  rule?: {
-    setRules(input: Input): void;
-  };
-}
-
-interface FormOptions {
-  hasFieldset: boolean;
-  inputsOptions: InputsOptionsWithRule[];
-  buttonOptions: ButtonOptions;
 }

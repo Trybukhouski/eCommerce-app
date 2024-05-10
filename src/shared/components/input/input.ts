@@ -7,7 +7,7 @@ class Input {
 
   public container: HTMLDivElement;
 
-  public hint = undefined as undefined | HTMLUListElement;
+  public hint?: HTMLUListElement;
 
   constructor({
     name = '',
@@ -18,7 +18,7 @@ class Input {
     required = false,
     hasHint = false,
     disabled = false,
-  } = {}) {
+  }: InputOptions = {}) {
     this.container = document.createElement('div');
     this.label = document.createElement('label');
     this.input = document.createElement('input');
@@ -40,7 +40,7 @@ class Input {
     });
   }
 
-  private addHint() {
+  private addHint(): void {
     const hintContainer = document.createElement('div');
     const hint = document.createElement('ul');
     hintContainer.classList.add(style.input__hint);
@@ -61,28 +61,24 @@ class Input {
     const { label } = this;
     const { input } = this;
 
-    if (type) {
-      input.type = type;
-    }
-    if (placeholder) {
-      input.placeholder = placeholder;
-    }
     if (labelText) {
       label.textContent = labelText;
       this.container.prepend(this.label);
     }
-    if (name) {
-      input.name = name;
-    }
-    if (value) {
-      input.value = value;
-    }
-    if (required) {
-      input.required = true;
-    }
-    if (disabled) {
-      input.disabled = true;
-    }
+
+    ([
+      ['type', type],
+      ['placeholder', placeholder],
+      ['name', name],
+      ['value', value],
+    ] as [string, string][]).forEach((a) => {
+      if (a[1] !== '') {
+        input.setAttribute(a[0], a[1]);
+      }
+    });
+
+    input.required = required;
+    input.disabled = disabled;
   }
 }
 

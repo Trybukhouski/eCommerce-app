@@ -20,13 +20,13 @@
   border-radius: var(--button-border-radius);
   transition: 0.3s background-color;
   cursor: pointer;
-}
 
-.simple-button:hover {
-  background-color: var(--hover-button-bg-color);
-}
+  &:hover {
+    background-color: var(--hover-button-bg-color);
+  }
 
-.simple-button:disabled {
-  background-color: var(--disabled-button-bg-color);
-  cursor: auto;
+  &:disabled {
+    background-color: var(--disabled-button-bg-color);
+    cursor: auto;
+  }
 }

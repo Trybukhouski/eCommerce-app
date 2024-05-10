@@ -1,19 +1,20 @@
 import * as style from './style.module.scss';
 
+type location = NonNullable<ButtonOptions['icon']>['towhere']; // "start" | "end"
+
 class Button {
   public button: HTMLButtonElement;
 
   constructor({
     text = '',
-    type = 'button' as 'submit' | 'reset' | 'button',
+    type = 'button',
     icon = {
-      sprite: undefined as BrowserSpriteSymbol | undefined,
-      towhere: 'start' as 'start' | 'end',
+      towhere: 'start',
     },
     disabled = false,
     isLink = false,
     href = '',
-  } = {}) {
+  }: ButtonOptions = {}) {
     const button = document.createElement('button');
     this.button = button;
     button.textContent = text;
@@ -35,7 +36,7 @@ class Button {
     }
   }
 
-  private addIcon(sprite: BrowserSpriteSymbol, where: 'start' | 'end'): void {
+  private addIcon(sprite: BrowserSpriteSymbol, where: location): void {
     const svg = `
     <svg viewBox="${sprite.viewBox}" width="50" height="50">
       <use xlink:href="#${sprite.id}"/>

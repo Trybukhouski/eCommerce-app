@@ -2,10 +2,10 @@ declare module '*.module.css';
 declare module '*.module.scss';
 
 interface BrowserSpriteSymbol {
-  id: string;
-  viewBox: string;
-  content?: string;
-  node?: 'object';
+  readonly id: string;
+  readonly viewBox: string;
+  readonly content?: string;
+  readonly node?: 'object';
 }
 
 declare module '*.svg' {

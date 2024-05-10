@@ -2,7 +2,7 @@ interface Input {
   input: HTMLInputElement;
   label: HTMLLabelElement;
   container: HTMLDivElement;
-  hint: undefined | HTMLUListElement;
+  hint?: HTMLUListElement;
 }
 
 interface Hint {
@@ -33,21 +33,19 @@ class ValidationRule {
     const hintElem = input.hint;
 
     if (this.pattern) {
-      const p = this.pattern;
-      inputElem.setAttribute('pattern', p);
+      inputElem.setAttribute('pattern', this.pattern);
     }
     if (this.minLength > 0) {
-      const minL = this.minLength;
-      inputElem.setAttribute('minLength', minL.toString());
+      inputElem.setAttribute('minLength', this.minLength.toString());
     }
     if (this.titleText) {
-      let minLenStroke = '';
+      let minLengthStroke = '';
       if (this.minLength > 0) {
-        minLenStroke = `Minimum line length: ${this.minLength}. `;
+        minLengthStroke = `Minimum line length: ${this.minLength}. `;
       }
 
-      const t = `${minLenStroke}${this.titleText}`;
-      inputElem.setAttribute('title', t);
+      const fullTitleText = `${minLengthStroke}${this.titleText}`;
+      inputElem.setAttribute('title', fullTitleText);
     }
     if (this.hints.length > 0 && hintElem) {
       this.hints.forEach((h) => {
@@ -79,7 +77,7 @@ class ValidationRule {
     });
   }
 
-  public addHints(hints: Hint[]) {
+  public addHints(hints: Hint[]): void {
     this.hints.push(...hints);
   }
 }
