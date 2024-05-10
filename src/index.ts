@@ -1,6 +1,6 @@
 import './style.scss';
 import HeaderRouter from './routes/HeaderRouter';
-import MainPage from './modules/mainPape/mainPage.view/MainPageView';
+import MainPage from './modules/mainPage/mainPage.view/MainPageView';
 
 const mainPage = new MainPage();
 mainPage.create();
