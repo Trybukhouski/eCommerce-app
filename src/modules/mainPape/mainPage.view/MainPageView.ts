@@ -1,25 +1,39 @@
 import MainPageMap from '../MainPage.map';
-
-type pages = 'page1' | 'page2' | 'page3' | 'error';
+import pages from '../../../interfaces/pages';
 
 class MainPageView extends MainPageMap {
-  private elements = {
-    mainContent: (() => {
-      const container = document.createElement('section');
-      return container;
-    })(),
+  public elements: { mainContent?: HTMLElement; errorPage: HTMLElement; root?: HTMLElement } = {
+    errorPage: this.components.errorPage.elements.root as HTMLElement,
   };
 
-  public root = (() => {
+  public create(): MainPageView {
     const container = document.createElement('main');
 
-    container.append(this.elements.mainContent);
+    const mainContent = document.createElement('section');
+    this.elements.mainContent = mainContent;
 
-    return container;
-  })();
+    container.append(mainContent);
+
+    this.elements.root = container;
+
+    return this;
+  }
 
   public setContent(content: pages): void {
-    this.elements.mainContent.innerHTML = content;
+    let { mainContent } = this.elements;
+    mainContent = mainContent as HTMLElement;
+    mainContent.childNodes.forEach((child) => child.remove());
+    if (content === 'error') {
+      mainContent.append(this.elements.errorPage);
+    } else {
+      const page = document.createElement('div');
+      page.innerHTML = content;
+      mainContent.append(page);
+    }
+  }
+
+  public inform(page: pages): void {
+    this.setContent(page);
   }
 }
 

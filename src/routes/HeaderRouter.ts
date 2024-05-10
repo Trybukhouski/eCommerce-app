@@ -1,19 +1,28 @@
-class HeaderRouter {
-  private routes: Set<string> = new Set(['login', 'registration', 'page1', 'page2', 'page3']);
+import pages from 'interfaces/pages';
 
-  public observeHashChange(navigateTo: (hash: string) => void): void {
+interface subscriber {
+  inform: (page: pages) => void;
+}
+
+class HeaderRouter {
+  private routes: Set<pages> = new Set(['page1', 'page2', 'page3', 'error']);
+
+  private subscribers: subscriber[] = [];
+
+  public observeHashChange(): void {
     window.addEventListener('hashchange', () => {
-      const hash = location.hash.slice(1);
-      if (this.routes.has(hash)) {
-        navigateTo(hash);
-      } else {
-        navigateTo('error');
-      }
+      const hash = location.hash.slice(1) as pages;
+      const result = this.routes.has(hash) ? hash : 'error';
+      this.subscribers.forEach((subscriber) => subscriber.inform(result));
     });
   }
 
   public setHash(hash: string): void {
     location.hash = `#${hash}`;
+  }
+
+  public addSubscriber(subscriber: subscriber) {
+    this.subscribers.push(subscriber);
   }
 }
 
