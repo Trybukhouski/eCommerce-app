@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -17,6 +18,14 @@ module.exports = {
       "@core": path.resolve(__dirname, 'src/modules/core/'),
       "@assets": path.resolve(__dirname, 'src/assets'),
     },
+    fallback: {
+      "path": require.resolve("path-browserify"),
+      "os": require.resolve("os-browserify/browser"),
+      "crypto": require.resolve("crypto-browserify"),
+      "buffer": require.resolve("buffer/"),
+      "stream": require.resolve("stream-browserify"),
+      "vm": require.resolve("vm-browserify")
+    }
   },
   output: {
     assetModuleFilename: 'assets/[name][hash][ext][query]',
@@ -30,6 +39,13 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
+    }),
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_CLIENT_ID': JSON.stringify(process.env.REACT_APP_CLIENT_ID),
+      'process.env.REACT_APP_CLIENT_SECRET': JSON.stringify(process.env.REACT_APP_CLIENT_SECRET),
+      'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
+      'process.env.REACT_APP_AUTH_URL': JSON.stringify(process.env.REACT_APP_AUTH_URL),
+      'process.env.REACT_APP_SCOPE': JSON.stringify(process.env.REACT_APP_SCOPE),
     }),
   ],
   module: {
@@ -65,7 +81,7 @@ module.exports = {
                       [
                         'postcss-preset-env',
                         {
-                          stage: 3, 
+                          stage: 3,
                           features: {
                             'custom-properties': false,
                           },

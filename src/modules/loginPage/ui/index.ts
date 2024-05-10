@@ -10,6 +10,7 @@ const emailInputOptions = {
   hasHint: true,
   require: true,
   type: 'email',
+  autocomplete: 'email',
 };
 
 const passwordInputOptions = {
@@ -19,6 +20,7 @@ const passwordInputOptions = {
   hasHint: true,
   require: true,
   type: 'password',
+  autocomplete: 'current-password',
 };
 
 const formOptions = {
@@ -68,7 +70,7 @@ class LoginPageUI {
     this.section.append(this.container);
     this.container.append(this.form);
 
-    this.section.classList.add(style["login-page"]);
+    this.section.classList.add(style['login-page']);
   }
 }
 
