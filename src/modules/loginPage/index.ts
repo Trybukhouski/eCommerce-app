@@ -3,9 +3,10 @@ import loginPageUI from './ui';
 export const clientCredentials = {
   clientId: 'P7AHNZvx7l7ATvqkj10zbEQa',
   clientSecret: 'z7kCZZoMPb5UmBBl_0g70ROn-vEmvGLn',
-  scope: 'introspect_oauth_tokens:ecommerce2024 manage_my_profile:ecommerce2024 manage_api_clients:ecommerce2024 manage_customers:ecommerce2024 create_anonymous_token:ecommerce2024',
+  scope:
+    'introspect_oauth_tokens:ecommerce2024 manage_my_profile:ecommerce2024 manage_api_clients:ecommerce2024 manage_customers:ecommerce2024 create_anonymous_token:ecommerce2024',
   apiUrl: 'https://api.us-central1.gcp.commercetools.com',
-  authUrl: 'https://auth.us-central1.gcp.commercetools.com'
+  authUrl: 'https://auth.us-central1.gcp.commercetools.com',
 };
 
 interface LoginData {
@@ -14,9 +15,11 @@ interface LoginData {
 }
 class LoginPage {
   public elem = loginPageUI.section;
+
   public uiApi = loginPageUI;
 
   private emailInput: HTMLInputElement | null = null;
+
   private passwordInput: HTMLInputElement | null = null;
 
   constructor() {
@@ -42,14 +45,14 @@ class LoginPage {
 
     const loginData: LoginData = {
       email: this.emailInput.value,
-      password: this.passwordInput.value
+      password: this.passwordInput.value,
     };
 
     const url = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers/token`;
     const body = new URLSearchParams({
-      'grant_type': 'password',
-      'username': loginData.email,
-      'password': loginData.password
+      grant_type: 'password',
+      username: loginData.email,
+      password: loginData.password,
     }).toString();
 
     try {
@@ -57,9 +60,11 @@ class LoginPage {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(`${clientCredentials.clientId}:${clientCredentials.clientSecret}`)
+          Authorization: `Basic ${btoa(
+            `${clientCredentials.clientId}:${clientCredentials.clientSecret}`
+          )}`,
         },
-        body: body
+        body,
       });
 
       if (!response.ok) {
@@ -74,9 +79,7 @@ class LoginPage {
       console.error('Authentication error:', error);
       alert('Failed to login!');
     }
-
-  }}
+  }
+}
 
 export default LoginPage;
-
-
