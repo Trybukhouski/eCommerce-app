@@ -1,4 +1,3 @@
-// AuthService.ts
 import { handleResponse } from '@shared/utils/errorHandling';
 import { clientCredentials } from '../../../config';
 
