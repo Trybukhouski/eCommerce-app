@@ -1,5 +1,9 @@
 import { ValidationRule } from './class/validation';
 
+function flipDate(date: string) {
+  return date.replace(/^(\d{1,2})([-.]\d{1,2}[-.])(\d{4})$/, '$3$2$1');
+}
+
 const birthDateValidation = new ValidationRule({
   minLength: 8,
   pattern: `^\\d{1,2}([\\-\\.]{1})\\d{1,2}\\1\\d{4}$`,
@@ -14,8 +18,9 @@ birthDateValidation.addHints([
         return false;
       }
 
+      const correctDateStr = flipDate(s);
       const currentData = new Date();
-      const birthDate = new Date(s);
+      const birthDate = new Date(correctDateStr);
       const yearsDifference = currentData.getFullYear() - birthDate.getFullYear();
       if (Number.isNaN(yearsDifference)) {
         return false;
@@ -24,13 +29,13 @@ birthDateValidation.addHints([
       if (yearsDifference > 14) {
         return true;
       }
-      if (yearsDifference === 14 && birthDate.getMonth() - currentData.getMonth() > 0) {
+      if (yearsDifference === 14 && birthDate.getMonth() - currentData.getMonth() < 0) {
         return true;
       }
       if (
         yearsDifference === 14 &&
         birthDate.getMonth() - currentData.getMonth() === 0 &&
-        birthDate.getDate() - currentData.getDate() >= 0
+        birthDate.getDate() - currentData.getDate() <= 0
       ) {
         return true;
       }
@@ -39,7 +44,7 @@ birthDateValidation.addHints([
   },
   {
     text: 'It should be an actual date',
-    callback: (s) => new Date(s).toString() !== 'Invalid Date',
+    callback: (s) => new Date(flipDate(s)).toString() !== 'Invalid Date',
   },
   {
     text: 'Please, enter in the correct format (dd-mm-yyyy).',
