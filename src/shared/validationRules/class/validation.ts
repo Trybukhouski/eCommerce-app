@@ -21,10 +21,13 @@ class ValidationRule {
 
   private signedInputs: Input[] = [];
 
-  constructor({ minLength = 0, pattern = '', titleText = '' } = {}) {
+  private hasCustomValidation: boolean;
+
+  constructor({ minLength = 0, pattern = '', titleText = '', hasCustomValidation = false } = {}) {
     this.minLength = minLength;
     this.pattern = pattern;
     this.titleText = titleText;
+    this.hasCustomValidation = hasCustomValidation;
   }
 
   public setRules(input: Input): void {
@@ -67,14 +70,20 @@ class ValidationRule {
     const input = this.signedInputs.find((i) => i.input === targetInput);
     const liArr = input?.hint?.childNodes;
     if (!liArr) return;
+
+    let errorMess = '';
     this.hints.forEach((h, i) => {
       const li = liArr[i] as HTMLElement;
       if (h.callback(value)) {
         li.setAttribute('data-correct', 'true');
       } else {
         li.setAttribute('data-correct', 'false');
+        errorMess = h.text;
       }
     });
+    if (this.hasCustomValidation) {
+      input.input.setCustomValidity(errorMess);
+    }
   }
 
   public addHints(hints: Hint[]): void {

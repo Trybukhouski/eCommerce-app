@@ -1,9 +1,14 @@
-import { emailValidation, passwordValidation } from '@shared/index';
+import {
+  emailValidation,
+  passwordValidation,
+  nameValidation,
+  birthDateValidation,
+} from '@shared/index';
 
 const requiredWithHintPattern = {
   hasHint: true,
   require: true,
-}
+};
 
 const emailInputOptions = {
   labelText: 'Email:',
@@ -37,7 +42,7 @@ const birthDateInputOptions = {
   labelText: 'Date of Birth:',
   placeholder: '15-03-1988',
   name: 'birth-date',
-  type: 'date',
+  type: 'text',
 };
 
 const adressInputOptions = {
@@ -61,11 +66,11 @@ const formOptions = {
   inputsOptions: [
     {
       options: firstNameInputOptions,
-      // rule: emailValidation,
+      rule: nameValidation,
     },
     {
       options: lastNameInputOptions,
-      // rule: emailValidation,
+      rule: nameValidation,
     },
     {
       options: emailInputOptions,
@@ -77,11 +82,11 @@ const formOptions = {
     },
     {
       options: birthDateInputOptions,
-      // rule: emailValidation,
+      rule: birthDateValidation,
     },
     {
       options: adressInputOptions,
-      // rule: emailValidation,
+      // rule: adressValidation,
     },
   ],
   buttonOptions: {

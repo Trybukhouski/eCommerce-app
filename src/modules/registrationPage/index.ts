@@ -1,4 +1,4 @@
-import './ui/config'
+import './ui/config';
 import { registrPageUI } from './ui';
 
 class RegistrPage {
