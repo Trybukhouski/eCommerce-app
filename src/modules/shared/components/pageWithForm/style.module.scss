@@ -37,3 +37,26 @@
     margin-bottom: var(--login-page-header-margin-bottom);
   }
 }
+
+.error-message {
+  color: red;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.success-message {
+  color: green;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+
