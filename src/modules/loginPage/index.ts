@@ -12,7 +12,11 @@ class LoginPage {
   private passwordInput: HTMLInputElement | null = null;
 
   constructor() {
-    document.addEventListener('DOMContentLoaded', this.initialize.bind(this));
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      this.initialize();
+    } else {
+      document.addEventListener('DOMContentLoaded', this.initialize.bind(this));
+    }
   }
 
   private initialize(): void {
