@@ -1,4 +1,4 @@
-import { Input, Form } from '@shared/index';
+import { Input, Form } from '@shared';
 import * as style from './style.module.scss';
 
 class FormPageUI {

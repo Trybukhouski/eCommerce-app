@@ -1,4 +1,4 @@
-import { Input, Button } from '@shared/index';
+import { Input, Button } from '@shared';
 
 type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
 

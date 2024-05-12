@@ -3,7 +3,7 @@ import {
   passwordValidation,
   nameValidation,
   birthDateValidation,
-} from '@shared/index';
+} from '@shared';
 
 const requiredWithHintPattern = {
   hasHint: true,

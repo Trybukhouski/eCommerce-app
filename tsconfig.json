@@ -4,7 +4,7 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "baseUrl": "./src",
     "paths": {
-      "@shared/*": ["shared/*"],
+      "@shared": ["shared"],
       "@core/*": ["modules/core/*"],
       "@assets/*": ["assets/*"],
       "@modules/*": ["modules/*"],

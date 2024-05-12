@@ -1,4 +1,4 @@
-import { emailValidation, passwordValidation } from '@shared/index';
+import { emailValidation, passwordValidation } from '@shared';
 
 const emailInputOptions = {
   labelText: 'Email:',
