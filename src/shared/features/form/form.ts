@@ -1,4 +1,5 @@
 import { Input, Button } from '@shared';
+import { defaultFormOptions, FormOptions } from './config';
 
 type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
 
@@ -11,22 +12,23 @@ class Form {
 
   public button: HTMLButtonElement;
 
-  constructor({ hasFieldset = false, inputsOptions = [], buttonOptions = {} }: FormOptions = {}) {
+  constructor(options: FormOptions) {
+    const configs = { ...defaultFormOptions, ...options };
     const form = document.createElement('form');
     this.container = form;
     this.form = form;
-    if (hasFieldset) {
+    if (configs.hasFieldset) {
       const fieldset = document.createElement('fieldset');
       form.append(fieldset);
       this.container = fieldset;
     }
 
     this.inputArr = [];
-    if (inputsOptions.length > 0 && inputsOptions) {
-      this.addInputs(inputsOptions);
+    if (configs.inputsOptions.length > 0 && configs.inputsOptions) {
+      this.addInputs(configs.inputsOptions);
     }
 
-    const button = new Button(buttonOptions);
+    const button = new Button(configs.buttonOptions);
     this.button = button.button;
     this.form.append(button.button);
 
