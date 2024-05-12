@@ -1,9 +1,4 @@
-import {
-  emailValidation,
-  passwordValidation,
-  nameValidation,
-  birthDateValidation,
-} from '@shared';
+import { emailValidation, passwordValidation, nameValidation, birthDateValidation } from '@shared';
 
 const requiredWithHintPattern = {
   hasHint: true,

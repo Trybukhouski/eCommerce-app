@@ -1,4 +1,4 @@
-import { FormPageUI } from '@modules/shared';
+import { FormPageUI } from '@modules/auth/shared/features';
 import { formOptions } from './config';
 
 const registrPageUI = new FormPageUI(formOptions, 'Create account');
