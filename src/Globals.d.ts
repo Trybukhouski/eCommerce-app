@@ -22,3 +22,8 @@ declare module '*.ico' {
   const value: string;
   export default string;
 }
+
+declare module '*.module.scss' {
+  const classes: { [key: string]: string };
+  export default classes;
+}
