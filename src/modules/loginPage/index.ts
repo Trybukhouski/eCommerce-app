@@ -1,6 +1,6 @@
 import { handleResponse } from '@shared/utils/errorHandling';
 import { loginPageUI } from '@modules/loginPage/ui';
-import { clientCredentials } from '../../config';
+import { clientCredentials } from 'config';
 
 class LoginPage {
   public elem = loginPageUI.section;
