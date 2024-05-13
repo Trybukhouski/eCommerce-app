@@ -1,0 +1,28 @@
+.notification {
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    position: fixed;
+    top: 75px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    z-index: 1000;
+    width: 50%;
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.notification.success {
+    background-color: green;
+}
+
+.notification.error {
+    background-color: red;
+}
+
+.notification.info {
+    background-color: blue;
+}

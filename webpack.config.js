@@ -28,7 +28,7 @@ module.exports = {
       "@assets": path.resolve(__dirname, 'src/assets/'),
       "@modules": path.resolve(__dirname, 'src/modules/'),
       "@config": path.resolve(__dirname, 'src/'),
-      "@service": path.resolve(__dirname, 'src/service/'),
+      "@services": path.resolve(__dirname, 'src/services/'),
     },
   },
   output: {

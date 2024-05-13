@@ -1,5 +1,6 @@
 import { loginPageUI } from '@modules/loginPage/ui';
-import { AuthService } from '@service/AuthService';
+import { AuthService } from '@services/AuthService';
+import { NotificationService } from '@services/NotificationService';
 
 class LoginPage {
   public elem = loginPageUI.section;
@@ -30,37 +31,20 @@ class LoginPage {
   private async handleLogin(event: Event): Promise<void> {
     event.preventDefault();
     if (!(this.emailInput && this.passwordInput)) {
-      console.error('Email or password input not found');
+      NotificationService.displayError('Email or password input not found');
       return;
     }
 
     try {
       const data = await AuthService.login(this.emailInput.value, this.passwordInput.value);
+      NotificationService.displaySuccess('Logged in successfully!');
       console.log('Authentication successful:', data);
-      this.showSuccess('Logged in successfully!');
       setTimeout(() => {
         window.location.href = '/main.html';
       }, 2000);
     } catch (error) {
-      console.error('Login failed:', error);
-      this.showError(error instanceof Error ? error.message : 'Login error');
+      NotificationService.displayError(error instanceof Error ? error.message : 'Login error');
     }
-  }
-
-  private showError(message: string): void {
-    this.uiApi.emailError.textContent = message;
-    this.emailInput!.classList.add('input-error');
-    this.passwordInput!.classList.add('input-error');
-    setTimeout(() => {
-      this.uiApi.emailError.textContent = '';
-      this.emailInput!.classList.remove('input-error');
-      this.passwordInput!.classList.remove('input-error');
-    }, 5000);
-  }
-
-  private showSuccess(message: string): void {
-    this.uiApi.successMessage.textContent = message;
-    this.uiApi.successMessage.style.display = 'block';
   }
 }
 

@@ -10,7 +10,7 @@
       "@assets/*": ["assets/*"],
       "@modules/*": ["modules/*"],
       "@config/*": ["config"],
-      "@service/*": ["service/*"],
+      "@services/*": ["services/*"],
     },
 
     /* Language and Environment */
