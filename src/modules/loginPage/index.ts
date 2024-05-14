@@ -31,7 +31,7 @@ class LoginPage {
       this.submitButton.addEventListener('click', this.handleLogin.bind(this));
       this.submitButton.focus();
     } else {
-      console.error('Submit button not found or is not a button element');
+      // console.error('Submit button not found or is not a button element');
     }
 
     const { form } = this.uiApi;
@@ -49,11 +49,18 @@ class LoginPage {
 
     try {
       const data = await AuthService.login(this.emailInput.value, this.passwordInput.value);
-      NotificationService.displaySuccess('Logged in successfully!');
-      console.log('Authentication successful:', data);
-      setTimeout(() => {
-        window.location.href = '/main.html';
-      }, 2000);
+      // console.log('Response data:', data);
+      if (data.access_token) {
+        localStorage.setItem('accessToken', data.access_token);
+        NotificationService.displaySuccess('Logged in successfully!');
+        // console.log('Authentication successful:', data);
+
+        setTimeout(() => {
+          window.location.href = '/main.html';
+        }, 2000);
+      } else {
+        throw new Error('Access Token is missing');
+      }
     } catch (error) {
       NotificationService.displayError(error instanceof Error ? error.message : 'Login error');
     }
