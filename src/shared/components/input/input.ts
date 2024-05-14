@@ -10,6 +10,8 @@ class Input {
 
   public hint?: HTMLUListElement;
 
+  public hintContainer?: HTMLDivElement;
+
   constructor(options?: InputOptions) {
     const configs = { ...defaultInputOptions, ...options };
     this.container = document.createElement('div');
@@ -32,6 +34,7 @@ class Input {
     hintContainer.append(hint);
     this.container.append(hintContainer);
     this.hint = hint;
+    this.hintContainer = hintContainer;
   }
 
   private setAtributes({

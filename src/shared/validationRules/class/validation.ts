@@ -1,9 +1,4 @@
-interface Input {
-  input: HTMLInputElement;
-  label: HTMLLabelElement;
-  container: HTMLDivElement;
-  hint?: HTMLUListElement;
-}
+import { Input } from "@shared";
 
 interface Hint {
   text: string;
@@ -50,13 +45,16 @@ class ValidationRule {
       const fullTitleText = `${minLengthStroke}${this.titleText}`;
       inputElem.setAttribute('title', fullTitleText);
     }
+    let hintHeight = 0;
     if (this.hints.length > 0 && hintElem) {
       this.hints.forEach((h) => {
         const li = document.createElement('li');
         li.textContent = h.text;
+        hintHeight += this.countHintHeight(h.text);
         hintElem.append(li);
       });
     }
+    input.hintContainer?.setAttribute('style', `--data-height: ${hintHeight}rem`);
 
     inputElem.addEventListener('input', this.checkHint.bind(this));
   }
@@ -89,6 +87,11 @@ class ValidationRule {
   public addHints(hints: Hint[]): void {
     this.hints.push(...hints);
   }
+
+  private countHintHeight(s: string): number {
+    const lettersPerStroke = 30; //approximately 30 chars fits into line with a screen width of 320px 
+    return Math.ceil(s.length / lettersPerStroke);
+  } 
 }
 
 export { ValidationRule };

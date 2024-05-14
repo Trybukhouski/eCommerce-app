@@ -1,5 +1,12 @@
 @import '@assets/variables.scss';
 
+@mixin hintHeight($margin: 0) {
+  height: calc(var(--data-height) + $margin);
+  @media (min-width: 541px) {
+    height: calc(var(--data-height) / 1.5 + $margin);
+  }
+}
+
 .input {
   display: flex;
   flex-direction: column;
@@ -17,7 +24,8 @@
 
     ul {
       box-sizing: border-box;
-      height: calc(var(--input-hint-height) - 2 * var(--input-hint-margin-block));
+      @include hintHeight();
+      // height: calc(var(--input-hint-height) - 2 * var(--input-hint-margin-block));
       padding-inline-start: var(--input-hint-pad-start);
       margin-block: var(--input-hint-margin-block);
 
@@ -56,7 +64,8 @@
 
   input:invalid + .input__hint,
   input:focus + .input__hint {
-    height: var(--input-hint-height);
+    @include hintHeight(calc(2 * var(--input-hint-margin-block)));
+    // height: var(--input-hint-height);
 
     li {
       left: 0;
