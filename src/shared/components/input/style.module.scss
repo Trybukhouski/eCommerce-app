@@ -8,13 +8,23 @@
 }
 
 .input {
+  $input-font-size: var(--font-size-s); // 16px
+  $input-input-paddings: var(--block-paddings-s); // 18px 11px
+  $input-label-margin-bottom: var(--label-margin-bottom); // 14px
+  $input-hint-pad-start: 1.0625rem; // 17px
+  $input-hint-margin-block: 1.0625rem; // 17px
+  $input-paddings: var(--block-left-padding-m); // 20px
+  $input-border-width: var(--border-width-m);
+  // $input-hint-height: 8.3125rem; // 133px
+
+  position: relative;
   display: flex;
   flex-direction: column;
-  font-size: var(--input-font-size);
-  padding: var(--input-paddings);
+  font-size: $input-font-size;
+  padding: $input-paddings;
 
   label {
-    margin-bottom: var(--input-label-margin-bottom);
+    margin-bottom: $input-label-margin-bottom;
   }
 
   .input__hint {
@@ -25,9 +35,9 @@
     ul {
       box-sizing: border-box;
       @include hintHeight();
-      // height: calc(var(--input-hint-height) - 2 * var(--input-hint-margin-block));
-      padding-inline-start: var(--input-hint-pad-start);
-      margin-block: var(--input-hint-margin-block);
+      // height: calc($input-hint-height) - 2 * $input-hint-margin-block);
+      padding-inline-start: $input-hint-pad-start;
+      margin-block: $input-hint-margin-block;
 
       li {
         position: relative;
@@ -38,10 +48,11 @@
   }
 
   input {
-    font-size: var(--input-font-size);
-    padding: var(--input-input-paddings);
+    font-size: $input-font-size;
+    padding: $input-input-paddings;
     border-radius: var(--input-border-radius);
     position: relative;
+    border-width: $input-border-width;
 
     &:invalid {
       outline: var(--wrong-input-color) auto 1px;
@@ -64,8 +75,8 @@
 
   input:invalid + .input__hint,
   input:focus + .input__hint {
-    @include hintHeight(calc(2 * var(--input-hint-margin-block)));
-    // height: var(--input-hint-height);
+    @include hintHeight(calc(2 * $input-hint-margin-block));
+    // height: $input-hint-height);
 
     li {
       left: 0;

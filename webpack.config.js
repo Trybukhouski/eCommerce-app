@@ -96,11 +96,19 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: [
+        oneOf: [
           {
-            loader: 'svg-sprite-loader',
+            test: /\.sprite\.svg$/i,
+            use: [
+              {
+                loader: 'svg-sprite-loader',
+              }
+            ],
+          },
+          {
+            type: 'asset/resource',
           }
-        ]
+        ],
       },
       {
         test: /\.tsx?$/,

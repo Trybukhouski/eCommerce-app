@@ -1,7 +1,7 @@
 import * as style from './style.module.scss';
 import { defaultButtonOptions, ButtonOptions } from './config';
 
-type location = NonNullable<ButtonOptions['icon']>['towhere']; // "start" | "end"
+type Location = NonNullable<ButtonOptions['icon']>['towhere']; // "start" | "end"
 
 class Button {
   public button: HTMLButtonElement;
@@ -29,7 +29,7 @@ class Button {
     }
   }
 
-  private addIcon(sprite: BrowserSpriteSymbol, where: location): void {
+  private addIcon(sprite: BrowserSpriteSymbol, where: Location): void {
     const svg = `
     <svg viewBox="${sprite.viewBox}" width="50" height="50">
       <use xlink:href="#${sprite.id}"/>

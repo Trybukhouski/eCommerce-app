@@ -22,15 +22,21 @@
   --neutral-input-color: rgb(127, 127, 127);
 
   // input's metrics
-  --input-font-size: 1rem; // 16px
-  --input-input-paddings: 1.125rem 0.6875rem; // 18px 11px
-  --input-label-margin-bottom: 0.875rem; // 14px
-  --input-hint-pad-start: 1.0625rem; // 17px
-  --input-hint-margin-block: 1.0625rem; // 17px
-  --input-hint-height: 8.3125rem; // 133px
-  --input-paddings: 1.25rem; // 20px
+  --font-size-s: 1rem;
+
+  --block-left-padding-m: 1.25rem;
+
+  --block-left-padding-s: 0.6875rem;
+  --block-top-padding-s: 1.125rem;
+
+  --block-paddings-m: var(--block-left-padding-m); // 20px
+  --block-paddings-s: var(--block-top-padding-s) var(--block-left-padding-s); // 18px 11px
+
+  --label-margin-bottom: 0.875rem;
 
   --arched-cubic-bezier: cubic-bezier(0.06, 0.47, 0.42, 1.11);
+
+  --border-width-m: 0.125rem;
 
   // login and registration pages styles
   --form-bg-color: rgb(230, 230, 230);

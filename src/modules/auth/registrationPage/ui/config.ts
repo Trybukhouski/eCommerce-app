@@ -1,4 +1,12 @@
-import { emailValidation, passwordValidation, nameValidation, birthDateValidation } from '@shared';
+import {
+  emailValidation,
+  passwordValidation,
+  nameValidation,
+  birthDateValidation,
+  FormOptions,
+} from '@shared';
+
+type InputOptionsType = NonNullable<FormOptions['inputsOptions']>[number]['type'];
 
 const requiredWithHintPattern = {
   hasHint: true,
@@ -56,6 +64,8 @@ const adressInputOptions = {
   adressInputOptions,
 ].forEach((o) => Object.assign(o, requiredWithHintPattern));
 
+const passwordType: InputOptionsType = 'password';
+
 const formOptions = {
   hasFieldset: true,
   inputsOptions: [
@@ -74,6 +84,7 @@ const formOptions = {
     {
       options: passwordInputOptions,
       rule: passwordValidation,
+      type: passwordType,
     },
     {
       options: birthDateInputOptions,

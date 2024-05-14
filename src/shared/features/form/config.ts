@@ -7,6 +7,7 @@ interface FormOptions {
     rule?: {
       setRules(input: Input): void;
     };
+    type?: 'password';
   }[];
   buttonOptions?: ButtonOptions;
 }

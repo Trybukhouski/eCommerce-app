@@ -1,4 +1,4 @@
-import { Input, Button } from '@shared';
+import { Input, Button, PasswordInput } from '@shared';
 import { defaultFormOptions, FormOptions } from './config';
 
 type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
@@ -38,7 +38,12 @@ class Form {
   private addInputs(arr: InputsOptionsWithRule): void {
     const { container } = this;
     arr.forEach((i) => {
-      const input = new Input(i.options);
+      let input;
+      if (i.type === 'password') {
+        input = new PasswordInput(i.options);
+      } else {
+        input = new Input(i.options);
+      }
       container.append(input.container);
       this.inputArr.push(input);
 

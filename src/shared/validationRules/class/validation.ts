@@ -1,4 +1,4 @@
-import { Input } from "@shared";
+import { Input } from '@shared';
 
 interface Hint {
   text: string;
@@ -89,9 +89,9 @@ class ValidationRule {
   }
 
   private countHintHeight(s: string): number {
-    const lettersPerStroke = 30; //approximately 30 chars fits into line with a screen width of 320px 
+    const lettersPerStroke = 30; // approximately 30 chars fits into line with a screen width of 320px
     return Math.ceil(s.length / lettersPerStroke);
-  } 
+  }
 }
 
 export { ValidationRule };
