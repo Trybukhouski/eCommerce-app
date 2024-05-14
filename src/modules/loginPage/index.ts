@@ -11,9 +11,11 @@ class LoginPage {
 
   private passwordInput: HTMLInputElement | null = null;
 
+  public submitButton: HTMLButtonElement | null = null;
+
   constructor() {
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      this.initialize();
+      setTimeout(this.initialize.bind(this), 0);
     } else {
       document.addEventListener('DOMContentLoaded', this.initialize.bind(this));
     }
@@ -22,6 +24,16 @@ class LoginPage {
   private initialize(): void {
     this.emailInput = this.elem.querySelector('input[name="email"]');
     this.passwordInput = this.elem.querySelector('input[name="password"]');
+    const submitButtonElement = this.elem.querySelector('button[type="submit"]');
+
+    if (submitButtonElement instanceof HTMLButtonElement) {
+      this.submitButton = submitButtonElement;
+      this.submitButton.addEventListener('click', this.handleLogin.bind(this));
+      this.submitButton.focus();
+    } else {
+      console.error('Submit button not found or is not a button element');
+    }
+
     const { form } = this.uiApi;
     if (form) {
       form.addEventListener('submit', this.handleLogin.bind(this));
