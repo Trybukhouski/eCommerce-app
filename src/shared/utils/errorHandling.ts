@@ -11,32 +11,34 @@ const defaultMessages: ErrorMessageMap = {
 };
 
 const customErrorMessages: ErrorMessageMap = {
+  invalid_customer_account_credentials: 'Customer account with the given credentials not found.',
   InvalidCredentials: 'Invalid login or password. Please check your credentials and try again.',
   UserNotFound: 'No user found with the provided credentials.',
 };
-
 export async function handleResponse(response: Response) {
-  let responseData;
-  try {
-    responseData = await response.json();
-  } catch (error) {
-    responseData = { message: await response.text() };
-  }
+  const contentType = response.headers.get('Content-Type');
 
   if (!response.ok) {
-    const errorMessage =
-      responseData.errors
-        ?.map((err: ErrorObject) => {
-          return customErrorMessages[err.code] || err.message;
-        })
-        .join(', ') ||
-      `${
-        defaultMessages[response.status as keyof typeof defaultMessages] ||
-        `Unexpected Error - Status ${response.status}`
-      }: ${responseData.message || 'An unknown error occurred.'}`;
-
+    let errorMessage = 'An unknown error occurred.';
+    if (contentType && contentType.includes('application/json')) {
+      const responseData = await response.json();
+      if (responseData.errors && responseData.errors.length > 0) {
+        errorMessage = responseData.errors
+          .map((err: ErrorObject) => {
+            return customErrorMessages[err.code] || err.message;
+          })
+          .join(', ');
+      } else {
+        errorMessage =
+          defaultMessages[response.status as keyof typeof defaultMessages] ||
+          `Unexpected Error - Status ${response.status}: ${responseData.message || errorMessage}`;
+      }
+    } else {
+      errorMessage = await response.text();
+    }
     console.error('Server error:', errorMessage);
     throw new Error(errorMessage);
   }
-  return responseData;
+
+  return response.json();
 }

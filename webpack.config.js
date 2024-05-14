@@ -2,6 +2,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 let mode = 'development';
 if (process.env.NODE_ENV === 'production') {
@@ -10,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   entry: './src/index.ts',
-  mode: mode,
+  mode,
   resolve: {
     fallback: {
       "path": require.resolve("path-browserify"),
@@ -48,12 +51,12 @@ module.exports = {
       process: 'process/browser',
     }),
     new webpack.DefinePlugin({
-      'process.env.CLIENT_ID': JSON.stringify(process.env.CLIENT_ID || 'P7AHNZvx7l7ATvqkj10zbEQa'),
-      'process.env.CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET || 'z7kCZZoMPb5UmBBl_0g70ROn-vEmvGLn'),
-      'process.env.SCOPE': JSON.stringify(process.env.SCOPE || 'introspect_oauth_tokens:ecommerce2024 manage_my_profile:ecommerce2024 manage_api_clients:ecommerce2024 manage_customers:ecommerce2024 create_anonymous_token:ecommerce2024'),
-      'process.env.API_URL': JSON.stringify(process.env.API_URL || 'https://api.us-central1.gcp.commercetools.com'),
-      'process.env.AUTH_URL': JSON.stringify(process.env.AUTH_URL || 'https://auth.us-central1.gcp.commercetools.com'),
-      'process.env.PROJECT_KEY': JSON.stringify(process.env.PROJECT_KEY || 'ecommerce2024'),
+      'process.env.CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
+      'process.env.CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET),
+      'process.env.SCOPE': JSON.stringify(process.env.SCOPE),
+      'process.env.API_URL': JSON.stringify(process.env.API_URL),
+      'process.env.AUTH_URL': JSON.stringify(process.env.AUTH_URL),
+      'process.env.PROJECT_KEY': JSON.stringify(process.env.PROJECT_KEY),
     }),
   ],
   module: {

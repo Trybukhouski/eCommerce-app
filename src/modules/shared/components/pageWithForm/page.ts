@@ -33,6 +33,7 @@ class FormPageUI {
     const form = new Form(formOptions);
     this.inputArr = form.inputArr;
     this.submitButton = form.button;
+    this.submitButton.type = 'submit';
     this.form = form.form;
 
     this.emailError = document.createElement('div');
