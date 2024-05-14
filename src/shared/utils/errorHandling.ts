@@ -36,7 +36,7 @@ export async function handleResponse(response: Response) {
     } else {
       errorMessage = await response.text();
     }
-    console.error('Server error:', errorMessage);
+    // console.error('Server error:', errorMessage);
     throw new Error(errorMessage);
   }
 

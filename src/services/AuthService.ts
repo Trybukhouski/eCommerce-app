@@ -1,10 +1,11 @@
 import { clientCredentials } from '@config/config';
 import { handleResponse } from '@shared/utils/errorHandling';
+import { LoginResponse } from '@services/interfaces';
 
 export class AuthService {
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
 
-  public static async login(username: string, password: string): Promise<any> {
+  public static async login(username: string, password: string): Promise<LoginResponse> {
     const url = `${this.baseUrl}/token`;
     const body = new URLSearchParams({
       grant_type: 'password',
