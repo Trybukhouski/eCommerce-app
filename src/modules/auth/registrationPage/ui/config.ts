@@ -67,21 +67,21 @@ const countrySelectOptions = {
 
 const cityInputOption = {
   labelText: 'City:',
-  placeholder: 'Minsk, Belarus, Moscow etc.',
+  placeholder: 'Moscow',
   name: 'city',
   type: 'text',
 };
 
 const streetInputOptions = {
   labelText: 'Street:',
-  placeholder: 'Poopoopoo Building st. etc.',
+  placeholder: 'Lenina',
   name: 'street',
   type: 'text',
 };
 
 const postInputOption = {
-  labelText: 'Mail code:',
-  placeholder: 'POST-mail(index) code',
+  labelText: 'Postal code:',
+  placeholder: '12345',
   name: 'index',
   type: 'text',
 };
