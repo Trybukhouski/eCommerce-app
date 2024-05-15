@@ -2,6 +2,8 @@ import { emailValidation, passwordValidation, FormOptions } from '@shared';
 
 type InputOptionsType = NonNullable<FormOptions['inputsOptions']>[number]['type'];
 
+const passwordType: InputOptionsType = 'password';
+
 const emailInputOptions = {
   labelText: 'Email:',
   placeholder: 'example@gmail.com',
@@ -19,8 +21,6 @@ const passwordInputOptions = {
   require: true,
   type: 'password',
 };
-
-const passwordType: InputOptionsType = 'password';
 
 const formOptions = {
   hasFieldset: true,

@@ -33,6 +33,10 @@ class Form {
     this.form.append(button.button);
 
     this.validityListener();
+
+    if (configs.id) {
+      this.form.id = configs.id;
+    }
   }
 
   private addInputs(arr: InputsOptionsWithRule): void {

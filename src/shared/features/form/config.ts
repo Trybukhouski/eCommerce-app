@@ -10,9 +10,10 @@ interface FormOptions {
     type?: 'password' | 'select';
   }[];
   buttonOptions?: ButtonOptions;
+  id?: string;
 }
 
-const defaultFormOptions: Required<FormOptions> = {
+const defaultFormOptions: Required<Omit<FormOptions, 'id'>> = {
   hasFieldset: false,
   inputsOptions: [],
   buttonOptions: {},
