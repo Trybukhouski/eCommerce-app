@@ -1,6 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 let mode = 'development';
 if (process.env.NODE_ENV === 'production') {
@@ -9,14 +13,25 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   entry: './src/index.ts',
-  mode: mode,
+  mode,
   resolve: {
+    fallback: {
+      "path": require.resolve("path-browserify"),
+      "os": require.resolve("os-browserify/browser"),
+      "crypto": require.resolve("crypto-browserify"),
+      "vm": require.resolve("vm-browserify"),
+      "buffer": require.resolve("buffer/"),
+      "stream": require.resolve("stream-browserify"),
+      process: require.resolve('process/browser'),
+    },
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
       "@shared": path.resolve(__dirname, 'src/shared/'),
       "@core": path.resolve(__dirname, 'src/modules/core/'),
       "@assets": path.resolve(__dirname, 'src/assets/'),
       "@modules": path.resolve(__dirname, 'src/modules/'),
+      "@config": path.resolve(__dirname, 'src/'),
+      "@services": path.resolve(__dirname, 'src/services/'),
     },
   },
   output: {
@@ -31,6 +46,17 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    new webpack.DefinePlugin({
+      'process.env.CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
+      'process.env.CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET),
+      'process.env.SCOPE': JSON.stringify(process.env.SCOPE),
+      'process.env.API_URL': JSON.stringify(process.env.API_URL),
+      'process.env.AUTH_URL': JSON.stringify(process.env.AUTH_URL),
+      'process.env.PROJECT_KEY': JSON.stringify(process.env.PROJECT_KEY),
     }),
   ],
   module: {
@@ -66,7 +92,7 @@ module.exports = {
                       [
                         'postcss-preset-env',
                         {
-                          stage: 3, 
+                          stage: 3,
                           features: {
                             'custom-properties': false,
                           },
