@@ -1,6 +1,6 @@
-import { loginPageUI } from './ui';
 import { AuthService } from '@services/AuthService';
 import { NotificationService } from '@services/NotificationService';
+import { loginPageUI } from './ui';
 
 class LoginPage {
   public elem = loginPageUI.section;
