@@ -1,3 +1,4 @@
+import * as style from './style.module.scss';
 import { defaultSelectOptions, SelectOptions } from './config';
 
 class Select {
@@ -13,7 +14,7 @@ class Select {
     this.label = document.createElement('label');
     this.select = document.createElement('select');
     this.container.append(this.select);
-    // this.container.classList.add(style.select);
+    this.container.classList.add(style.select);
 
     this.setAtributes(configs);
     this.addOptions(configs.options);

@@ -1,4 +1,4 @@
-@import '@assets/variables.scss';
+@import '@assets/style/inputBoxMixin.scss';
 
 @mixin hintHeight($margin: 0) {
   height: calc(var(--data-height) + $margin);
@@ -17,15 +17,7 @@
   $input-border-width: var(--border-width-m);
   // $input-hint-height: 8.3125rem; // 133px
 
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  font-size: $input-font-size;
-  padding: $input-paddings;
-
-  label {
-    margin-bottom: $input-label-margin-bottom;
-  }
+  @include inputBox($input-font-size, $input-paddings, $input-label-margin-bottom);
 
   .input__hint {
     height: 0;

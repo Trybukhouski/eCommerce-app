@@ -5,10 +5,18 @@
   --big-border-radius: 0.625rem; // 10px
   --small-border-radius: 0.3125rem; // 5px
 
+  // colors
+  --orange-900: #211000;
+  --orange-500: #ff7b00; // previous: rgb(255, 153, 0)
+  --orange-400: #ff9029; // previous: rgb(231, 139, 0)
+  --orange-300: #fda452;
+  --orange-200: #fcb86f; // previous: rgb(203 182 152)
+  --orange-100: #fad9b5;
+
   // button's colors
-  --disabled-button-bg-color: rgb(203 182 152);
-  --hover-button-bg-color: rgb(231, 139, 0);
-  --normal-button-bg-color: rgb(255, 153, 0);
+  --disabled-button-bg-color: var(--orange-200);
+  --hover-button-bg-color: var(--orange-500);
+  --normal-button-bg-color: var(--orange-400);
   --button-color: white;
 
   // button's metrics
