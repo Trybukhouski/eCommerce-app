@@ -1,0 +1,22 @@
+@import '@assets/variables.scss';
+
+.simple-button {
+  font-size: var(--button-font-size);
+  color: var(--button-color);
+  padding: var(--button-padidings);
+  width: var(--button-width);
+  background-color: var(--normal-button-bg-color);
+  border: none;
+  border-radius: var(--big-border-radius);
+  transition: 0.3s background-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--hover-button-bg-color);
+  }
+
+  &:disabled {
+    background-color: var(--disabled-button-bg-color);
+    cursor: auto;
+  }
+}

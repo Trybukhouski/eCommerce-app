@@ -1,2 +1,8 @@
 @import './assets/styles/fonts.module.scss';
 @import './assets/styles/global.module.scss';
+
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+}

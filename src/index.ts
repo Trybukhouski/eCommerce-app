@@ -1,4 +1,6 @@
 import './style.scss';
+import '@modules/application';
+import '@config/config';
 import { Router } from '@routes/index';
 import { MainPageView as MainPage } from '@modules/mainPage/index';
 

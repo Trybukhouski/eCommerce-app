@@ -1,0 +1,60 @@
+@import '@assets/variables.scss';
+
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  > * {
+    max-width: var(--content-max-width);
+  }
+
+  form {
+    background-color: var(--form-bg-color);
+    padding: var(--form-paddings);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--big-border-radius);
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  button {
+    margin: auto;
+    margin-top: var(--form-button-margin-top);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: var(--h2-font-size);
+    margin-bottom: var(--login-page-header-margin-bottom);
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.success-message {
+  color: green;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
