@@ -52,7 +52,7 @@ class Select {
     select.multiple = multiple;
   }
 
-  public addOptions(selectOptions: string[]) {
+  public addOptions(selectOptions: string[]): void {
     selectOptions.forEach((o) => {
       const optionElem = document.createElement('option');
       optionElem.value = o;

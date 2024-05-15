@@ -16,7 +16,7 @@ class PasswordInput extends Input {
     this.addEyeButton();
   }
 
-  private addEyeButton() {
+  private addEyeButton(): void {
     const eye = document.createElement('a');
     eye.classList.add('eye');
     eye.classList.add(this.eyeClasses[0]);
@@ -30,7 +30,7 @@ class PasswordInput extends Input {
     });
   }
 
-  private switchInputType() {
+  private switchInputType(): void {
     const types = this.inputTypes;
 
     const { type } = this.input;
@@ -38,7 +38,7 @@ class PasswordInput extends Input {
     this.input.type = newType;
   }
 
-  private switchEyeClass() {
+  private switchEyeClass(): void {
     const eye = this.eyeElement;
     if (!eye) return;
 
