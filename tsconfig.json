@@ -11,6 +11,10 @@
       "@modules/*": ["modules/*"],
       "@config/*": ["config"],
       "@services/*": ["services/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@routes/*": ["routes/*"],
+      "@root/*": ["*"],
+
     },
 
     /* Language and Environment */
