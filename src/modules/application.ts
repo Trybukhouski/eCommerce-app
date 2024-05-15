@@ -1,5 +1,5 @@
-import { LoginPage } from './auth';
-// import { RegistrPage } from './auth';
+// import { LoginPage } from './auth';
+import { RegistrPage } from './auth';
 
-const lp = new LoginPage();
+const lp = new RegistrPage();
 document.querySelector('body')?.append(lp.elem);

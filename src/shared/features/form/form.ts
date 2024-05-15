@@ -1,4 +1,4 @@
-import { Input, Button, PasswordInput } from '@shared';
+import { Input, Button, PasswordInput, Select } from '@shared';
 import { defaultFormOptions, FormOptions } from './config';
 
 type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
@@ -6,7 +6,7 @@ type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
 class Form {
   public container: HTMLElement;
 
-  public inputArr: Input[];
+  public inputArr: (Input | Select)[];
 
   public form: HTMLFormElement;
 
@@ -41,13 +41,15 @@ class Form {
       let input;
       if (i.type === 'password') {
         input = new PasswordInput(i.options);
+      } else if (i.type === 'select') {
+        input = new Select(i.options);
       } else {
         input = new Input(i.options);
       }
       container.append(input.container);
       this.inputArr.push(input);
 
-      if (i.rule) {
+      if (i.rule && input instanceof Input) {
         i.rule.setRules(input);
       }
     });
@@ -56,7 +58,10 @@ class Form {
   private validityListener(): void {
     this.form.addEventListener('input', () => {
       const isValid = !this.inputArr.some((i) => {
-        return i.input.validity.valid === false || i.input.value.length === 0;
+        if (i instanceof Input) {
+          return i.input.validity.valid === false || i.input.value.length === 0;
+        }
+        return false;
       });
       this.button.disabled = !isValid;
     });

@@ -3,10 +3,18 @@ import {
   passwordValidation,
   nameValidation,
   birthDateValidation,
+  postValidation,
+  streetValidation,
   FormOptions,
 } from '@shared';
 
 type InputOptionsType = NonNullable<FormOptions['inputsOptions']>[number]['type'];
+
+const passwordType: InputOptionsType = 'password';
+
+const selectType: InputOptionsType = 'select';
+
+const formId = 'registration';
 
 const requiredWithHintPattern = {
   hasHint: true,
@@ -48,10 +56,33 @@ const birthDateInputOptions = {
   type: 'text',
 };
 
-const adressInputOptions = {
-  labelText: 'Address:',
-  placeholder: 'Minsk, Belarus, Independence str 100-34',
-  name: 'adress',
+const countrySelectOptions = {
+  name: 'country',
+  form: formId,
+  labelText: 'Country:',
+  size: 1,
+  required: true,
+  options: 'Russia, Belarus, USA, Kazakhstan'.split(', '),
+};
+
+const cityInputOption = {
+  labelText: 'City:',
+  placeholder: 'Minsk, Belarus, Moscow etc.',
+  name: 'city',
+  type: 'text',
+};
+
+const streetInputOptions = {
+  labelText: 'Street:',
+  placeholder: 'Poopoopoo Building st. etc.',
+  name: 'street',
+  type: 'text',
+};
+
+const postInputOption = {
+  labelText: 'Mail code:',
+  placeholder: 'POST-mail(index) code',
+  name: 'index',
   type: 'text',
 };
 
@@ -61,10 +92,10 @@ const adressInputOptions = {
   firstNameInputOptions,
   lastNameInputOptions,
   birthDateInputOptions,
-  adressInputOptions,
+  cityInputOption,
+  streetInputOptions,
+  postInputOption,
 ].forEach((o) => Object.assign(o, requiredWithHintPattern));
-
-const passwordType: InputOptionsType = 'password';
 
 const formOptions = {
   hasFieldset: true,
@@ -91,8 +122,20 @@ const formOptions = {
       rule: birthDateValidation,
     },
     {
-      options: adressInputOptions,
-      // rule: adressValidation,
+      options: countrySelectOptions,
+      type: selectType,
+    },
+    {
+      options: cityInputOption,
+      rule: nameValidation,
+    },
+    {
+      options: streetInputOptions,
+      rule: streetValidation,
+    },
+    {
+      options: postInputOption,
+      rule: postValidation,
     },
   ],
   buttonOptions: {

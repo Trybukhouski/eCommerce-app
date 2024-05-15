@@ -1,4 +1,4 @@
-import { Input, Form, FormOptions } from '@shared';
+import { Input, Form, FormOptions, Select } from '@shared';
 import * as style from './style.module.scss';
 
 class FormPageUI {
@@ -6,7 +6,7 @@ class FormPageUI {
 
   public container: HTMLDivElement;
 
-  public inputArr: Input[];
+  public inputArr: (Input | Select)[];
 
   public submitButton: HTMLButtonElement;
 

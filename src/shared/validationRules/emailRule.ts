@@ -1,7 +1,7 @@
 import { ValidationRule } from './class/validation';
 
 const emailValidation = new ValidationRule({
-  pattern: `\\S{1,}@(\\w|\\d|\\.|_|-){1,}\\.(\\w|\\d|\\.|_|-){1,}$`,
+  pattern: `^[\\w\\d!#$%&*+=\\?^_\\|~\\-]+?@(\\w|\\d|\\.|_|-){1,}\\.(\\w|\\d|\\.|_|-){1,}$`,
 });
 
 emailValidation.addHints([
@@ -14,12 +14,16 @@ emailValidation.addHints([
     callback: (s: string) => !!s.match(/@/),
   },
   {
-    text: 'There should be a domain part',
+    text: 'There should be a domain part.',
     callback: (s: string) => !!s.match(/@(\w|\d|_|-){1}(\w|\d|\.|_|-)*\.(\w|\d|\.|_|-){1,}$/),
   },
   {
-    text: 'Must contain an account name',
+    text: 'Must contain an account name.',
     callback: (s: string) => !!s.match(/^\S{1,}@/),
+  },
+  {
+    text: 'Only roman alphabet is allowed.',
+    callback: (s: string) => !!s.match(/^[\w\d!#$%&*+=?^_|~-]*@/),
   },
 ]);
 

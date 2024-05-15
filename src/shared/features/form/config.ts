@@ -1,13 +1,13 @@
-import { InputOptions, Input, ButtonOptions } from '@shared';
+import { InputOptions, Input, ButtonOptions, SelectOptions } from '@shared';
 
 interface FormOptions {
   hasFieldset?: boolean;
   inputsOptions?: {
-    options: InputOptions;
+    options: InputOptions | SelectOptions;
     rule?: {
       setRules(input: Input): void;
     };
-    type?: 'password';
+    type?: 'password' | 'select';
   }[];
   buttonOptions?: ButtonOptions;
 }
