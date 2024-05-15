@@ -29,7 +29,7 @@ class FormPageUI {
     this.section.append(this.container);
     this.container.append(this.form);
 
-    this.section.classList.add(style['login-page']);
+    this.section.classList.add(style['form-page']);
   }
 }
 

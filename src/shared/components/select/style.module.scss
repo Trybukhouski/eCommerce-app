@@ -1,20 +1,15 @@
 @import '@assets/style/inputBoxMixin.scss';
 
 .select {
-  $input-font-size: var(--font-size-s);
-  $input-input-paddings: var(--block-paddings-s);
-  $input-label-margin-bottom: var(--label-margin-bottom);
-  $input-paddings: var(--block-left-padding-m);
-  $input-border-width: var(--border-width-m);
-  $option-hover-bg-color: var(--orange-100);
-  $option-color: var(--orange-900);
+  $select-paddings: var(--block-paddings-s);
+  $select-border-width: var(--border-width-m);
 
-  @include inputBox($input-font-size, $input-paddings, $input-label-margin-bottom);
+  @include inputBox();
 
   select {
     box-sizing: border-box;
     border-radius: 0;
-    border-width: $input-border-width;
-    padding: $input-input-paddings;
+    border-width: $select-border-width;
+    padding: $select-paddings;
   }
 }

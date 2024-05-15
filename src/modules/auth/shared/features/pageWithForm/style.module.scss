@@ -1,4 +1,16 @@
-.login-page {
+@import '@assets/style/pageHeaderMixin.scss';
+
+.form-page {
+  $form-bg-color: var(--white-200);
+
+  $login-page-header-margin-bottom: 1.8125rem; // 29px
+  $form-paddings: var(--block-paddings-xl); // 30px 70px 50px
+  $form-button-margin-top: 1.6875rem; // 27px
+
+  $h2-font-size: var(--font-size-m); // 24px
+  $children-max-width: var(--content-max-width);
+  $form-border-radius: var(--big-border-radius);
+
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -7,15 +19,17 @@
   flex-direction: column;
 
   > * {
-    max-width: var(--content-max-width);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: $children-max-width;
   }
 
   form {
-    background-color: var(--form-bg-color);
-    padding: var(--form-paddings);
+    background-color: $form-bg-color;
+    padding: $form-paddings;
     display: flex;
     flex-direction: column;
-    border-radius: var(--big-border-radius);
+    border-radius: $form-border-radius;
   }
 
   fieldset {
@@ -26,12 +40,10 @@
 
   button {
     margin: auto;
-    margin-top: var(--form-button-margin-top);
+    margin-top: $form-button-margin-top;
   }
 
   h2 {
-    margin: 0;
-    font-size: var(--h2-font-size);
-    margin-bottom: var(--login-page-header-margin-bottom);
+    @include pageHeader();
   }
 }

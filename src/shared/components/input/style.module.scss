@@ -8,16 +8,19 @@
 }
 
 .input {
+  $wrong-input-color: var(--wrong-warning-color);
+  $correct-input-color: var(--correct-warning-color);
+  $neutral-input-color: var(--neutral-input-color);
   $input-font-size: var(--font-size-s); // 16px
   $input-input-paddings: var(--block-paddings-s); // 18px 11px
   $input-label-margin-bottom: var(--label-margin-bottom); // 14px
   $input-hint-pad-start: 1.0625rem; // 17px
   $input-hint-margin-block: 1.0625rem; // 17px
-  $input-paddings: var(--block-left-padding-m); // 20px
+  $input-paddings: var(--block-left-padding-m);
   $input-border-width: var(--border-width-m);
   // $input-hint-height: 8.3125rem; // 133px
 
-  @include inputBox($input-font-size, $input-paddings, $input-label-margin-bottom);
+  @include inputBox();
 
   .input__hint {
     height: 0;

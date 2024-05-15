@@ -1,0 +1,6 @@
+@mixin pageHeader() {
+  text-align: center;
+  margin: 0;
+  font-size: var(--font-size-m);
+  margin-bottom: 1.8125rem;
+}
