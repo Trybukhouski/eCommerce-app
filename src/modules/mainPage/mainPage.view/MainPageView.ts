@@ -1,5 +1,5 @@
 import { Routes } from '@interfaces/index';
-import { MainPageMap } from '../mainPage.map'; // TODO: Разобраться, почему не работает @modules/mainPage/index
+import { MainPageMap } from '../MainPage.map'; // TODO: Разобраться, почему не работает @modules/mainPage/index
 
 export class MainPageView extends MainPageMap {
   public elements = {

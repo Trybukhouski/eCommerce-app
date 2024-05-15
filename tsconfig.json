@@ -9,6 +9,8 @@
       "@core/*": ["modules/core/*"],
       "@assets/*": ["assets/*"],
       "@modules/*": ["modules/*"],
+      "@config/*": ["config"],
+      "@services/*": ["services/*"],
       "@interfaces/*": ["interfaces/*"],
       "@routes/*": ["routes/*"],
       "@root/*": ["*"],
