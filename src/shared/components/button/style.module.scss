@@ -1,8 +1,9 @@
 .simple-button {
+  box-sizing: border-box;
   font-size: var(--button-font-size);
   color: var(--button-color);
   padding: var(--button-padidings);
-  width: var(--button-width);
+  min-width: var(--button-width);
   background-color: var(--normal-button-bg-color);
   border: none;
   border-radius: var(--big-border-radius);
