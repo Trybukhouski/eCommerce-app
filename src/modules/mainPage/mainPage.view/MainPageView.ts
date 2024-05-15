@@ -1,27 +1,22 @@
-import MainPageMap from '../MainPage.map';
-import pages from '../../../interfaces/pages';
+import { Routes } from '@interfaces/index';
+import { MainPageMap } from '../mainPage.map'; // TODO: Разобраться, почему не работает @modules/mainPage/index
 
-class MainPageView extends MainPageMap {
-  public elements: { mainContent?: HTMLElement; errorPage: HTMLElement; root?: HTMLElement } = {
-    errorPage: this.components.errorPage.elements.root as HTMLElement,
+export class MainPageView extends MainPageMap {
+  public elements = {
+    mainContent: document.createElement('section'),
+    errorPage: this.components.errorPage.elements.root,
+    root: document.createElement('main'),
   };
 
   public create(): MainPageView {
-    const container = document.createElement('main');
-
-    const mainContent = document.createElement('section');
-    this.elements.mainContent = mainContent;
-
-    container.append(mainContent);
-
-    this.elements.root = container;
+    const { mainContent, root } = this.elements;
+    root.append(mainContent);
 
     return this;
   }
 
-  public setContent(content: pages): void {
-    let { mainContent } = this.elements;
-    mainContent = mainContent as HTMLElement;
+  public setContent(content: Routes): void {
+    const { mainContent } = this.elements;
     mainContent.childNodes.forEach((child) => child.remove());
     if (content === 'error') {
       mainContent.append(this.elements.errorPage);
@@ -32,9 +27,7 @@ class MainPageView extends MainPageMap {
     }
   }
 
-  public inform(page: pages): void {
+  public inform(page: Routes): void {
     this.setContent(page);
   }
 }
-
-export default MainPageView;

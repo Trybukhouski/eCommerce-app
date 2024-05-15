@@ -1,18 +1,18 @@
-import pages from 'interfaces/pages';
+import { Routes } from '@interfaces/index';
 
 interface subscriber {
-  inform: (page: pages) => void;
+  inform: (page: Routes) => void;
 }
 
-class HeaderRouter {
-  private routes: Set<pages> = new Set(['page1', 'page2', 'page3', 'error']);
+export class Router {
+  private routes: Set<Routes> = new Set(['page1', 'page2', 'page3', 'error']);
 
   private subscribers: subscriber[] = [];
 
   public observeHashChange(): void {
     window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.slice(1) as pages;
-      const result = this.routes.has(hash) ? hash : 'error';
+      const hash = window.location.hash.slice(1);
+      const result = this.routes.has(hash as Routes) ? (hash as Routes) : 'error';
       this.subscribers.forEach((subscriber) => subscriber.inform(result));
     });
   }
@@ -25,5 +25,3 @@ class HeaderRouter {
     this.subscribers.push(subscriber);
   }
 }
-
-export default HeaderRouter;

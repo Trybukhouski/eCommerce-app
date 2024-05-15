@@ -1,14 +1,14 @@
 import './style.scss';
-import HeaderRouter from './routes/HeaderRouter';
-import MainPage from './modules/mainPage/mainPage.view/MainPageView';
+import { Router } from '@routes/index';
+import { MainPageView as MainPage } from '@modules/mainPage/index';
 
 const mainPage = new MainPage();
 mainPage.create();
 
-const headerRouter = new HeaderRouter();
-headerRouter.addSubscriber(mainPage);
+const router = new Router();
+router.addSubscriber(mainPage);
 
-document.body.append(mainPage.elements.root as HTMLElement);
+document.body.append(mainPage.elements.root);
 mainPage.setContent('error');
 
-headerRouter.observeHashChange();
+router.observeHashChange();

@@ -1,9 +1,7 @@
-import ErrorPage from '../errorPage/errorPage.view/ErrorPage.view';
+import { ErrorPageView as ErrorPage } from '@modules/errorPage/index';
 
-class MainPageMap {
+export class MainPageMap {
   protected components = {
     errorPage: new ErrorPage().create(),
   };
 }
-
-export default MainPageMap;

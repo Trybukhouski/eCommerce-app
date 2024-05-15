@@ -1,36 +1,33 @@
 import * as styles from './styles.module.scss';
 
-class ErrorPageView {
-  public elements: { backHomeBtn?: HTMLElement; root?: HTMLElement } = {};
+export class ErrorPageView {
+  public elements = {
+    backHomeBtn: document.createElement('button'),
+    root: document.createElement('div'),
+    content: document.createElement('div'),
+  };
 
   public create(): ErrorPageView {
-    const container = document.createElement('div');
-    container.classList.add(styles.container);
+    const { content, backHomeBtn, root } = this.elements;
 
-    const content = document.createElement('div');
+    root.classList.add(styles.container);
     content.classList.add(styles.content);
 
     const title = document.createElement('h2');
     title.classList.add(styles.title);
     title.innerHTML = 'Page not found';
 
-    const pic = document.createElement('p');
-    pic.classList.add(styles.title);
-    pic.innerHTML = '¯\\_(ツ)_/¯';
+    const emojiText = document.createElement('p');
+    emojiText.classList.add(styles.title);
+    emojiText.innerHTML = '¯\\_(ツ)_/¯';
 
-    const backHomeBtn = document.createElement('button');
     backHomeBtn.innerHTML = 'Main Page';
-    this.elements.backHomeBtn = backHomeBtn;
 
     content.append(title);
-    content.append(pic);
+    content.append(emojiText);
     content.append(backHomeBtn);
-    container.append(content);
-
-    this.elements.root = container;
+    root.append(content);
 
     return this;
   }
 }
-
-export default ErrorPageView;

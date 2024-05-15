@@ -7,6 +7,11 @@
       "@shared/*": ["shared/*"],
       "@core/*": ["modules/core/*"],
       "@assets/*": ["assets/*"],
+      "@modules/*": ["modules/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@routes/*": ["routes/*"],
+      "@root/*": ["*"],
+
     },
     
     /* Language and Environment */
