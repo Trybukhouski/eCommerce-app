@@ -1,4 +1,4 @@
-@import '@assets/style/inputBoxMixin.scss';
+@import '@assets/styles/mixins/inputBoxMixin.scss';
 
 @mixin hintHeight($margin: 0) {
   height: calc(var(--data-height) + $margin);

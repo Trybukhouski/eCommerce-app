@@ -1,4 +1,4 @@
-@import '@assets/style/pageHeaderMixin.scss';
+@import '@assets/styles/fonts.scss';
 
 .form-page {
   $form-bg-color: var(--white-200);
@@ -44,6 +44,6 @@
   }
 
   h2 {
-    @include pageHeader();
+    @include title();
   }
 }

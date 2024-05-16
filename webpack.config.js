@@ -32,6 +32,9 @@ module.exports = {
       "@modules": path.resolve(__dirname, 'src/modules/'),
       "@config": path.resolve(__dirname, 'src/'),
       "@services": path.resolve(__dirname, 'src/services/'),
+      "@interfaces": path.resolve(__dirname, 'src/interfaces/'),
+      "@routes": path.resolve(__dirname, 'src/routes/'),
+      '@root': path.resolve(__dirname, 'src/'),
     },
   },
   output: {
