@@ -2,7 +2,7 @@ import { ValidationRule } from './class/validation';
 
 const nameValidation = new ValidationRule({
   minLength: 1,
-  pattern: `^[\\p{L} \\-]*$`,
+  hasCustomValidation: true,
 });
 
 nameValidation.addHints([
@@ -13,6 +13,10 @@ nameValidation.addHints([
   {
     text: 'There should be no special characters or numbers.',
     callback: (s: string) => !!s.match(/^[\p{L} -]*$/u),
+  },
+  {
+    text: 'There should be no spaces at the beginning or end of a line.',
+    callback: (s: string) => (s.length < 2 && s !== ' ') || !!s.match(/(?<=^\p{L}).*(?=\p{L}$)/u),
   },
 ]);
 
