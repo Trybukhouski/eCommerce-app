@@ -1,4 +1,5 @@
 import { Input } from '@shared';
+import { ValidationOptions, defaultValidationOptions } from './config';
 
 interface Hint {
   text: string;
@@ -18,11 +19,12 @@ class ValidationRule {
 
   private hasCustomValidation: boolean;
 
-  constructor({ minLength = 0, pattern = '', titleText = '', hasCustomValidation = false } = {}) {
-    this.minLength = minLength;
-    this.pattern = pattern;
-    this.titleText = titleText;
-    this.hasCustomValidation = hasCustomValidation;
+  constructor(options?: ValidationOptions) {
+    const configs = { ...defaultValidationOptions, ...options };
+    this.minLength = configs.minLength;
+    this.pattern = configs.pattern;
+    this.titleText = configs.titleText;
+    this.hasCustomValidation = configs.hasCustomValidation;
   }
 
   public setRules(input: Input): void {
