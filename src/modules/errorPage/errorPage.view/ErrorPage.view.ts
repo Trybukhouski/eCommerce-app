@@ -1,8 +1,9 @@
+import { Button } from '@shared';
 import * as styles from './styles.module.scss';
 
 export class ErrorPageView {
   public elements = {
-    backHomeBtn: document.createElement('button'),
+    backHomeBtn: new Button({ text: 'Main Page' }).button,
     root: document.createElement('div'),
     content: document.createElement('div'),
   };
@@ -20,8 +21,6 @@ export class ErrorPageView {
     const emojiText = document.createElement('p');
     emojiText.classList.add(styles.title);
     emojiText.innerHTML = '¯\\_(ツ)_/¯';
-
-    backHomeBtn.innerHTML = 'Main Page';
 
     content.append(title);
     content.append(emojiText);

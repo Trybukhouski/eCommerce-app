@@ -1,9 +1,5 @@
-interface Input {
-  input: HTMLInputElement;
-  label: HTMLLabelElement;
-  container: HTMLDivElement;
-  hint?: HTMLUListElement;
-}
+import { Input } from '@shared';
+import { ValidationOptions, defaultValidationOptions } from './config';
 
 interface Hint {
   text: string;
@@ -21,10 +17,14 @@ class ValidationRule {
 
   private signedInputs: Input[] = [];
 
-  constructor({ minLength = 0, pattern = '', titleText = '' } = {}) {
-    this.minLength = minLength;
-    this.pattern = pattern;
-    this.titleText = titleText;
+  private hasCustomValidation: boolean;
+
+  constructor(options?: ValidationOptions) {
+    const configs = { ...defaultValidationOptions, ...options };
+    this.minLength = configs.minLength;
+    this.pattern = configs.pattern;
+    this.titleText = configs.titleText;
+    this.hasCustomValidation = configs.hasCustomValidation;
   }
 
   public setRules(input: Input): void {
@@ -47,13 +47,16 @@ class ValidationRule {
       const fullTitleText = `${minLengthStroke}${this.titleText}`;
       inputElem.setAttribute('title', fullTitleText);
     }
+    let hintHeight = 0;
     if (this.hints.length > 0 && hintElem) {
       this.hints.forEach((h) => {
         const li = document.createElement('li');
         li.textContent = h.text;
+        hintHeight += this.countHintHeight(h.text);
         hintElem.append(li);
       });
     }
+    input.hintContainer?.setAttribute('style', `--data-height: ${hintHeight}rem`);
 
     inputElem.addEventListener('input', this.checkHint.bind(this));
   }
@@ -67,18 +70,29 @@ class ValidationRule {
     const input = this.signedInputs.find((i) => i.input === targetInput);
     const liArr = input?.hint?.childNodes;
     if (!liArr) return;
+
+    let errorMess = '';
     this.hints.forEach((h, i) => {
       const li = liArr[i] as HTMLElement;
       if (h.callback(value)) {
         li.setAttribute('data-correct', 'true');
       } else {
         li.setAttribute('data-correct', 'false');
+        errorMess = h.text;
       }
     });
+    if (this.hasCustomValidation) {
+      input.input.setCustomValidity(errorMess);
+    }
   }
 
   public addHints(hints: Hint[]): void {
     this.hints.push(...hints);
+  }
+
+  private countHintHeight(s: string): number {
+    const lettersPerStroke = 30; // approximately 30 chars fits into line with a screen width of 320px
+    return Math.ceil(s.length / lettersPerStroke);
   }
 }
 

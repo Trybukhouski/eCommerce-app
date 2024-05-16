@@ -1,5 +1,5 @@
 import { clientCredentials } from '@config/config';
-import { handleResponse } from '@shared/utils/errorHandling';
+import { handleResponse } from '@shared';
 import { LoginResponse } from '@services/interfaces';
 
 export class AuthService {

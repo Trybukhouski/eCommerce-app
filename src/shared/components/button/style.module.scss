@@ -1,22 +1,31 @@
-@import '@assets/variables.scss';
-
 .simple-button {
-  font-size: var(--button-font-size);
-  color: var(--button-color);
-  padding: var(--button-padidings);
-  width: var(--button-width);
-  background-color: var(--normal-button-bg-color);
+  $disabled-button-bg-color: var(--orange-200);
+  $hover-button-bg-color: var(--orange-500);
+  $normal-button-bg-color: var(--orange-400);
+  $button-color: var(--white-100);
+  $border-radius: var(--big-border-radius);
+
+  $min-button-width: 10.1875rem; // 163px
+  $button-padidings: var(--block-paddings-button);
+  $button-font-size: var(--font-size-s);
+
+  box-sizing: border-box;
+  font-size: $button-font-size;
+  color: $button-color;
+  padding: $button-padidings;
+  min-width: $min-button-width;
+  background-color: $normal-button-bg-color;
   border: none;
-  border-radius: var(--big-border-radius);
+  border-radius: $border-radius;
   transition: 0.3s background-color;
   cursor: pointer;
 
   &:hover {
-    background-color: var(--hover-button-bg-color);
+    background-color: $hover-button-bg-color;
   }
 
   &:disabled {
-    background-color: var(--disabled-button-bg-color);
+    background-color: $disabled-button-bg-color;
     cursor: auto;
   }
 }

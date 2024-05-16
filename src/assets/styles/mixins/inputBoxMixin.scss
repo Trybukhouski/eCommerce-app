@@ -1,0 +1,11 @@
+@mixin inputBox() {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-s);
+  padding: var(--block-left-padding-m);
+
+  label {
+    margin-bottom: var(--label-margin-bottom);
+  }
+}

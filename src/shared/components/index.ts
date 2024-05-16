@@ -1,2 +1,4 @@
-export * from './input/input';
-export * from './button/button';
+export * from './input';
+export * from './button';
+export * from './select';
+export * from './sprite';

@@ -1,4 +1,5 @@
 import * as style from './style.module.scss';
+import { defaultInputOptions, InputOptions } from './config';
 
 class Input {
   public input: HTMLInputElement;
@@ -9,35 +10,21 @@ class Input {
 
   public hint?: HTMLUListElement;
 
-  constructor({
-    name = '',
-    type = 'text',
-    placeholder = '',
-    labelText = '',
-    value = '',
-    required = false,
-    hasHint = false,
-    disabled = false,
-  }: InputOptions = {}) {
+  public hintContainer?: HTMLDivElement;
+
+  constructor(options?: InputOptions) {
+    const configs = { ...defaultInputOptions, ...options };
     this.container = document.createElement('div');
     this.label = document.createElement('label');
     this.input = document.createElement('input');
     this.container.append(this.input);
     this.container.classList.add(style.input);
 
-    if (hasHint) {
+    if (configs.hasHint) {
       this.addHint();
     }
 
-    this.setAtributes({
-      name,
-      type,
-      placeholder,
-      labelText,
-      value,
-      required,
-      disabled,
-    });
+    this.setAtributes(configs);
   }
 
   private addHint(): void {
@@ -47,6 +34,7 @@ class Input {
     hintContainer.append(hint);
     this.container.append(hintContainer);
     this.hint = hint;
+    this.hintContainer = hintContainer;
   }
 
   private setAtributes({
@@ -57,7 +45,7 @@ class Input {
     value,
     required,
     disabled,
-  }: Required<Omit<InputOptions, 'hasHint'>>): void {
+  }: Required<InputOptions>): void {
     const { label } = this;
     const { input } = this;
 

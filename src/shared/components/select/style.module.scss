@@ -1,0 +1,15 @@
+@import '@assets/styles/mixins/inputBoxMixin.scss';
+
+.select {
+  $select-paddings: var(--block-paddings-s);
+  $select-border-width: var(--border-width-m);
+
+  @include inputBox();
+
+  select {
+    box-sizing: border-box;
+    border-radius: 0;
+    border-width: $select-border-width;
+    padding: $select-paddings;
+  }
+}

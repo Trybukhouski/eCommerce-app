@@ -1,4 +1,4 @@
-import { ErrorObject } from '@shared/utils/interfaces';
+import { ErrorObject } from './interfaces';
 
 type ErrorMessageMap = { [key: string]: string };
 

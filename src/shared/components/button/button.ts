@@ -1,42 +1,35 @@
 import * as style from './style.module.scss';
+import { defaultButtonOptions, ButtonOptions } from './config';
 
-type location = NonNullable<ButtonOptions['icon']>['towhere']; // "start" | "end"
+type Location = NonNullable<ButtonOptions['icon']>['towhere']; // "start" | "end"
 
 class Button {
   public button: HTMLButtonElement;
 
-  constructor({
-    text = '',
-    type = 'button',
-    icon = {
-      towhere: 'start',
-    },
-    disabled = false,
-    isLink = false,
-    href = '',
-  }: ButtonOptions = {}) {
+  constructor(options?: ButtonOptions) {
+    const configs = { ...defaultButtonOptions, ...options };
     const button = document.createElement('button');
     this.button = button;
-    button.textContent = text;
+    button.textContent = configs.text;
     button.classList.add(style['simple-button']);
 
-    if (disabled) {
+    if (configs.disabled) {
       button.disabled = true;
     }
 
-    if (isLink) {
+    if (configs.isLink) {
       button.classList.add('link');
-      button.setAttribute('data-href', href);
+      button.setAttribute('data-href', configs.href);
     }
 
-    button.type = type;
+    button.type = configs.type;
 
-    if (icon.sprite) {
-      this.addIcon(icon.sprite, icon.towhere);
+    if (configs.icon.sprite) {
+      this.addIcon(configs.icon.sprite, configs.icon.towhere);
     }
   }
 
-  private addIcon(sprite: BrowserSpriteSymbol, where: location): void {
+  private addIcon(sprite: BrowserSpriteSymbol, where: Location): void {
     const svg = `
     <svg viewBox="${sprite.viewBox}" width="50" height="50">
       <use xlink:href="#${sprite.id}"/>

@@ -1,0 +1,63 @@
+:root {
+  --font-size: 16px;
+  --content-max-width: 41.5rem; // 664px
+
+  // border-radius
+
+  --big-border-radius: 0.625rem; // 10px
+  --small-border-radius: 0.3125rem; // 5px
+
+  // colors
+
+  --orange-900: #211000;
+  --orange-500: #ff7b00; // previous: rgb(255, 153, 0)
+  --orange-400: #ff9029; // previous: rgb(231, 139, 0)
+  --orange-300: #fda452;
+  --orange-200: #fcb86f; // previous: rgb(203 182 152)
+  --orange-100: #fad9b5;
+
+  --white-100: white;
+  --white-200: #e6e6e6;
+
+  --grey-500: #7f7f7f;
+
+  --wrong-warning-color: rgb(237, 44, 32);
+  --correct-warning-color: rgb(28, 181, 53);
+  --neutral-input-color: var(--grey-500);
+
+  //font-sizes
+
+  --font-size-s: 1rem;
+  --font-size-m: 1.6rem; // 24px
+
+  // paddings
+
+  --block-top-padding-s: 1.125rem; // 18px
+  --block-left-padding-s: 0.6875rem; // 11px
+
+  --block-top-padding-m: 1.25rem; // 18px
+  --block-left-padding-m: 1.25rem; // 11px
+
+  --block-top-padding-button: 1.375rem; // 22px
+  --block-left-padding-button: 1rem;
+
+  --block-top-padding-xl: 1.875rem; // 30px
+  --block-left-padding-xl: 4.375rem; // 70px
+  --block-bottom-padding-xl: 3.125rem; // 50px
+
+  --block-paddings-s: var(--block-top-padding-s) var(--block-left-padding-s);
+  --block-paddings-m: var(--block-top-padding-m) var(--block-left-padding-m);
+  --block-paddings-button: var(--block-top-padding-button) var(--block-left-padding-button);
+  --block-paddings-xl: var(--block-top-padding-xl) var(--block-left-padding-xl)
+    var(--block-bottom-padding-xl);
+
+  --label-margin-bottom: 0.875rem;
+
+  --arched-cubic-bezier: cubic-bezier(0.06, 0.47, 0.42, 1.11);
+
+  --border-width-m: 0.125rem;
+}
+
+html {
+  font-size: var(--font-size);
+}

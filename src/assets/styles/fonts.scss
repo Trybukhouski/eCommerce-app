@@ -1,0 +1,9 @@
+@mixin title {
+  font-family: 'Lalezar', system-ui;
+  font-weight: 700;
+  font-style: normal;
+  font-size: var(--font-size-m);
+  text-align: center;
+  margin: 0;
+  margin-bottom: 1.8125rem;
+}
