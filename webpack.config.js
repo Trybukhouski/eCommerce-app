@@ -127,15 +127,15 @@ module.exports = {
         test: /\.svg$/,
         oneOf: [
           {
-            test: /\.sprite\.svg$/i,
+            test: /\.notsprite\.svg$/i,
+            type: 'asset/resource',
+          },
+          {
             use: [
               {
                 loader: 'svg-sprite-loader',
               }
             ],
-          },
-          {
-            type: 'asset/resource',
           }
         ],
       },

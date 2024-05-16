@@ -1,14 +1,18 @@
-import './style.scss';
-import { Input, InputOptions } from '@shared';
+import eyeHideSprite from '@assets/sprites/eye/eye-password-hide.svg';
+import eyeShowSprite from '@assets/sprites/eye/eye-password-show.svg';
+import { Input, InputOptions, addSprite } from '@shared';
+import * as style from './style.module.scss';
 
 type TupleOfTwoString = [string, string];
+type TupleOfTwoSprites = [BrowserSpriteSymbol, BrowserSpriteSymbol];
+
+const eyeSprites: TupleOfTwoSprites = [eyeShowSprite, eyeHideSprite];
+const eyeSpritesIds: TupleOfTwoString = eyeSprites.map((s) => s.id) as TupleOfTwoString;
 
 class PasswordInput extends Input {
-  private eyeClasses: TupleOfTwoString = ['invisible', 'visible'];
-
   private inputTypes: TupleOfTwoString = ['password', 'text'];
 
-  private eyeElement?: HTMLAnchorElement;
+  private eyeElement?: HTMLElement;
 
   constructor(options: InputOptions) {
     super(options);
@@ -17,13 +21,17 @@ class PasswordInput extends Input {
   }
 
   private addEyeButton(): void {
-    const eye = document.createElement('a');
-    eye.classList.add('eye');
-    eye.classList.add(this.eyeClasses[0]);
-    this.container.append(eye);
-    this.eyeElement = eye;
+    const eyeElement = document.createElement('a');
+    eyeElement.classList.add(style.eye);
+    this.container.append(eyeElement);
+    this.eyeElement = eyeElement;
 
-    eye.addEventListener('click', (e: Event) => {
+    eyeSprites.forEach((s) => {
+      eyeElement.insertAdjacentHTML('beforeend', addSprite(s, 25, 25));
+    });
+    eyeElement.classList.add(eyeSpritesIds[0]);
+
+    eyeElement.addEventListener('click', (e: Event) => {
       e.preventDefault();
       this.switchInputType();
       this.switchEyeClass();
@@ -42,7 +50,7 @@ class PasswordInput extends Input {
     const eye = this.eyeElement;
     if (!eye) return;
 
-    const classes = this.eyeClasses;
+    const classes = eyeSpritesIds;
 
     const currentClass = classes.find((c) => eye.classList.contains(c));
     if (!currentClass) return;
