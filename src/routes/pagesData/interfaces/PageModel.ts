@@ -1,4 +1,4 @@
-import { Routes } from '.';
+import { Routes } from './routes';
 
 export interface PageModel {
   name: string;

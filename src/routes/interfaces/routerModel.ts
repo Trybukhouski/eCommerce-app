@@ -1,4 +1,4 @@
-import { Subscriber } from '.';
+import { Subscriber } from './subscriber';
 
 export interface RouterModel {
   observeHashChange(): void;
