@@ -1,3 +1,4 @@
+import { Routes } from '@routes/pagesData/interfaces/routes';
 import LinkModel from './interfaces/LinkModel';
 import { NavMap } from '../nav.map';
 import * as styles from './styles.module.scss';
@@ -21,13 +22,6 @@ class NavView extends NavMap {
 
     this.createLinks(this.db.getAvailablePages());
 
-    root.addEventListener('click', (event) => {
-      const target = this.utils.checkWhetherLinkIsClicked(event);
-      if (target) {
-        this.setActiveLinkAccordingCurrentPage(this.db.getCurrentPageName());
-      }
-    });
-
     return this;
   }
 
@@ -37,7 +31,7 @@ class NavView extends NavMap {
       link.innerHTML = `${linkObject.name[0]?.toUpperCase()}${linkObject.name
         .slice(1)
         .toLowerCase()}`;
-      link.setAttribute('data-name', linkObject.name);
+      link.setAttribute('data-name', linkObject.hash);
       link.setAttribute('data-current', 'false');
       link.classList.add(styles.link);
       switch (linkObject.type) {
@@ -64,6 +58,10 @@ class NavView extends NavMap {
         link.setAttribute('data-current', 'false');
       }
     });
+  }
+
+  public inform(name: Routes): void {
+    this.setActiveLinkAccordingCurrentPage(name);
   }
 }
 

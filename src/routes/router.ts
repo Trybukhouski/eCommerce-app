@@ -1,27 +1,30 @@
-import { Routes } from '@interfaces/index';
+import { Routes } from '@routes/pagesData/interfaces/routes';
+import { RouterModel } from './interfaces/routerModel';
+import { Subscriber } from './interfaces/subscriber';
 
-interface subscriber {
-  inform: (page: Routes) => void;
-}
+export class Router implements RouterModel {
+  private subscribers: Subscriber[] = [];
 
-export class Router {
-  private routes: Set<Routes> = new Set(['page1', 'page2', 'page3', 'error']);
+  private routes: Routes[];
 
-  private subscribers: subscriber[] = [];
+  constructor(routes: Routes[]) {
+    this.routes = routes;
+  }
 
   public observeHashChange(): void {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.slice(1);
-      const result = this.routes.has(hash as Routes) ? (hash as Routes) : 'error';
-      this.subscribers.forEach((subscriber) => subscriber.inform(result));
+      const outputHash: Routes = this.routes.includes(hash as Routes) ? (hash as Routes) : 'error';
+      this.setHash(outputHash);
+      this.subscribers.forEach((subscriber) => subscriber.inform(outputHash));
     });
   }
 
-  public setHash(hash: string): void {
+  public setHash(hash: Routes): void {
     window.location.hash = `#${hash}`;
   }
 
-  public addSubscriber(subscriber: subscriber) {
+  public addSubscriber(subscriber: Subscriber) {
     this.subscribers.push(subscriber);
   }
 }

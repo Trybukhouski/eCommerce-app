@@ -1,4 +1,4 @@
-import { Pages } from './pages';
+import { Routes } from './routes';
 import { PageModel } from './PageModel';
 
-export type PagesDataModel = Record<Pages, PageModel>;
+export type PagesDataModel = Record<Routes, PageModel>;

@@ -1,12 +1,14 @@
 import HeaderView from './header.view/HeaderView';
 
-class HeaderActions extends HeaderView {
-  public create(): void {
+export class HeaderActions extends HeaderView {
+  public create(): HeaderActions {
     super.create();
     this.closeNavAfterClickOnLink();
     this.changeNavVisibilityAfterClickOnBurger();
     this.changeHeaderViewAfterWindowResize();
     this.setHeaderConfig();
+
+    return this;
   }
 
   private closeNavAfterClickOnLink(): void {
@@ -54,5 +56,3 @@ class HeaderActions extends HeaderView {
     return window.innerWidth <= tabletViewSize;
   }
 }
-
-export default HeaderActions;

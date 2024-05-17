@@ -1,10 +1,12 @@
+import { Routes } from '@routes/pagesData/interfaces/routes';
+
 export interface PageModel {
   name: string;
-  hash: string;
+  hash: Routes;
   status: 'available' | 'blocked';
   current: boolean;
   type: 'shop' | 'account' | 'system';
-  ifBlocked?: {
-    redirectionPage: string;
+  ifBlocked: {
+    redirectionPage: Routes;
   };
 }

@@ -1,4 +1,4 @@
-export type Pages =
+export type Routes =
   | 'main'
   | 'catalog'
   | 'about'

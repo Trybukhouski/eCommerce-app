@@ -8,28 +8,37 @@ export const blockedPages = {
 export const pagesData: PagesDataModel = {
   main: {
     name: 'main',
-    hash: '#main',
+    hash: 'main',
     status: 'available',
     current: true,
     type: 'shop',
+    ifBlocked: {
+      redirectionPage: 'error',
+    },
   },
   catalog: {
     name: 'catalog',
-    hash: '#catalog',
+    hash: 'catalog',
     status: 'available',
     current: false,
     type: 'shop',
+    ifBlocked: {
+      redirectionPage: 'error',
+    },
   },
   about: {
     name: 'about',
-    hash: '#about',
+    hash: 'about',
     status: 'available',
     current: false,
     type: 'shop',
+    ifBlocked: {
+      redirectionPage: 'error',
+    },
   },
   registration: {
     name: 'registration',
-    hash: '#registration',
+    hash: 'registration',
     status: 'available',
     current: false,
     type: 'account',
@@ -39,7 +48,7 @@ export const pagesData: PagesDataModel = {
   },
   login: {
     name: 'login',
-    hash: '#login',
+    hash: 'login',
     status: 'available',
     current: false,
     type: 'account',
@@ -49,7 +58,7 @@ export const pagesData: PagesDataModel = {
   },
   profile: {
     name: 'profile',
-    hash: '#profile',
+    hash: 'profile',
     status: 'available',
     current: false,
     type: 'account',
@@ -59,7 +68,7 @@ export const pagesData: PagesDataModel = {
   },
   signOut: {
     name: 'sign out',
-    hash: '#signOut',
+    hash: 'signOut',
     status: 'available',
     current: false,
     type: 'account',
@@ -69,9 +78,12 @@ export const pagesData: PagesDataModel = {
   },
   error: {
     name: 'error',
-    hash: '#error',
+    hash: 'error',
     status: 'available',
     current: false,
     type: 'system',
+    ifBlocked: {
+      redirectionPage: 'main',
+    },
   },
 };

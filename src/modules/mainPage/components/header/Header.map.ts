@@ -5,7 +5,7 @@ import { PagesDataModifierModel } from '../../../../routes/pagesData/interfaces/
 class HeaderMap {
   protected db: PagesDataModifierModel;
 
-  protected components: {
+  public components: {
     burger: Burger;
     nav: Nav;
   };
