@@ -3,11 +3,14 @@ import { handleResponse } from '@shared';
 import { LoginResponse, RegistrationResponse } from '@services/interfaces';
 
 export class AuthService {
-  // Base URL for the API
-  private static baseUrl = `https://api.${clientCredentials.apiUrl}.commercetools.com/${clientCredentials.projectKey}`;
+  // URL for authentication
+  private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
+
+  // URL for registration
+  private static registerUrl = `${clientCredentials.apiUrl}/ecommerce2024/customers`;
 
   public static async login(username: string, password: string): Promise<LoginResponse> {
-    const url = `${this.baseUrl}/oauth/ecommerce2024/customers/token`;
+    const url = `${this.baseUrl}/token`;
     const body = new URLSearchParams({
       grant_type: 'password',
       username,
@@ -39,7 +42,6 @@ export class AuthService {
     street: string;
     postalCode: string;
   }): Promise<RegistrationResponse> {
-    const url = `${this.baseUrl}/customers`;
     const body = JSON.stringify({
       email: userData.email,
       firstName: userData.firstName,
@@ -56,7 +58,7 @@ export class AuthService {
       ],
     });
 
-    const response = await fetch(url, {
+    const response = await fetch(this.registerUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

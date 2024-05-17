@@ -23,7 +23,7 @@ export interface Customer {
   shippingAddressIds: string[];
   billingAddressIds: string[];
   isEmailVerified: boolean;
-  stores: Store[];
+  // stores: Store[];
   authenticationMode: string;
 }
 
@@ -38,9 +38,16 @@ export interface CustomerReference {
   id: string;
 }
 
-export interface Address {}
+export interface Address {
+  id: string;
+  streetName: string;
+  postalCode: string;
+  city: string;
+  country: string;
+  additionalAddressInfo: string;
+}
 
-export interface Store {}
+// export interface Store { }
 
 export interface RegistrationResponse {
   customer: Customer;

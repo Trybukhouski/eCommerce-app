@@ -53,7 +53,7 @@ class RegistrPage {
       this.submitButton.addEventListener('click', this.handleRegistration.bind(this));
       this.submitButton.focus();
     } else {
-      console.error('Submit button not found or is not a button element');
+      NotificationService.displayError('Submit button not found or is not a button element');
     }
 
     const { form } = this.uiApi;
@@ -62,44 +62,53 @@ class RegistrPage {
     }
   }
 
+  private areInputsValid(): boolean {
+    const inputs = [
+      this.emailInput,
+      this.passwordInput,
+      this.firstNameInput,
+      this.lastNameInput,
+      this.birthDateInput,
+      this.countryInput,
+      this.cityInput,
+      this.streetInput,
+      this.postalCodeInput,
+    ];
+
+    return inputs.every((input) => input !== null);
+  }
+
+  private collectUserData() {
+    return {
+      email: this.emailInput!.value,
+      firstName: this.firstNameInput!.value,
+      lastName: this.lastNameInput!.value,
+      password: this.passwordInput!.value,
+      birthDate: this.birthDateInput!.value,
+      country: this.countryInput!.value,
+      city: this.cityInput!.value,
+      street: this.streetInput!.value,
+      postalCode: this.postalCodeInput!.value,
+    };
+  }
+
   private async handleRegistration(event: Event): Promise<void> {
     event.preventDefault();
-    if (
-      !(
-        this.emailInput &&
-        this.passwordInput &&
-        this.firstNameInput &&
-        this.lastNameInput &&
-        this.birthDateInput &&
-        this.countryInput &&
-        this.cityInput &&
-        this.streetInput &&
-        this.postalCodeInput
-      )
-    ) {
+
+    if (!this.areInputsValid()) {
       NotificationService.displayError('One or more input fields are not found');
       return;
     }
 
+    const userData = this.collectUserData();
+
     try {
-      const response = await AuthService.register({
-        email: this.emailInput.value,
-        firstName: this.firstNameInput.value,
-        lastName: this.lastNameInput.value,
-        password: this.passwordInput.value,
-        birthDate: this.birthDateInput.value,
-        country: this.countryInput.value,
-        city: this.cityInput.value,
-        street: this.streetInput.value,
-        postalCode: this.postalCodeInput.value,
-      });
-
+      /* const response = */ await AuthService.register(userData);
       NotificationService.displaySuccess('Account created successfully!');
-      console.log('Registration successful:', response);
-
-      setTimeout(() => {
+      // console.log('Registration successful:', response);
+      /*      setTimeout(() => {
         window.location.href = '/main.html';
-      }, 2000);
+      }, 2000); */
     } catch (error) {
       NotificationService.displayError(
         error instanceof Error ? error.message : 'Registration error'
@@ -107,5 +116,4 @@ class RegistrPage {
     }
   }
 }
-
 export { RegistrPage };
