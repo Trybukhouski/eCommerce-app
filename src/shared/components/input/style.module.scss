@@ -2,10 +2,10 @@
 @import '@assets/styles/fonts.scss';
 
 @mixin hintHeight($margin: 0) {
-  $hint-height-mobile: calc(var(--data-height) + $margin);
-  $hint-height-screen: calc(var(--data-height) / 3 + $margin);
+  $hint-height-mobile: calc(var(--data-height) * 1.4 + $margin);
+  $hint-height-screen: calc(var(--data-height) / 2 + $margin);
 
-  height: clamp(hint-height-screen, calc(100vh - 100vw), $hint-height-mobile);
+  height: clamp($hint-height-screen, calc(100vh - 1.5 * 100vw), $hint-height-mobile);
 }
 
 .input {
