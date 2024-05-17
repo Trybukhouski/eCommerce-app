@@ -1,5 +1,5 @@
 import { Routes } from '@routes/pagesData/interfaces/routes';
-import LinkModel from './interfaces/LinkModel';
+import { LinkModel } from './interfaces';
 import { NavMap } from '../nav.map';
 import * as styles from './styles.module.scss';
 

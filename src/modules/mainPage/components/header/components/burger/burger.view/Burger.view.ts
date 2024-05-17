@@ -1,6 +1,6 @@
 import * as styles from './styles.module.scss';
 
-class BurgerView {
+export class BurgerView {
   public root = document.createElement('div');
 
   public draw(): BurgerView {
@@ -37,5 +37,3 @@ class BurgerView {
     return JSON.parse(this.root.getAttribute('data-opened') as string);
   }
 }
-
-export default BurgerView;

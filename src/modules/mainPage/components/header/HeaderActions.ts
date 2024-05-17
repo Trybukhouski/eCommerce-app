@@ -1,4 +1,4 @@
-import HeaderView from './header.view/HeaderView';
+import { HeaderView } from './index';
 
 export class HeaderActions extends HeaderView {
   public create(): HeaderActions {

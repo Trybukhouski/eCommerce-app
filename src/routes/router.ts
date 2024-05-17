@@ -1,6 +1,5 @@
 import { Routes } from '@routes/pagesData/interfaces/routes';
-import { RouterModel } from './interfaces/routerModel';
-import { Subscriber } from './interfaces/subscriber';
+import { RouterModel, Subscriber } from './interfaces';
 
 export class Router implements RouterModel {
   private subscribers: Subscriber[] = [];

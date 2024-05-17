@@ -1,8 +1,8 @@
-import HeaderMap from '../Header.map';
+import { HeaderMap } from '../Header.map';
 
 import * as styles from './styles.module.scss';
 
-class HeaderView extends HeaderMap {
+export class HeaderView extends HeaderMap {
   public elements = {
     burger: this.components.burger.root,
     logo: document.createElement('h1'),
@@ -37,5 +37,3 @@ class HeaderView extends HeaderMap {
     }
   }
 }
-
-export default HeaderView;

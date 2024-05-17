@@ -1,5 +1,5 @@
-import LinkModel from '../../../modules/mainPage/components/header/components/nav/nav.view/interfaces/LinkModel';
-import { Routes } from './routes';
+import { LinkModel } from '@modules/mainPage/components/header/components/nav/nav.view/interfaces';
+import { Routes } from '.';
 
 export interface PagesDataModifierModel {
   getAvailablePages(): LinkModel[];

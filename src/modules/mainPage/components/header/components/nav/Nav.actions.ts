@@ -1,6 +1,6 @@
 import NavView from './nav.view/Nav.view';
 
-class NavActions extends NavView {
+export class NavActions extends NavView {
   public create(): NavActions {
     super.create();
     this.createSignalAboutClickOnLink();

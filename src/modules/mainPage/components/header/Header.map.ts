@@ -1,8 +1,10 @@
-import Burger from './components/burger/burger.view/Burger.view';
-import Nav from './components/nav/Nav.actions';
+import {
+  NavActions as Nav,
+  BurgerView as Burger,
+} from '@modules/mainPage/components/header/components';
 import { PagesDataModifierModel } from '../../../../routes/pagesData/interfaces/PagesDataModifierModel';
 
-class HeaderMap {
+export class HeaderMap {
   protected db: PagesDataModifierModel;
 
   public components: {
@@ -19,5 +21,3 @@ class HeaderMap {
     };
   }
 }
-
-export default HeaderMap;

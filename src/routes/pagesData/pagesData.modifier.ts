@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { PageModel } from 'routes/pagesData/interfaces/PageModel';
+import { LinkModel } from '@modules/mainPage/components/header/components/nav/nav.view/interfaces';
 import { PagesDataModifierModel } from './interfaces/PagesDataModifierModel';
 import { PagesDataModel } from './interfaces/pagesDataModel';
-import LinkModel from '../../modules/mainPage/components/header/components/nav/nav.view/interfaces/LinkModel';
 import { Routes } from './interfaces/routes';
 
 export class PagesDataModifier implements PagesDataModifierModel {

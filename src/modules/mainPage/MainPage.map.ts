@@ -1,9 +1,8 @@
 import { ErrorPageView as ErrorPage } from '@modules/errorPage/index';
 import { PagesDataModifierModel } from '@routes/pagesData/interfaces/PagesDataModifierModel';
 import { RouterModel } from '@routes/interfaces/routerModel';
+import { RegistrPage as RegistrationPage, LoginPage } from '@modules/auth/index';
 import { HeaderActions as Header } from './components/header/HeaderActions';
-import { RegistrPage as RegistrationPage } from '../auth/registrationPage/index';
-import { LoginPage } from '../auth/loginPage/index';
 
 export class MainPageMap {
   protected db: PagesDataModifierModel;
