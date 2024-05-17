@@ -7,7 +7,7 @@ const postValidation = new ValidationRule({
 postValidation.addHints([
   {
     text: 'The minimum length is 4 characters long.',
-    callback: (s: string) => s.length >= 1,
+    callback: (s: string) => s.length >= 4,
   },
 ]);
 

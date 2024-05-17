@@ -12,16 +12,8 @@
   $wrong-input-color: var(--wrong-warning-color);
   $correct-input-color: var(--correct-warning-color);
   $neutral-input-color: var(--neutral-input-color);
-  $input-font-size: var(--font-size-s); // 16px
-  $input-input-padding-top: var(--padding-s); // 18px
-  $input-input-padding-right: var(--padding-xxs); // 11px
-  $input-label-margin-bottom: var(--label-margin-bottom); // 14px
   $input-hint-pad-start: 1.0625rem; // 17px
   $input-hint-margin-block: 1.0625rem; // 17px
-  $input-paddings: var(--block-left-padding-m);
-  $input-border-width: var(--border-width-m);
-  $input-border-radius: var(--small-border-radius);
-  // $input-hint-height: 8.3125rem; // 133px
 
   @include inputBox();
 
@@ -30,6 +22,7 @@
   }
 
   input {
+    @include regularText();
   }
 
   .input__hint {
@@ -40,7 +33,6 @@
     ul {
       box-sizing: border-box;
       @include hintHeight();
-      // height: calc($input-hint-height) - 2 * $input-hint-margin-block);
       padding-inline-start: $input-hint-pad-start;
       margin-block: $input-hint-margin-block;
 
@@ -48,18 +40,14 @@
         position: relative;
         left: -200%;
         transition: 0.5s left var(--arched-cubic-bezier);
+
+        @include regularText();
       }
     }
   }
 
   input {
-    font-size: $input-font-size;
-    padding: $input-input-padding-top $input-input-padding-right;
-    border-radius: $input-border-radius;
     position: relative;
-    border-width: $input-border-width;
-    box-sizing: unset;
-    width: calc(100% - ($input-input-padding-right + $input-border-width) * 2);
 
     &:invalid {
       outline: $wrong-input-color auto 1px;
@@ -83,7 +71,6 @@
   input:invalid + .input__hint,
   input:focus + .input__hint {
     @include hintHeight(calc(2 * $input-hint-margin-block));
-    // height: $input-hint-height);
 
     li {
       left: 0;
@@ -95,8 +82,6 @@
   }
 
   @keyframes wronginput {
-    0% {
-    }
     25% {
       transform: rotate(0.2deg);
     }
@@ -105,8 +90,6 @@
     }
     75% {
       transform: rotate(-0.2deg);
-    }
-    100% {
     }
   }
 }

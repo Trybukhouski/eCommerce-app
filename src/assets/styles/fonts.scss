@@ -8,10 +8,14 @@
   margin-bottom: 1.8125rem;
 }
 
-@mixin label {
+@mixin regularText {
   font-family: 'Actor', system-ui;
   font-size: var(--font-size-s);
   font-style: normal;
   margin: 0;
+}
+
+@mixin label {
+  @include regularText();
   margin-bottom: var(--label-margin-bottom);
 }

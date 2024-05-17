@@ -1,8 +1,8 @@
 .eye {
   $margin-top: calc(var(--font-size-s) + var(--label-margin-bottom) + var(--border-width-m));
-  $margin-right: calc(var(--block-left-padding-m) + var(--border-width-m) + 50px);
-  $height: calc((var(--block-top-padding-s) + var(--border-width-m)) * 2 + 18px);
-  $paddings: var(--block-paddings-s);
+  $margin-right: calc(var(--padding-m) + var(--border-width-m) + 50px);
+  $height: calc((var(--padding-s) + var(--border-width-m)) * 2 + 18px);
+  $paddings: var(--padding-s) var(--padding-xxs);
 
   position: absolute;
   right: 0;
