@@ -1,0 +1,23 @@
+@import '~@root/style';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.content {
+  @include title;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: fit-content;
+}
+
+.title {
+  @include title;
+  display: block;
+}

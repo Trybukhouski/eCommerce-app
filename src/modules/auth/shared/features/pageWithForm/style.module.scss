@@ -1,0 +1,49 @@
+@import '@assets/styles/fonts.scss';
+
+.form-page {
+  $form-bg-color: var(--white-200);
+
+  $login-page-header-margin-bottom: 1.8125rem; // 29px
+  $form-paddings: var(--block-paddings-xl); // 30px 70px 50px
+  $form-button-margin-top: 1.6875rem; // 27px
+
+  $h2-font-size: var(--font-size-m); // 24px
+  $children-max-width: var(--content-max-width);
+  $form-border-radius: var(--big-border-radius);
+
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  > * {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: $children-max-width;
+  }
+
+  form {
+    background-color: $form-bg-color;
+    padding: $form-paddings;
+    display: flex;
+    flex-direction: column;
+    border-radius: $form-border-radius;
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  button {
+    margin: auto;
+    margin-top: $form-button-margin-top;
+  }
+
+  h2 {
+    @include title();
+  }
+}

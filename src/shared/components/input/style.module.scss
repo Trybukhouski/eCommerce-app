@@ -1,0 +1,101 @@
+@import '@assets/styles/mixins/inputBoxMixin.scss';
+
+@mixin hintHeight($margin: 0) {
+  height: calc(var(--data-height) + $margin);
+  @media (min-width: 541px) {
+    height: calc(var(--data-height) / 1.5 + $margin);
+  }
+}
+
+.input {
+  $wrong-input-color: var(--wrong-warning-color);
+  $correct-input-color: var(--correct-warning-color);
+  $neutral-input-color: var(--neutral-input-color);
+  $input-font-size: var(--font-size-s); // 16px
+  $input-input-paddings: var(--block-paddings-s); // 18px 11px
+  $input-label-margin-bottom: var(--label-margin-bottom); // 14px
+  $input-hint-pad-start: 1.0625rem; // 17px
+  $input-hint-margin-block: 1.0625rem; // 17px
+  $input-paddings: var(--block-left-padding-m);
+  $input-border-width: var(--border-width-m);
+  $input-border-radius: var(--small-border-radius);
+  // $input-hint-height: 8.3125rem; // 133px
+
+  @include inputBox();
+
+  .input__hint {
+    height: 0;
+    overflow: hidden;
+    transition: 0.7s height var(--arched-cubic-bezier);
+
+    ul {
+      box-sizing: border-box;
+      @include hintHeight();
+      // height: calc($input-hint-height) - 2 * $input-hint-margin-block);
+      padding-inline-start: $input-hint-pad-start;
+      margin-block: $input-hint-margin-block;
+
+      li {
+        position: relative;
+        left: -200%;
+        transition: 0.5s left var(--arched-cubic-bezier);
+      }
+    }
+  }
+
+  input {
+    font-size: $input-font-size;
+    padding: $input-input-paddings;
+    border-radius: $input-border-radius;
+    position: relative;
+    border-width: $input-border-width;
+
+    &:invalid {
+      outline: $wrong-input-color auto 1px;
+    }
+
+    &:invalid + .input__hint ul {
+      li[data-correct='false'] {
+        color: $wrong-input-color;
+      }
+    }
+    & + .input__hint ul {
+      li {
+        color: $neutral-input-color;
+      }
+      li[data-correct='true'] {
+        color: $correct-input-color;
+      }
+    }
+  }
+
+  input:invalid + .input__hint,
+  input:focus + .input__hint {
+    @include hintHeight(calc(2 * $input-hint-margin-block));
+    // height: $input-hint-height);
+
+    li {
+      left: 0;
+    }
+  }
+
+  input:invalid:not(:focus) {
+    animation: wronginput 0.15s ease-in-out 2;
+  }
+
+  @keyframes wronginput {
+    0% {
+    }
+    25% {
+      transform: rotate(0.2deg);
+    }
+    50% {
+      transform: scale(1.005);
+    }
+    75% {
+      transform: rotate(-0.2deg);
+    }
+    100% {
+    }
+  }
+}
