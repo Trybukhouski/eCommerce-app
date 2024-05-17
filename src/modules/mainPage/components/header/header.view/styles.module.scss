@@ -1,0 +1,71 @@
+@import '../../../../../style.scss';
+
+.container {
+  background-color: var(--BGContrast);
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding: 1rem 0;
+  width: 1040px;
+  margin: auto;
+}
+
+.logo {
+  @include title;
+  margin: 0;
+  color: var(--textContrast);
+
+  span {
+    color: var(--textAccent);
+  }
+}
+
+.nav {
+  flex-grow: 1;
+}
+
+.burger {
+  display: none;
+}
+
+@media screen and (max-width: 1439px) {
+  .wrapper {
+    min-width: 900px;
+    width: calc(100% - 12.5rem);
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .wrapper {
+    min-width: 664px;
+    width: calc(100% - 7.5rem);
+  }
+}
+
+@media screen and (max-width: 766px) {
+  .wrapper {
+    min-width: 360px;
+    width: calc(100% - 5rem);
+  }
+
+  .wrapper {
+    position: relative;
+  }
+
+  .nav {
+    position: absolute;
+    top: 100%;
+
+    &_display_none {
+      display: none;
+    }
+  }
+
+  .burger {
+    display: flex;
+  }
+}
