@@ -7,3 +7,11 @@
   margin: 0;
   margin-bottom: 1.8125rem;
 }
+
+@mixin label {
+  font-family: 'Actor', system-ui;
+  font-size: var(--font-size-s);
+  font-style: normal;
+  margin: 0;
+  margin-bottom: var(--label-margin-bottom);
+}

@@ -1,0 +1,13 @@
+@mixin adaptivePaddings(
+  $breakpoint,
+  $pad-top,
+  $pad-right: $pad-top,
+  $pad-bottom: $pad-top,
+  $pad-left: $pad-right,
+  $coef: 1.6
+) {
+  padding-top: clamp(calc($pad-top / $coef), 100vw - $breakpoint, $pad-top);
+  padding-right: clamp(calc($pad-right / $coef), 100vw - $breakpoint, $pad-right);
+  padding-bottom: clamp(calc($pad-bottom / $coef), 100vw - $breakpoint, $pad-bottom);
+  padding-left: clamp(calc($pad-left / $coef), 100vw - $breakpoint, $pad-left);
+}

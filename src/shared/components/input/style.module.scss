@@ -1,4 +1,5 @@
 @import '@assets/styles/mixins/inputBoxMixin.scss';
+@import '@assets/styles/fonts.scss';
 
 @mixin hintHeight($margin: 0) {
   height: calc(var(--data-height) + $margin);
@@ -12,7 +13,8 @@
   $correct-input-color: var(--correct-warning-color);
   $neutral-input-color: var(--neutral-input-color);
   $input-font-size: var(--font-size-s); // 16px
-  $input-input-paddings: var(--block-paddings-s); // 18px 11px
+  $input-input-padding-top: var(--padding-s); // 18px
+  $input-input-padding-right: var(--padding-xxs); // 11px
   $input-label-margin-bottom: var(--label-margin-bottom); // 14px
   $input-hint-pad-start: 1.0625rem; // 17px
   $input-hint-margin-block: 1.0625rem; // 17px
@@ -22,6 +24,13 @@
   // $input-hint-height: 8.3125rem; // 133px
 
   @include inputBox();
+
+  label {
+    @include label();
+  }
+
+  input {
+  }
 
   .input__hint {
     height: 0;
@@ -45,10 +54,12 @@
 
   input {
     font-size: $input-font-size;
-    padding: $input-input-paddings;
+    padding: $input-input-padding-top $input-input-padding-right;
     border-radius: $input-border-radius;
     position: relative;
     border-width: $input-border-width;
+    box-sizing: unset;
+    width: calc(100% - ($input-input-padding-right + $input-border-width) * 2);
 
     &:invalid {
       outline: $wrong-input-color auto 1px;
