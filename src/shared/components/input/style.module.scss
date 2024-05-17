@@ -2,17 +2,17 @@
 @import '@assets/styles/fonts.scss';
 
 @mixin hintHeight($margin: 0) {
-  height: calc(var(--data-height) + $margin);
-  @media (min-width: 541px) {
-    height: calc(var(--data-height) / 1.5 + $margin);
-  }
+  $hint-height-mobile: calc(var(--data-height) + $margin);
+  $hint-height-screen: calc(var(--data-height) / 3 + $margin);
+
+  height: clamp(hint-height-screen, calc(100vh - 100vw), $hint-height-mobile);
 }
 
 .input {
   $wrong-input-color: var(--wrong-warning-color);
   $correct-input-color: var(--correct-warning-color);
   $neutral-input-color: var(--neutral-input-color);
-  $input-hint-pad-start: 1.0625rem; // 17px
+  $input-hint-pad-start: 1.2rem;
   $input-hint-margin-block: 1.0625rem; // 17px
 
   @include inputBox();
