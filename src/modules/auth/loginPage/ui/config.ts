@@ -9,7 +9,7 @@ const emailInputOptions = {
   placeholder: 'example@gmail.com',
   name: 'email',
   hasHint: true,
-  require: true,
+  required: true,
   type: 'email',
 };
 
@@ -18,7 +18,7 @@ const passwordInputOptions = {
   placeholder: '2333Wd#sQ',
   name: 'password',
   hasHint: true,
-  require: true,
+  required: true,
   type: 'password',
 };
 

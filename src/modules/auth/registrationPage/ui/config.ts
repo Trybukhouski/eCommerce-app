@@ -8,7 +8,9 @@ import {
   FormOptions,
 } from '@shared';
 
-type InputOptionsType = NonNullable<FormOptions['inputsOptions']>[number]['type'];
+type InputOptions = NonNullable<FormOptions['inputsOptions']>[number];
+
+type InputOptionsType = InputOptions['type'];
 
 const passwordType: InputOptionsType = 'password';
 
@@ -18,7 +20,7 @@ const formId = 'registration';
 
 const requiredWithHintPattern = {
   hasHint: true,
-  require: true,
+  required: true,
 };
 
 const emailInputOptions = {
@@ -97,8 +99,77 @@ const postInputOption = {
   postInputOption,
 ].forEach((o) => Object.assign(o, requiredWithHintPattern));
 
+const [
+  deliveryCountrySelectOptions,
+  deliveryCityInputOption,
+  deliveryStreetInputOptions,
+  deliveryPostInputOption,
+]: Partial<InputOptions>[] = [{}, {}, {}, {}];
+
+const deliveryInputOptions = [
+  deliveryCountrySelectOptions,
+  deliveryCityInputOption,
+  deliveryStreetInputOptions,
+  deliveryPostInputOption,
+];
+
+const [
+  billsCountrySelectOptions,
+  billsCityInputOption,
+  billsStreetInputOptions,
+  billsPostInputOption,
+]: Partial<InputOptions>[] = [{}, {}, {}, {}];
+
+const billsInputOptions = [
+  billsCountrySelectOptions,
+  billsCityInputOption,
+  billsStreetInputOptions,
+  billsPostInputOption,
+];
+
+const adressInputOptions = [
+  {
+    options: countrySelectOptions,
+    type: selectType,
+  },
+  {
+    options: cityInputOption,
+    rule: nameValidation,
+  },
+  {
+    options: streetInputOptions,
+    rule: streetValidation,
+  },
+  {
+    options: postInputOption,
+    rule: postValidation,
+  },
+];
+
+// The object is copied here and the name property is changed in order to have 2 address fields
+const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
+  deliveryInputOptions,
+  billsInputOptions,
+].map((g, index) => {
+  const namePrefix = index === 0 ? 'delivery' : 'bills';
+  const newG = g.map((i, ind) => {
+    const adress = adressInputOptions[ind];
+    const adressName = adress?.options.name;
+    if (i === undefined || !adress) {
+      return {} as InputOptions;
+    }
+    const newOptions = { ...adress.options, name: `${namePrefix}-${adressName}` };
+    Object.assign(i, adress, { options: newOptions });
+    if (index === 1) {
+      Object.defineProperty(i.options, 'required', { value: false });
+    }
+    return i as InputOptions;
+  });
+  return newG;
+}) as [InputOptions[], InputOptions[]];
+
 const formOptions = {
-  hasFieldset: true,
+  hasFieldset: false,
   inputsOptions: [
     {
       options: firstNameInputOptions,
@@ -121,21 +192,17 @@ const formOptions = {
       options: birthDateInputOptions,
       rule: birthDateValidation,
     },
+  ],
+  subGroups: [
     {
-      options: countrySelectOptions,
-      type: selectType,
+      inputOptions: nonNullableDeliveryInputOptions,
+      id: 'delivery',
+      legend: 'Delivery adress:',
     },
     {
-      options: cityInputOption,
-      rule: nameValidation,
-    },
-    {
-      options: streetInputOptions,
-      rule: streetValidation,
-    },
-    {
-      options: postInputOption,
-      rule: postValidation,
+      inputOptions: nonNullableBillsInputOptions,
+      id: 'bills',
+      legend: 'Bills adress:',
     },
   ],
   buttonOptions: {
