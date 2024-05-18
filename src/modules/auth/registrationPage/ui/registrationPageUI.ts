@@ -1,5 +1,5 @@
 import { FormPageUI, FormPageOptions } from '@modules/auth/shared';
-import { Input } from '@shared';
+import { Input, FormInputs } from '@shared';
 import * as style from './style.module.scss';
 
 class RegistrationPageUI extends FormPageUI {
@@ -48,6 +48,18 @@ class RegistrationPageUI extends FormPageUI {
         fieldset.classList.add(className);
       }
     });
+  }
+
+  public getValue(input: FormInputs) {
+    let inputElement;
+    if (input instanceof Input) {
+      inputElement = input.input;
+      if (inputElement.type === 'checkbox') {
+        return inputElement.checked;
+      }
+      return inputElement.value;
+    }
+    return input.select.value;
   }
 }
 

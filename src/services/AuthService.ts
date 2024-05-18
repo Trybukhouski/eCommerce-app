@@ -1,6 +1,6 @@
 import { clientCredentials } from '@config/config';
 import { handleResponse } from '@shared';
-import { LoginResponse, RegistrationResponse } from '@services/interfaces';
+import { LoginResponse, RegistrationResponse, UserData } from '@services/interfaces';
 
 export class AuthService {
   // URL for authentication
@@ -46,27 +46,17 @@ export class AuthService {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Token error:', errorText);
+      // const errorText = await response.text();
+      // console.error('Token error:', errorText);
       throw new Error('Failed to get token');
     }
 
     const data = await handleResponse(response);
     localStorage.setItem('accessToken', data.access_token);
-    console.log('Token obtained and saved:', data.access_token);
+    // console.log('Token obtained and saved:', data.access_token);
   }
 
-  public static async register(userData: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-    birthDate: string;
-    country: string;
-    city: string;
-    street: string;
-    postalCode: string;
-  }): Promise<RegistrationResponse> {
+  public static async register(userData: UserData): Promise<RegistrationResponse> {
     const body = JSON.stringify({
       email: userData.email,
       firstName: userData.firstName,
@@ -88,8 +78,6 @@ export class AuthService {
       throw new Error('No access token found');
     }
 
-    console.log('Using token for registration:', token);
-
     const response = await fetch(this.registerUrl, {
       method: 'POST',
       headers: {
@@ -100,8 +88,8 @@ export class AuthService {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Registration error:', errorText);
+      // const errorText = await response.text();
+      // console.error('Registration error:', errorText);
       throw new Error('Registration failed');
     }
 

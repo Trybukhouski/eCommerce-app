@@ -47,6 +47,18 @@ export interface Address {
   additionalAddressInfo: string;
 }
 
+export interface UserData {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  password?: string;
+  birthDate?: string;
+  country?: string;
+  city?: string;
+  street?: string;
+  postalCode?: string;
+}
+
 // export interface Store { }
 
 export interface RegistrationResponse {
