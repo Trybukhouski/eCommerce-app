@@ -103,12 +103,9 @@ class RegistrPage {
     const userData = this.collectUserData();
 
     try {
-      /* const response = */ await AuthService.register(userData);
+      await AuthService.getToken();
+      await AuthService.register(userData);
       NotificationService.displaySuccess('Account created successfully!');
-      // console.log('Registration successful:', response);
-      /*      setTimeout(() => {
-        window.location.href = '/main.html';
-      }, 2000); */
     } catch (error) {
       NotificationService.displayError(
         error instanceof Error ? error.message : 'Registration error'
@@ -116,4 +113,5 @@ class RegistrPage {
     }
   }
 }
+
 export { RegistrPage };
