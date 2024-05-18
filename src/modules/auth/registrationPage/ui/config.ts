@@ -64,7 +64,7 @@ const countrySelectOptions = {
   labelText: 'Country:',
   size: 1,
   required: true,
-  options: 'Russia, Belarus, USA, Kazakhstan'.split(', '),
+  options: 'RU, BY, US, KZ'.split(', '),
 };
 
 const cityInputOption = {
