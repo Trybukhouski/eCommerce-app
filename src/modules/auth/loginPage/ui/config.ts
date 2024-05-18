@@ -23,7 +23,7 @@ const passwordInputOptions = {
 };
 
 const formOptions = {
-  hasFieldset: true,
+  hasFieldset: false,
   inputsOptions: [
     {
       options: emailInputOptions,

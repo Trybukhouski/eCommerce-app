@@ -48,7 +48,14 @@
   fieldset {
     margin: 0;
     padding: 0;
-    border: none;
+    margin-top: var(--padding-m);
+    margin-bottom: var(--padding-m);
+    box-sizing: border-box;
+
+    legend {
+      @include regularText();
+      margin-left: 1rem;
+    }
   }
 
   button {
