@@ -1,6 +1,6 @@
-import { FormPageUI } from '@modules/auth/shared';
 import { formOptions } from './config';
+import { RegistrationPageUI } from './registrationPageUI';
 
-const registrPageUI = new FormPageUI(formOptions, 'Create account');
+const registrPageUI = new RegistrationPageUI(formOptions, 'Create account');
 
 export { registrPageUI };

@@ -18,6 +18,7 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "class-methods-use-this": "off",
     "import/prefer-default-export": "off",
+    "dot-notation": "off",
   },
   overrides: [
     {

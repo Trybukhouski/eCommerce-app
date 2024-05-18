@@ -1,21 +1,6 @@
-import { Input, Form, FormOptions, Select } from '@shared';
+import { Input, Form } from '@shared';
 import * as style from './style.module.scss';
-
-type InputUnion = Input | Select;
-
-interface InputElements {
-  [name: string]: InputUnion;
-}
-
-type UnionInputOptions = FormOptions['inputsOptions'];
-
-interface Options extends FormOptions {
-  subGroups?: {
-    id: string;
-    inputOptions: NonNullable<UnionInputOptions>;
-    legend: string;
-  }[];
-}
+import { InputUnion, InputElements, FormPageOptions } from './config';
 
 class FormPageUI {
   public section: HTMLElement;
@@ -39,7 +24,7 @@ class FormPageUI {
     };
   } = {};
 
-  constructor(formOptions: Options, headerText: string) {
+  constructor(formOptions: FormPageOptions, headerText: string) {
     this.section = document.createElement('section');
     this.container = document.createElement('div');
 
@@ -74,7 +59,7 @@ class FormPageUI {
     });
   }
 
-  private addGroups(subGroups: NonNullable<Options['subGroups']>) {
+  private addGroups(subGroups: NonNullable<FormPageOptions['subGroups']>) {
     subGroups.forEach((g) => {
       const fieldset = document.createElement('fieldset');
       fieldset.id = g.id;

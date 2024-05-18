@@ -1,12 +1,12 @@
 import { Input, Button, PasswordInput, Select } from '@shared';
-import { defaultFormOptions, FormOptions } from './config';
+import { defaultFormOptions, FormOptions, FormInputs } from './config';
 
 type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
 
 class Form {
   public container: HTMLElement;
 
-  public inputArr: (Input | Select)[];
+  public inputArr: FormInputs[];
 
   public form: HTMLFormElement;
 
@@ -39,7 +39,7 @@ class Form {
     }
   }
 
-  public addInputs(arr: InputsOptionsWithRule): (Input | Select)[] {
+  public addInputs(arr: InputsOptionsWithRule): FormInputs[] {
     const { container } = this;
     return arr.map((i) => {
       let input;
