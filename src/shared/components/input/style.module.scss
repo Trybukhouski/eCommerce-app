@@ -93,3 +93,18 @@
     }
   }
 }
+
+.checkbox {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  padding: var(--padding-m);
+  gap: 0.5rem;
+
+  label {
+    @include regularText();
+  }
+
+  input {
+    width: 1rem;
+  }
+}

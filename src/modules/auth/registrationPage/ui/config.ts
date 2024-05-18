@@ -99,18 +99,32 @@ const postInputOption = {
   postInputOption,
 ].forEach((o) => Object.assign(o, requiredWithHintPattern));
 
+const defaultAdressCheckboxOptions = {
+  name: 'default',
+  labelText: 'Set as default adress',
+  type: 'checkbox',
+};
+
+const matchAdressCheckboxOptions = {
+  name: 'adress-match',
+  labelText: 'Also use as billing adress',
+  type: 'checkbox',
+};
+
 const [
   deliveryCountrySelectOptions,
   deliveryCityInputOption,
   deliveryStreetInputOptions,
   deliveryPostInputOption,
-]: Partial<InputOptions>[] = [{}, {}, {}, {}];
+  deliveryDefaultAdressCheckboxOptions,
+]: Partial<InputOptions>[] = [{}, {}, {}, {}, {}];
 
 const deliveryInputOptions = [
   deliveryCountrySelectOptions,
   deliveryCityInputOption,
   deliveryStreetInputOptions,
   deliveryPostInputOption,
+  deliveryDefaultAdressCheckboxOptions,
 ];
 
 const [
@@ -118,13 +132,15 @@ const [
   billsCityInputOption,
   billsStreetInputOptions,
   billsPostInputOption,
-]: Partial<InputOptions>[] = [{}, {}, {}, {}];
+  billsDefaultAdressCheckboxOptions,
+]: Partial<InputOptions>[] = [{}, {}, {}, {}, {}];
 
 const billsInputOptions = [
   billsCountrySelectOptions,
   billsCityInputOption,
   billsStreetInputOptions,
   billsPostInputOption,
+  billsDefaultAdressCheckboxOptions,
 ];
 
 const adressInputOptions = [
@@ -143,6 +159,9 @@ const adressInputOptions = [
   {
     options: postInputOption,
     rule: postValidation,
+  },
+  {
+    options: defaultAdressCheckboxOptions,
   },
 ];
 
@@ -167,6 +186,8 @@ const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
   });
   return newG;
 }) as [InputOptions[], InputOptions[]];
+
+nonNullableDeliveryInputOptions.push({ options: matchAdressCheckboxOptions });
 
 const formOptions = {
   hasFieldset: false,

@@ -34,6 +34,7 @@ class FormPageUI {
 
   public subGroups: {
     [id: string]: {
+      fieldset: HTMLElement;
       inputElements: InputUnion[];
     };
   } = {};
@@ -89,7 +90,10 @@ class FormPageUI {
       });
       this.submitButton.before(fieldset);
 
-      this.subGroups[g.id] = { inputElements: inputs };
+      this.subGroups[g.id] = {
+        inputElements: inputs,
+        fieldset,
+      };
     });
   }
 }
