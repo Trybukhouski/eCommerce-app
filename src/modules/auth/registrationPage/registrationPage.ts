@@ -161,7 +161,7 @@ class RegistrPage {
       return;
     }
 
-    addresses.forEach((a) => {
+    addresses.forEach(async (a) => {
       const actions: AddressAction[] = [];
 
       const [isDeafault, addAddressIdAction, setdefaultAddressAction] = this.createActionsObjects(
@@ -176,7 +176,8 @@ class RegistrPage {
         actions.push(setdefaultAddressAction);
       }
 
-      AuthService.sendAddressActions(customerId, actions);
+      /* const r = */ await AuthService.sendAddressActions(customerId, actions);
+      // console.log(r);
     });
   }
 }

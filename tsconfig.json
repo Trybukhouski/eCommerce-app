@@ -9,7 +9,7 @@
       "@core/*": ["modules/core/*"],
       "@assets/*": ["assets/*"],
       "@modules/*": ["modules/*"],
-      "@config/*": ["config"],
+      "@config": ["config.ts"],
       "@services": ["services"],
       "@interfaces/*": ["interfaces/*"],
       "@routes/*": ["routes/*"],

@@ -1,5 +1,4 @@
-import { AuthService } from '@services/AuthService';
-import { NotificationService } from '@services/NotificationService';
+import { AuthService, NotificationService } from '@services';
 import { loginPageUI } from './ui';
 
 class LoginPage {

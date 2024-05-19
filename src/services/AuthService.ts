@@ -1,4 +1,4 @@
-import { clientCredentials } from '@config/config';
+import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
 import { LoginResponse, RegistrationResponse, UserData, AddressAction } from './interfaces';
 // import { version } from 'process';
