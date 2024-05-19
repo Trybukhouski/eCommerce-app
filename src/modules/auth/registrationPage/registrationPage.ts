@@ -20,6 +20,19 @@ class RegistrPage {
 
   public submitButton: HTMLButtonElement;
 
+  private readonly addressKeysObj = {
+    delivery: {
+      prefix: 'delivery-',
+      defaultActionName: 'setDefaultShippingAddress',
+      setIdActionName: 'addShippingAddressId',
+    },
+    bills: {
+      prefix: 'bills-',
+      defaultActionName: 'setDefaultBillingAddress',
+      setIdActionName: 'addBillingAddressId',
+    },
+  };
+
   constructor() {
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
       setTimeout(this.addSubmitListeners.bind(this), 0);
@@ -110,21 +123,8 @@ class RegistrPage {
     }
   }
 
-  private addressKeysObj = {
-    delivery: {
-      prefix: 'delivery-',
-      defaultActionName: 'setDefaultShippingAddress',
-      setIdActionName: 'addShippingAddressId',
-    },
-    bills: {
-      prefix: 'bills-',
-      defaultActionName: 'setDefaultBillingAddress',
-      setIdActionName: 'addBillingAddressId',
-    },
-  };
-
   private createActionsObjects(a: CreateActionsObjectsOptions) {
-    let config;
+    let config: typeof this.addressKeysObj.delivery;
     if (a.key === 'delivery') {
       config = this.addressKeysObj.delivery;
     } else {
