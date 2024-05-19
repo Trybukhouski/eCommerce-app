@@ -79,21 +79,21 @@ class RegistrPage {
         },
       ],
     };
-    if (this.getInputValue('adress-match') !== 'true') {
-      const billsAdress: Address = {
+    if (this.getInputValue('address-match') !== 'true') {
+      const billsAddress: Address = {
         key: 'bills',
         country: this.getInputValue('bills-country'),
         city: this.getInputValue('bills-city'),
         streetName: this.getInputValue('bills-street'),
         postalCode: this.getInputValue('bills-index'),
       };
-      if (Object.values(billsAdress).some((v) => v === undefined || v === '')) {
+      if (Object.values(billsAddress).some((v) => v === undefined || v === '')) {
         NotificationService.displayError(
           'Some of the fields of the bills address were filled in incorrectly'
         );
         return undefined;
       }
-      userData.addresses.push(billsAdress);
+      userData.addresses.push(billsAddress);
     }
     return userData;
   }
@@ -169,9 +169,12 @@ class RegistrPage {
     }
 
     if (addresses.length === 1) {
-      const billsAdress: CreateActionsObjectsOptions = {};
-      Object.assign(billsAdress, addresses[0] as Address, { key: 'bills', dontCheckDefault: true });
-      addresses.push(billsAdress);
+      const billsAddress: CreateActionsObjectsOptions = {};
+      Object.assign(billsAddress, addresses[0] as Address, {
+        key: 'bills',
+        dontCheckDefault: true,
+      });
+      addresses.push(billsAddress);
     }
 
     const actionsArr: AddressAction[] = [];

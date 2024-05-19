@@ -9,14 +9,14 @@ class RegistrationPageUI extends FormPageUI {
     super(formOptions, headerText);
 
     this.insertCheckboxInContainer();
-    this.toggleVisibilityBillsAdress();
+    this.toggleVisibilityBillsAddress();
   }
 
   private insertCheckboxInContainer() {
     const fieldset = this.subGroups['delivery']?.fieldset;
     const checkboxContainer = document.createElement('div');
 
-    ['delivery-default', 'adress-match'].forEach((s) => {
+    ['delivery-default', 'address-match'].forEach((s) => {
       const checkbox = this.inputElements[s];
       if (!checkbox) {
         return;
@@ -30,8 +30,8 @@ class RegistrationPageUI extends FormPageUI {
     checkboxContainer.classList.add(style['checkbox-container']);
   }
 
-  private toggleVisibilityBillsAdress() {
-    const checkbox = this.inputElements['adress-match'];
+  private toggleVisibilityBillsAddress() {
+    const checkbox = this.inputElements['address-match'];
     if (!checkbox || !(checkbox instanceof Input)) {
       return;
     }

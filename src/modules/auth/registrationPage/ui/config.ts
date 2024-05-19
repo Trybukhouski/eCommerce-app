@@ -116,15 +116,15 @@ const postInputOption = {
   postInputOption,
 ].forEach((o) => Object.assign(o, requiredWithHintPattern));
 
-const defaultAdressCheckboxOptions = {
+const defaultAddressCheckboxOptions = {
   name: 'default',
-  labelText: 'Set as default adress',
+  labelText: 'Set as default address',
   type: 'checkbox',
 };
 
-const matchAdressCheckboxOptions: InputOptions['options'] = {
-  name: 'adress-match',
-  labelText: 'Also use as billing adress',
+const matchAddressCheckboxOptions: InputOptions['options'] = {
+  name: 'address-match',
+  labelText: 'Also use as billing address',
   type: 'checkbox',
 };
 
@@ -133,7 +133,7 @@ const [
   deliveryCityInputOption,
   deliveryStreetInputOptions,
   deliveryPostInputOption,
-  deliveryDefaultAdressCheckboxOptions,
+  deliveryDefaultAddressCheckboxOptions,
 ]: Partial<InputOptions>[] = [{}, {}, {}, {}, {}];
 
 const deliveryInputOptions = [
@@ -141,7 +141,7 @@ const deliveryInputOptions = [
   deliveryCityInputOption,
   deliveryStreetInputOptions,
   deliveryPostInputOption,
-  deliveryDefaultAdressCheckboxOptions,
+  deliveryDefaultAddressCheckboxOptions,
 ];
 
 const [
@@ -149,7 +149,7 @@ const [
   billsCityInputOption,
   billsStreetInputOptions,
   billsPostInputOption,
-  billsDefaultAdressCheckboxOptions,
+  billsDefaultAddressCheckboxOptions,
 ]: Partial<InputOptions>[] = [{}, {}, {}, {}, {}];
 
 const billsInputOptions = [
@@ -157,10 +157,10 @@ const billsInputOptions = [
   billsCityInputOption,
   billsStreetInputOptions,
   billsPostInputOption,
-  billsDefaultAdressCheckboxOptions,
+  billsDefaultAddressCheckboxOptions,
 ];
 
-const adressInputOptions = [
+const addressInputOptions = [
   {
     options: countrySelectOptions,
     type: selectType,
@@ -178,7 +178,7 @@ const adressInputOptions = [
     rule: postValidation,
   },
   {
-    options: defaultAdressCheckboxOptions,
+    options: defaultAddressCheckboxOptions,
   },
 ];
 
@@ -189,13 +189,13 @@ const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
 ].map((g, index) => {
   const namePrefix = index === 0 ? 'delivery' : 'bills';
   const newG = g.map((i, ind) => {
-    const adress = adressInputOptions[ind];
-    const adressName = adress?.options.name;
-    if (i === undefined || !adress) {
+    const address = addressInputOptions[ind];
+    const addressName = address?.options.name;
+    if (i === undefined || !address) {
       return {} as InputOptions;
     }
-    const newOptions = { ...adress.options, name: `${namePrefix}-${adressName}` };
-    Object.assign(i, adress, { options: newOptions });
+    const newOptions = { ...address.options, name: `${namePrefix}-${addressName}` };
+    Object.assign(i, address, { options: newOptions });
     if (index === 1) {
       Object.defineProperty(i.options, 'required', { value: false });
     }
@@ -204,7 +204,7 @@ const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
   return newG;
 }) as [InputOptions[], InputOptions[]];
 
-nonNullableDeliveryInputOptions.push({ options: matchAdressCheckboxOptions });
+nonNullableDeliveryInputOptions.push({ options: matchAddressCheckboxOptions });
 
 const formOptions = {
   hasFieldset: false,
@@ -235,12 +235,12 @@ const formOptions = {
     {
       inputOptions: nonNullableDeliveryInputOptions,
       id: 'delivery',
-      legend: 'Delivery adress:',
+      legend: 'Delivery address:',
     },
     {
       inputOptions: nonNullableBillsInputOptions,
       id: 'bills',
-      legend: 'Bills adress:',
+      legend: 'Bills address:',
     },
   ],
   buttonOptions: {
