@@ -204,9 +204,7 @@ const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
   return newG;
 }) as [InputOptions[], InputOptions[]];
 
-const o: InputOptions = { options: matchAdressCheckboxOptions };
-
-nonNullableDeliveryInputOptions.push(o);
+nonNullableDeliveryInputOptions.push({ options: matchAdressCheckboxOptions });
 
 const formOptions = {
   hasFieldset: false,
