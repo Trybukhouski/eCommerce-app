@@ -64,7 +64,24 @@ const countrySelectOptions = {
   labelText: 'Country:',
   size: 1,
   required: true,
-  options: 'RU, BY, US, KZ'.split(', '),
+  options: [
+    {
+      value: 'RU',
+      text: 'Russia',
+    },
+    {
+      value: 'BY',
+      text: 'Belarus',
+    },
+    {
+      value: 'US',
+      text: 'United States of America',
+    },
+    {
+      value: 'KZ',
+      text: 'Kazakhstan',
+    },
+  ],
 };
 
 const cityInputOption = {
@@ -105,7 +122,7 @@ const defaultAdressCheckboxOptions = {
   type: 'checkbox',
 };
 
-const matchAdressCheckboxOptions = {
+const matchAdressCheckboxOptions: InputOptions['options'] = {
   name: 'adress-match',
   labelText: 'Also use as billing adress',
   type: 'checkbox',
@@ -187,7 +204,9 @@ const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
   return newG;
 }) as [InputOptions[], InputOptions[]];
 
-nonNullableDeliveryInputOptions.push({ options: matchAdressCheckboxOptions });
+const o: InputOptions = { options: matchAdressCheckboxOptions };
+
+nonNullableDeliveryInputOptions.push(o);
 
 const formOptions = {
   hasFieldset: false,
