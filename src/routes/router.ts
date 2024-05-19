@@ -1,4 +1,4 @@
-import { Routes } from '@interfaces/index';
+import { Routes } from '@interfaces';
 
 interface subscriber {
   inform: (page: Routes) => void;
@@ -21,7 +21,7 @@ export class Router {
     window.location.hash = `#${hash}`;
   }
 
-  public addSubscriber(subscriber: subscriber) {
+  public addSubscriber(subscriber: subscriber): void {
     this.subscribers.push(subscriber);
   }
 }

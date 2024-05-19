@@ -39,16 +39,38 @@ export interface CustomerReference {
 }
 
 export interface Address {
-  id: string;
-  streetName: string;
-  postalCode: string;
-  city: string;
-  country: string;
-  additionalAddressInfo: string;
+  id?: string;
+  key?: string;
+  streetName?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
+  additionalAddressInfo?: string;
+}
+
+export interface UserData {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  password?: string;
+  birthDate?: string;
+  addresses: {
+    key?: string;
+    country?: string;
+    city?: string;
+    streetName?: string;
+    postalCode?: string;
+  }[];
 }
 
 // export interface Store { }
 
 export interface RegistrationResponse {
   customer: Customer;
+}
+
+export interface AddressAction {
+  action: string;
+  addressId?: string;
+  addressKey?: string;
 }

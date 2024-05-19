@@ -1,6 +1,8 @@
 import * as style from './style.module.scss';
 import { defaultSelectOptions, SelectOptions } from './config';
 
+type SelectOption = NonNullable<SelectOptions['options']>[number];
+
 class Select {
   public select: HTMLSelectElement;
 
@@ -52,11 +54,11 @@ class Select {
     select.multiple = multiple;
   }
 
-  public addOptions(selectOptions: string[]): void {
+  public addOptions(selectOptions: SelectOption[]): void {
     selectOptions.forEach((o) => {
       const optionElem = document.createElement('option');
-      optionElem.value = o;
-      optionElem.textContent = o;
+      optionElem.value = o.value;
+      optionElem.textContent = o.text;
       this.select.append(optionElem);
     });
   }

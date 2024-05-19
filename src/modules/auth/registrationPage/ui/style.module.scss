@@ -1,0 +1,14 @@
+.checkbox-container {
+  display: grid;
+  grid-auto-flow: column;
+  justify-items: start;
+  align-items: center;
+
+  @media (max-width: 23.4375rem) {
+    grid-auto-flow: row;
+  }
+}
+
+.fieldset:global(.hidden) {
+  display: none;
+}

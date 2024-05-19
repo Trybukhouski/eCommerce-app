@@ -1,4 +1,4 @@
-import { ValidationRule } from './class/validation';
+import { ValidationRule } from './ValidationRule';
 
 function flipDate(date: string) {
   return date.replace(/^(\d{1,2})([-.]\d{1,2}[-.])(\d{4})$/, '$3$2$1');

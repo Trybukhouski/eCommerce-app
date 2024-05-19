@@ -1,2 +1,2 @@
 export * from './form';
-export { FormOptions } from './config';
+export { FormOptions, FormInputs } from './config';

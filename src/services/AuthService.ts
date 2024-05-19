@@ -1,15 +1,12 @@
-import { clientCredentials } from '@config/config';
+import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
-import { LoginResponse, RegistrationResponse } from '@services/interfaces';
+import { LoginResponse, RegistrationResponse, UserData, AddressAction } from './interfaces';
 
 export class AuthService {
-  // URL for authentication
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
 
-  // URL for registration
   private static registerUrl = `${clientCredentials.apiUrl}/ecommerce2024/customers`;
 
-  // URL for client credentials token
   private static tokenUrl = `${clientCredentials.authUrl}/oauth/token?grant_type=client_credentials`;
 
   public static async login(username: string, password: string): Promise<LoginResponse> {
@@ -46,49 +43,20 @@ export class AuthService {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Token error:', errorText);
       throw new Error('Failed to get token');
     }
 
     const data = await handleResponse(response);
     localStorage.setItem('accessToken', data.access_token);
-    console.log('Token obtained and saved:', data.access_token);
   }
 
-  public static async register(userData: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-    birthDate: string;
-    country: string;
-    city: string;
-    street: string;
-    postalCode: string;
-  }): Promise<RegistrationResponse> {
-    const body = JSON.stringify({
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      password: userData.password,
-      addresses: [
-        {
-          country: userData.country,
-          city: userData.city,
-          streetName: userData.street,
-          postalCode: userData.postalCode,
-          additionalAddressInfo: `Date of Birth: ${userData.birthDate}`,
-        },
-      ],
-    });
+  public static async register(userData: UserData): Promise<RegistrationResponse> {
+    const body = JSON.stringify(userData);
 
     const token = localStorage.getItem('accessToken');
     if (!token) {
       throw new Error('No access token found');
     }
-
-    console.log('Using token for registration:', token);
 
     const response = await fetch(this.registerUrl, {
       method: 'POST',
@@ -101,10 +69,67 @@ export class AuthService {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Registration error:', errorText);
-      throw new Error('Registration failed');
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'Registration failed');
+    }
+    return handleResponse(response);
+  }
+
+  public static async getCustomerVersion(userId: string): Promise<number> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No access token found');
     }
 
+    const url = `${this.registerUrl}/${userId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to get customer version: ${errorText}`);
+    }
+
+    const data = await handleResponse(response);
+    return data.version;
+  }
+
+  public static async sendAddressActions(
+    userId: string,
+    actions: AddressAction[]
+  ): Promise<RegistrationResponse> {
+    const currentVersion = await this.getCustomerVersion(userId);
+    const request = {
+      version: currentVersion,
+      actions,
+    };
+    const body = JSON.stringify(request);
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No access token found');
+    }
+
+    const url = `${this.registerUrl}/${userId}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'The addresses could not be set');
+    }
     return handleResponse(response);
   }
 }
