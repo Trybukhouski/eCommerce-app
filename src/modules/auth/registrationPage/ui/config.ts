@@ -186,9 +186,9 @@ const addressInputOptions = [
 const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
   deliveryInputOptions,
   billsInputOptions,
-].map((g, index) => {
+].map((group, index) => {
   const namePrefix = index === 0 ? 'delivery' : 'bills';
-  const newG = g.map((i, ind) => {
+  const newGroup = group.map((i, ind) => {
     const address = addressInputOptions[ind];
     const addressName = address?.options.name;
     if (i === undefined || !address) {
@@ -201,7 +201,7 @@ const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
     }
     return i as InputOptions;
   });
-  return newG;
+  return newGroup;
 }) as [InputOptions[], InputOptions[]];
 
 nonNullableDeliveryInputOptions.push({ options: matchAddressCheckboxOptions });
