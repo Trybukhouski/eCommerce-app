@@ -2,6 +2,7 @@
 @import '@assets/styles/mixins/adaptivePaddings.scss';
 
 .form-page {
+  $page-paddings: var(--padding-xl) 0;
   $form-bg-color: var(--white-200);
 
   $login-page-header-margin-bottom: 1.8125rem; // 29px
@@ -24,6 +25,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: $page-paddings;
 
   > * {
     box-sizing: border-box;
