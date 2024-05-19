@@ -10,7 +10,7 @@ import { Input } from '@shared';
 import { registrPageUI } from './ui';
 
 interface CreateActionsObjectsOptions extends Address {
-  dontCheckDefault?: boolean;
+  dontCheckDefault?: 'true' | 'false';
 }
 
 class RegistrPage {
@@ -132,7 +132,7 @@ class RegistrPage {
     }
 
     let isDefault: string | undefined;
-    if (a.dontCheckDefault) {
+    if (a.dontCheckDefault === 'true') {
       isDefault = 'true';
     } else {
       isDefault = this.getInputValue(`${config.prefix}default`);
@@ -162,7 +162,7 @@ class RegistrPage {
       const billsAddress: CreateActionsObjectsOptions = {};
       Object.assign(billsAddress, addresses[0] as Address, {
         key: 'bills',
-        dontCheckDefault: true,
+        dontCheckDefault: this.getInputValue('delivery-default'),
       });
       addresses.push(billsAddress);
     }
