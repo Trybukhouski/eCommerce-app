@@ -57,21 +57,7 @@ export class AuthService {
   }
 
   public static async register(userData: UserData): Promise<RegistrationResponse> {
-    const body = JSON.stringify({
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      password: userData.password,
-      addresses: [
-        {
-          country: userData.country,
-          city: userData.city,
-          streetName: userData.street,
-          postalCode: userData.postalCode,
-          additionalAddressInfo: `Date of Birth: ${userData.birthDate}`,
-        },
-      ],
-    });
+    const body = JSON.stringify(userData);
 
     const token = localStorage.getItem('accessToken');
     if (!token) {

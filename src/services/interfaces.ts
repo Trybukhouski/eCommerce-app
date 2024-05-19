@@ -53,10 +53,12 @@ export interface UserData {
   lastName?: string;
   password?: string;
   birthDate?: string;
-  country?: string;
-  city?: string;
-  street?: string;
-  postalCode?: string;
+  adresses: {
+    country?: string;
+    city?: string;
+    street?: string;
+    postalCode?: string;
+  }[];
 }
 
 // export interface Store { }
