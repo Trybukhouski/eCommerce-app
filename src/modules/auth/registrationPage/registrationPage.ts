@@ -1,6 +1,7 @@
 import './ui/config';
 import { NotificationService, AuthService, RegistrationResponse } from '@services';
 import { Input } from '@shared';
+import { Address, AddressAction } from '@root/services/interfaces';
 import { registrPageUI } from './ui';
 
 interface UserData {
@@ -117,6 +118,42 @@ class RegistrPage {
     }
   }
 
+  private addressKeysObj = {
+    delivery: {
+      prefix: 'delivery-',
+      defaultActionName: 'setDefaultShippingAddress',
+      setIdActionName: 'addShippingAddressId',
+    },
+    bills: {
+      prefix: 'bills-',
+      defaultActionName: 'setDefaultBillingAddress',
+      setIdActionName: 'addBillingAddressId',
+    },
+  };
+
+  private createActionsObjects(a: Address) {
+    let config;
+    if (a.key === 'delivery') {
+      config = this.addressKeysObj.delivery;
+    } else {
+      config = this.addressKeysObj.bills;
+    }
+
+    const isDeafault = this.getInputValue(`${config.prefix}default`);
+
+    return [
+      isDeafault,
+      {
+        action: config.setIdActionName,
+        addressKey: a.key,
+      },
+      {
+        action: config.defaultActionName,
+        addressKey: a.key,
+      },
+    ] as [string | undefined, AddressAction, AddressAction];
+  }
+
   private setAddresses(response: RegistrationResponse) {
     const customerId = response.customer.id;
     const { addresses } = response.customer;
@@ -125,29 +162,21 @@ class RegistrPage {
     }
 
     addresses.forEach((a) => {
-      let prefix: string;
-      /// let addAddressMethod;
-      /// let defaultMethod;
-      if (a.key === 'delivery') {
-        prefix = 'delivery-';
-        // defaultMethod = (obj) => AuthService.setDefaultShippingAddress(obj);
-        // addAddressMethod = (obj) => AuthService.addShippingAddressID(obj);
-      } else if (a.key === 'bills') {
-        prefix = 'bills-';
-        // defaultMethod = (obj) => AuthService.setDefaultBillingAddress(obj);
-        // addAddressMethod = (obj) => AuthService.addBillingAddressID(obj);
-      } else {
-        prefix = '';
-      }
-      const isDeafault = this.getInputValue(`${prefix}default`);
-      if (!isDeafault || prefix === '') {
+      const actions: AddressAction[] = [];
+
+      const [isDeafault, addAddressIdAction, setdefaultAddressAction] = this.createActionsObjects(
+        a
+      );
+      if (!isDeafault) {
         return;
       }
 
-      // addAddressMethod();
+      actions.push(addAddressIdAction);
       if (isDeafault === 'true') {
-        // defaultMethod();
+        actions.push(setdefaultAddressAction);
       }
+
+      AuthService.sendAddressActions(customerId, actions);
     });
   }
 }

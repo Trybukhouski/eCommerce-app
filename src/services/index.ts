@@ -1,3 +1,3 @@
 export * from './AuthService';
 export * from './NotificationService';
-export { RegistrationResponse, UserData } from './interfaces';
+export { RegistrationResponse, UserData, AddressAction } from './interfaces';

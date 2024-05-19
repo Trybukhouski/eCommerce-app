@@ -1,6 +1,7 @@
 import { clientCredentials } from '@config/config';
 import { handleResponse } from '@shared';
-import { LoginResponse, RegistrationResponse, UserData } from './interfaces';
+import { LoginResponse, RegistrationResponse, UserData, AddressAction } from './interfaces';
+// import { version } from 'process';
 
 export class AuthService {
   // URL for authentication
@@ -81,5 +82,33 @@ export class AuthService {
     return handleResponse(response);
   }
 
-  public static async sendAction() {}
+  public static async sendAddressActions(userId: string, actions: AddressAction[]) {
+    const request = {
+      version: 1,
+      actions,
+    };
+    const body = JSON.stringify(request);
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No access token found');
+    }
+
+    const url = `${this.registerUrl}/${userId}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'The addresses could not be set');
+    }
+    return handleResponse(response);
+  }
 }

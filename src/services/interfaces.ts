@@ -68,3 +68,9 @@ export interface UserData {
 export interface RegistrationResponse {
   customer: Customer;
 }
+
+export interface AddressAction {
+  action: string;
+  addressId?: string;
+  addressKey?: string;
+}
