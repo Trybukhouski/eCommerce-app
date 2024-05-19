@@ -82,7 +82,7 @@ class FormPageUI {
     });
   }
 
-  public toggleButtonDisabled() {
+  public toggleButtonDisabled(): void {
     const isDisabled = this.submitButton.disabled;
     this.submitButton.disabled = !isDisabled;
   }

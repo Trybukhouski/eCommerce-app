@@ -50,7 +50,7 @@ class RegistrationPageUI extends FormPageUI {
     });
   }
 
-  public getValue(input: FormInputs) {
+  public getValue(input: FormInputs): string | boolean {
     let inputElement;
     if (input instanceof Input) {
       inputElement = input.input;

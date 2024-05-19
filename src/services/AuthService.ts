@@ -99,7 +99,10 @@ export class AuthService {
     return data.version;
   }
 
-  public static async sendAddressActions(userId: string, actions: AddressAction[]) {
+  public static async sendAddressActions(
+    userId: string,
+    actions: AddressAction[]
+  ): Promise<RegistrationResponse> {
     const currentVersion = await this.getCustomerVersion(userId);
     const request = {
       version: currentVersion,
