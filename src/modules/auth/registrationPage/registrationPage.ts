@@ -19,6 +19,10 @@ interface UserData {
   }[];
 }
 
+interface CreateActionsObjectsOptions extends Address {
+  dontCheckDefault?: boolean;
+}
+
 class RegistrPage {
   public elem = registrPageUI.section;
 
@@ -105,7 +109,7 @@ class RegistrPage {
     try {
       await AuthService.getToken();
       const response = await AuthService.register(userData);
-      this.setAddresses(response);
+      await this.setAddresses(response);
       NotificationService.displaySuccess('Account created successfully!');
       this.uiApi.toggleButtonDisabled();
     } catch (error) {
@@ -129,7 +133,7 @@ class RegistrPage {
     },
   };
 
-  private createActionsObjects(a: Address) {
+  private createActionsObjects(a: CreateActionsObjectsOptions) {
     let config;
     if (a.key === 'delivery') {
       config = this.addressKeysObj.delivery;
@@ -137,22 +141,27 @@ class RegistrPage {
       config = this.addressKeysObj.bills;
     }
 
-    const isDeafault = this.getInputValue(`${config.prefix}default`);
+    let isDefault: string | undefined;
+    if (a.dontCheckDefault) {
+      isDefault = 'true';
+    } else {
+      isDefault = this.getInputValue(`${config.prefix}default`);
+    }
 
     return [
-      isDeafault,
+      isDefault,
       {
         action: config.setIdActionName,
-        addressKey: a.key,
+        addressId: a.id,
       },
       {
         action: config.defaultActionName,
-        addressKey: a.key,
+        addressId: a.id,
       },
     ] as [string | undefined, AddressAction, AddressAction];
   }
 
-  private setAddresses(response: RegistrationResponse) {
+  private async setAddresses(response: RegistrationResponse) {
     const customerId = response.customer.id;
     const { addresses } = response.customer;
     if (!addresses || !customerId) {
@@ -160,29 +169,34 @@ class RegistrPage {
     }
 
     if (addresses.length === 1) {
-      const billsAdress: Address = {};
-      Object.assign(billsAdress, addresses[0] as Address, { key: 'bills' });
+      const billsAdress: CreateActionsObjectsOptions = {};
+      Object.assign(billsAdress, addresses[0] as Address, { key: 'bills', dontCheckDefault: true });
       addresses.push(billsAdress);
     }
 
-    addresses.forEach(async (a) => {
+    const actionsArr: AddressAction[] = [];
+    addresses.forEach((a) => {
       const actions: AddressAction[] = [];
 
-      const [isDeafault, addAddressIdAction, setdefaultAddressAction] = this.createActionsObjects(
-        a
-      );
-      if (!isDeafault) {
+      const [isDefault, addAddressIdAction, setDefaultAddressAction] = this.createActionsObjects(a);
+      if (!isDefault) {
         return;
       }
 
       actions.push(addAddressIdAction);
-      if (isDeafault === 'true') {
-        actions.push(setdefaultAddressAction);
+      if (isDefault === 'true') {
+        actions.push(setDefaultAddressAction);
       }
-
-      /* const r = */ await AuthService.sendAddressActions(customerId, actions);
-      // console.log(r);
+      actionsArr.push(...actions);
     });
+
+    try {
+      AuthService.sendAddressActions(customerId, actionsArr);
+    } catch (error) {
+      NotificationService.displayError(
+        error instanceof Error ? error.message : 'Error fetching customer version'
+      );
+    }
   }
 }
 

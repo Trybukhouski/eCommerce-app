@@ -1,16 +1,12 @@
 import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
 import { LoginResponse, RegistrationResponse, UserData, AddressAction } from './interfaces';
-// import { version } from 'process';
 
 export class AuthService {
-  // URL for authentication
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
 
-  // URL for registration
   private static registerUrl = `${clientCredentials.apiUrl}/ecommerce2024/customers`;
 
-  // URL for client credentials token
   private static tokenUrl = `${clientCredentials.authUrl}/oauth/token?grant_type=client_credentials`;
 
   public static async login(username: string, password: string): Promise<LoginResponse> {
@@ -47,14 +43,11 @@ export class AuthService {
     });
 
     if (!response.ok) {
-      // const errorText = await response.text();
-      // console.error('Token error:', errorText);
       throw new Error('Failed to get token');
     }
 
     const data = await handleResponse(response);
     localStorage.setItem('accessToken', data.access_token);
-    // console.log('Token obtained and saved:', data.access_token);
   }
 
   public static async register(userData: UserData): Promise<RegistrationResponse> {
@@ -82,9 +75,34 @@ export class AuthService {
     return handleResponse(response);
   }
 
+  public static async getCustomerVersion(userId: string): Promise<number> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No access token found');
+    }
+
+    const url = `${this.registerUrl}/${userId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to get customer version: ${errorText}`);
+    }
+
+    const data = await handleResponse(response);
+    return data.version;
+  }
+
   public static async sendAddressActions(userId: string, actions: AddressAction[]) {
+    const currentVersion = await this.getCustomerVersion(userId);
     const request = {
-      version: 1,
+      version: currentVersion,
       actions,
     };
     const body = JSON.stringify(request);
