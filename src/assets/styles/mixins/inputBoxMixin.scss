@@ -5,12 +5,12 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  font-size: var(--font-size-s);
+  font-size: var(--font-size-sm);
   padding: var(--padding-md);
 
   input,
   select {
-    font-size: var(--font-size-s);
+    font-size: var(--font-size-sm);
     padding: var(--padding-sm) var(--padding-xxsm);
     border-radius: var(--small-border-radius);
     border-width: $input-border-width;
