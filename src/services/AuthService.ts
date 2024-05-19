@@ -1,6 +1,6 @@
 import { clientCredentials } from '@config/config';
 import { handleResponse } from '@shared';
-import { LoginResponse, RegistrationResponse, UserData } from '@services/interfaces';
+import { LoginResponse, RegistrationResponse, UserData } from './interfaces';
 
 export class AuthService {
   // URL for authentication
@@ -74,11 +74,12 @@ export class AuthService {
     });
 
     if (!response.ok) {
-      // const errorText = await response.text();
-      // console.error('Registration error:', errorText);
-      throw new Error('Registration failed');
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'Registration failed');
     }
-
     return handleResponse(response);
   }
+
+  public static async sendAction() {}
 }

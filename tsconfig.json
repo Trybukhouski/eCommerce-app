@@ -10,7 +10,7 @@
       "@assets/*": ["assets/*"],
       "@modules/*": ["modules/*"],
       "@config/*": ["config"],
-      "@services/*": ["services/*"],
+      "@services": ["services"],
       "@interfaces/*": ["interfaces/*"],
       "@routes/*": ["routes/*"],
       "@root/*": ["*"],

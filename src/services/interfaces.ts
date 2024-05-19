@@ -40,6 +40,7 @@ export interface CustomerReference {
 
 export interface Address {
   id: string;
+  key: string;
   streetName: string;
   postalCode: string;
   city: string;
