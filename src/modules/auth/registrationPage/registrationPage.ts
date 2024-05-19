@@ -4,24 +4,10 @@ import {
   RegistrationResponse,
   Address,
   AddressAction,
+  UserData,
 } from '@services';
 import { Input } from '@shared';
 import { registrPageUI } from './ui';
-
-interface UserData {
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  password?: string;
-  birthDate?: string;
-  addresses: {
-    key?: string;
-    country?: string;
-    city?: string;
-    streetName?: string;
-    postalCode?: string;
-  }[];
-}
 
 interface CreateActionsObjectsOptions extends Address {
   dontCheckDefault?: boolean;
