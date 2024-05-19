@@ -47,6 +47,7 @@ class LoginPage {
       return;
     }
 
+    this.uiApi.toggleButtonDisabled();
     try {
       const data = await AuthService.login(this.emailInput.value, this.passwordInput.value);
       // console.log('Response data:', data);
@@ -61,8 +62,10 @@ class LoginPage {
       } else {
         throw new Error('Access Token is missing');
       }
+      this.uiApi.toggleButtonDisabled();
     } catch (error) {
       NotificationService.displayError(error instanceof Error ? error.message : 'Login error');
+      this.uiApi.toggleButtonDisabled();
     }
   }
 }

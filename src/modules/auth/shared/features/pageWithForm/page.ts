@@ -81,6 +81,11 @@ class FormPageUI {
       };
     });
   }
+
+  public toggleButtonDisabled() {
+    const isDisabled = this.submitButton.disabled;
+    this.submitButton.disabled = !isDisabled;
+  }
 }
 
 export { FormPageUI };

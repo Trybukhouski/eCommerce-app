@@ -103,15 +103,18 @@ class RegistrPage {
     if (userData === undefined || Object.values(userData).some((v) => v === undefined)) {
       return;
     }
+    this.uiApi.toggleButtonDisabled();
     try {
       await AuthService.getToken();
       const response = await AuthService.register(userData);
       console.log(response);
       NotificationService.displaySuccess('Account created successfully!');
+      this.uiApi.toggleButtonDisabled();
     } catch (error) {
       NotificationService.displayError(
         error instanceof Error ? error.message : 'Registration error'
       );
+      this.uiApi.toggleButtonDisabled();
     }
   }
 }
