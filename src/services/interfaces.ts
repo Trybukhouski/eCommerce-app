@@ -53,10 +53,11 @@ export interface UserData {
   lastName?: string;
   password?: string;
   birthDate?: string;
-  adresses: {
+  addresses: {
+    key?: string;
     country?: string;
     city?: string;
-    street?: string;
+    streetName?: string;
     postalCode?: string;
   }[];
 }

@@ -10,16 +10,16 @@ interface UserData {
   lastName?: string;
   password?: string;
   birthDate?: string;
-  adresses: {
+  addresses: {
     key?: string;
     country?: string;
     city?: string;
-    street?: string;
+    streetName?: string;
     postalCode?: string;
   }[];
 }
 
-type Adress = NonNullable<UserData['adresses']>[number];
+type Adress = NonNullable<UserData['addresses']>[number];
 
 class RegistrPage {
   public elem = registrPageUI.section;
@@ -67,12 +67,12 @@ class RegistrPage {
       lastName: this.getInputValue('last-name'),
       password: this.getInputValue('password'),
       birthDate: this.getInputValue('birth-date'),
-      adresses: [
+      addresses: [
         {
           key: 'delivery',
           country: this.getInputValue('delivery-country'),
           city: this.getInputValue('delivery-city'),
-          street: this.getInputValue('delivery-street'),
+          streetName: this.getInputValue('delivery-street'),
           postalCode: this.getInputValue('delivery-index'),
         },
       ],
@@ -82,7 +82,7 @@ class RegistrPage {
         key: 'bills',
         country: this.getInputValue('bills-country'),
         city: this.getInputValue('bills-city'),
-        street: this.getInputValue('bills-street'),
+        streetName: this.getInputValue('bills-street'),
         postalCode: this.getInputValue('bills-index'),
       };
       if (Object.values(billsAdress).some((v) => v === undefined || v === '')) {
@@ -91,7 +91,7 @@ class RegistrPage {
         );
         return undefined;
       }
-      userData.adresses.push(billsAdress);
+      userData.addresses.push(billsAdress);
     }
     return userData;
   }
@@ -105,8 +105,8 @@ class RegistrPage {
     }
     try {
       await AuthService.getToken();
-      /* const response = */ await AuthService.register(userData);
-      // console.log(response);
+      const response = await AuthService.register(userData);
+      console.log(response);
       NotificationService.displaySuccess('Account created successfully!');
     } catch (error) {
       NotificationService.displayError(
