@@ -39,13 +39,13 @@ export interface CustomerReference {
 }
 
 export interface Address {
-  id: string;
-  key: string;
-  streetName: string;
-  postalCode: string;
-  city: string;
-  country: string;
-  additionalAddressInfo: string;
+  id?: string;
+  key?: string;
+  streetName?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
+  additionalAddressInfo?: string;
 }
 
 export interface UserData {

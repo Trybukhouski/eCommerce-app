@@ -19,8 +19,6 @@ interface UserData {
   }[];
 }
 
-type Adress = NonNullable<UserData['addresses']>[number];
-
 class RegistrPage {
   public elem = registrPageUI.section;
 
@@ -78,7 +76,7 @@ class RegistrPage {
       ],
     };
     if (this.getInputValue('adress-match') !== 'true') {
-      const billsAdress: Adress = {
+      const billsAdress: Address = {
         key: 'bills',
         country: this.getInputValue('bills-country'),
         city: this.getInputValue('bills-city'),
@@ -159,6 +157,12 @@ class RegistrPage {
     const { addresses } = response.customer;
     if (!addresses || !customerId) {
       return;
+    }
+
+    if (addresses.length === 1) {
+      const billsAdress: Address = {};
+      Object.assign(billsAdress, addresses[0] as Address, { key: 'bills' });
+      addresses.push(billsAdress);
     }
 
     addresses.forEach(async (a) => {
