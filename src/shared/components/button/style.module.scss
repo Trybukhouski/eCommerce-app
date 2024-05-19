@@ -8,7 +8,7 @@
   $border-radius: var(--big-border-radius);
 
   $min-button-width: 10.1875rem; // 163px
-  $button-padidings: var(--padding-l) var(--padding-xs);
+  $button-padidings: var(--padding-lg) var(--padding-xsm);
   $button-font-size: var(--font-size-s);
 
   @include regularText();

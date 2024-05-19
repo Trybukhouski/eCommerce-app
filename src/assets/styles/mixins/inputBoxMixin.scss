@@ -1,17 +1,17 @@
 @mixin inputBox() {
-  $input-padding-right: var(--padding-xxs);
+  $input-padding-right: var(--padding-xxsm);
   $input-border-width: var(--border-width-m);
 
   position: relative;
   display: flex;
   flex-direction: column;
   font-size: var(--font-size-s);
-  padding: var(--padding-m);
+  padding: var(--padding-md);
 
   input,
   select {
     font-size: var(--font-size-s);
-    padding: var(--padding-s) var(--padding-xxs);
+    padding: var(--padding-sm) var(--padding-xxsm);
     border-radius: var(--small-border-radius);
     border-width: $input-border-width;
     box-sizing: unset;

@@ -2,20 +2,20 @@
 @import '@assets/styles/mixins/adaptivePaddings.scss';
 
 .form-page {
-  $page-paddings: var(--padding-xl) 0;
+  $page-paddings: var(--padding-xlg) 0;
   $form-bg-color: var(--white-200);
 
   $login-page-header-margin-bottom: 1.8125rem; // 29px
 
-  $form-padding-top: var(--padding-xl); // 30px
-  $form-padding-right: var(--padding-xxxl); // 70px
-  $form-padding-bottom: var(--padding-xxl); // 50px
+  $form-padding-top: var(--padding-xlg); // 30px
+  $form-padding-right: var(--padding-xxxlg); // 70px
+  $form-padding-bottom: var(--padding-xxlg); // 50px
 
   $form-button-margin-top: 1.6875rem; // 27px
 
   $h2-font-size: var(--font-size-m); // 24px
   $children-max-width: var(--content-max-width);
-  $children-padding-right: var(--padding-xxs);
+  $children-padding-right: var(--padding-xxsm);
   $form-border-radius: var(--big-border-radius);
   $breakpoint: var(--breakpoint-mobile);
 
@@ -50,8 +50,8 @@
   fieldset {
     margin: 0;
     padding: 0;
-    margin-top: var(--padding-m);
-    margin-bottom: var(--padding-m);
+    margin-top: var(--padding-md);
+    margin-bottom: var(--padding-md);
     box-sizing: border-box;
 
     legend {
