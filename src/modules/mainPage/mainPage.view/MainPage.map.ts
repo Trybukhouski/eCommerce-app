@@ -1,4 +1,4 @@
-import { ErrorPageView as ErrorPage } from '@modules/errorPage/index';
+import { ErrorPageView as ErrorPage } from '@modules/errorPage';
 
 export class MainPageMap {
   protected components = {

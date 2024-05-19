@@ -1,4 +1,4 @@
-import { Routes } from '@interfaces/index';
+import { Routes } from '@interfaces';
 
 interface subscriber {
   inform: (page: Routes) => void;

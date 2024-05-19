@@ -1,7 +1,11 @@
-import './ui/config';
-import { NotificationService, AuthService, RegistrationResponse } from '@services';
+import {
+  NotificationService,
+  AuthService,
+  RegistrationResponse,
+  Address,
+  AddressAction,
+} from '@services';
 import { Input } from '@shared';
-import { Address, AddressAction } from '@root/services/interfaces';
 import { registrPageUI } from './ui';
 
 interface UserData {

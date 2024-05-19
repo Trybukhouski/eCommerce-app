@@ -11,7 +11,7 @@
       "@modules/*": ["modules/*"],
       "@config": ["config.ts"],
       "@services": ["services"],
-      "@interfaces/*": ["interfaces/*"],
+      "@interfaces": ["interfaces"],
       "@routes/*": ["routes/*"],
       "@root/*": ["*"],
 

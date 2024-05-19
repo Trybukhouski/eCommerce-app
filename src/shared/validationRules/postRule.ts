@@ -1,4 +1,4 @@
-import { ValidationRule } from './class/validation';
+import { ValidationRule } from './ValidationRule';
 
 const postValidation = new ValidationRule({
   minLength: 4,
