@@ -1,1 +1,1 @@
-export * from './errorPage.view/ErrorPage.view';
+export { ErrorPageView as ErrorPage } from './errorPage.view/ErrorPage.view';

@@ -1,4 +1,3 @@
-import { RegistrPage } from './index';
+// import { RegistrPage } from './index';
 
-const lp = new RegistrPage();
-document.querySelector('body')?.append(lp.elem);
+// const lp = new RegistrPage();

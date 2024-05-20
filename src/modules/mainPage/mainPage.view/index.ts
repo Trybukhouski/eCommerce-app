@@ -1,2 +1,2 @@
 export * from './MainPageView';
-export * from './MainPage.map';
+export * from '../MainPage.map';
