@@ -139,6 +139,6 @@ export class AuthService {
 
   public static logout(): void {
     localStorage.removeItem('accessToken');
-    window.location.href = '/login';
+    router.setHash('login');
   }
 }

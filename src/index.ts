@@ -6,7 +6,7 @@ import './style.scss';
 
 const pagesCollection = new PagesDataModifier(pagesData);
 const router = new Router(pagesCollection.getPagesHash());
-pagesCollection.setBlockedPagesAccordingUserStatus(true);
+pagesCollection.setBlockedPagesAccordingUserStatus(false);
 
 const mainPage = new MainPage(pagesCollection, router);
 mainPage.create();
