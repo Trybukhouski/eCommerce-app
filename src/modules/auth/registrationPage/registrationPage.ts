@@ -41,6 +41,17 @@ class RegistrPage {
     }
 
     this.submitButton = this.uiApi.submitButton;
+
+    this.uiApi.addLinkToOppositePage({
+      linkText: 'Log in',
+      textBeforeLink: `Do you already have a page? `,
+      textAfterLink: ` here!`,
+    });
+    this.uiApi.setLinkHref('#login');
+  }
+
+  private redirectToMain(): void {
+    window.location.hash = '#main';
   }
 
   private addSubmitListeners(): void {
@@ -114,6 +125,7 @@ class RegistrPage {
       const response = await AuthService.register(userData);
       await this.setAddresses(response);
       NotificationService.displaySuccess('Account created successfully!');
+      this.redirectToMain();
       this.uiApi.toggleButtonDisabled();
     } catch (error) {
       NotificationService.displayError(

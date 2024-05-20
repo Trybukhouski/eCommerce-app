@@ -18,6 +18,17 @@ class LoginPage {
     } else {
       document.addEventListener('DOMContentLoaded', this.initialize.bind(this));
     }
+
+    this.uiApi.addLinkToOppositePage({
+      linkText: 'Sign up',
+      textBeforeLink: `Haven't registered yet? `,
+      textAfterLink: ` here!`,
+    });
+    this.uiApi.setLinkHref('#registration');
+  }
+
+  private redirectToMain(): void {
+    window.location.hash = '#main';
   }
 
   private initialize(): void {
@@ -55,9 +66,7 @@ class LoginPage {
         NotificationService.displaySuccess('Logged in successfully!');
         // console.log('Authentication successful:', data);
 
-        setTimeout(() => {
-          window.location.href = '/main.html';
-        }, 2000);
+        this.redirectToMain();
       } else {
         throw new Error('Access Token is missing');
       }
