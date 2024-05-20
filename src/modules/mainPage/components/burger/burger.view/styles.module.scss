@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: fit-content;
+  height: fit-content;
+  cursor: pointer;
+}
+
+.line {
+  width: 2.5rem;
+  height: 0.12rem;
+  background-color: var(--textContrast);
+}
+
+.container[data-opened='true'] {
+  position: relative;
+  width: 2.2rem;
+  height: 2.2rem;
+  > :nth-child(1) {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    animation: rotateTopBarForward 0.5s forwards;
+  }
+  > :nth-child(2) {
+    display: none;
+  }
+  > :nth-child(3) {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    animation: rotateBottomBarForward 0.5s forwards;
+  }
+}
+
+@keyframes rotateTopBarForward {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(45deg);
+  }
+}
+
+@keyframes rotateBottomBarForward {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(-45deg);
+  }
+}

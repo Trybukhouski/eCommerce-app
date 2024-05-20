@@ -11,6 +11,7 @@
   "trailingComma": "es5",
   "semi": true,
   "jsxSingleQuote": false,
+  "endOfLine": "lf",
 
   "htmlWhitespaceSensitivity": "ignore"
 }
