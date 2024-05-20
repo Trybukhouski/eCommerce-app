@@ -8,7 +8,7 @@ export class NavActions extends NavView {
     return this;
   }
 
-  private createSignalAboutClickOnLink() {
+  private createSignalAboutClickOnLink(): void {
     this.elements.root.addEventListener('click', (event) => {
       const target = this.utils.checkWhetherLinkIsClicked(event);
       if (target) {

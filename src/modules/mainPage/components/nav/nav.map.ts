@@ -2,10 +2,10 @@ import { PagesDataModifierModel } from '@routes/pagesData/interfaces/PagesDataMo
 import { checkWhetherLinkIsClicked } from './utils/checkWhetherLinkIsClicked';
 
 export class NavMap {
-  protected db: PagesDataModifierModel;
+  protected database: PagesDataModifierModel;
 
-  constructor(db: PagesDataModifierModel) {
-    this.db = db;
+  constructor(database: PagesDataModifierModel) {
+    this.database = database;
   }
 
   protected utils = {

@@ -1,8 +1,8 @@
-import { LinkModel } from '@modules/mainPage/components/header/components/nav/nav.view/interfaces';
+import { LinkModel } from '@modules/mainPage/components/nav';
 import { Routes } from './routes';
 
 export interface PagesDataModifierModel {
-  getAvailablePages(): LinkModel[];
+  getAvailableLinks(): LinkModel[];
   getCurrentPageName(): string;
   getPagesHash(): Routes[];
   setBlockedPagesAccordingUserStatus(authorised: boolean): void;

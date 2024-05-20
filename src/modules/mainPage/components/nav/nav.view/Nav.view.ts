@@ -1,5 +1,5 @@
-import { Routes } from '@routes/pagesData/interfaces/routes';
-import { LinkModel } from './interfaces';
+import { Routes } from '@routes/index';
+import { LinkModel } from '@modules/mainPage/components/nav';
 import { NavMap } from '../nav.map';
 import * as styles from './styles.module.scss';
 
@@ -20,7 +20,7 @@ class NavView extends NavMap {
     root.append(navByShop);
     root.append(navByAccount);
 
-    this.createLinks(this.db.getAvailablePages());
+    this.createLinks(this.database.getAvailableLinks());
 
     return this;
   }

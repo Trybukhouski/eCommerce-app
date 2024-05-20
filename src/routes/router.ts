@@ -23,6 +23,10 @@ export class Router implements RouterModel {
     window.location.hash = `#${hash}`;
   }
 
+  public getHash(): string {
+    return window.location.hash.slice(1);
+  }
+
   public addSubscriber(subscriber: Subscriber) {
     this.subscribers.push(subscriber);
   }

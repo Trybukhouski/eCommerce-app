@@ -1,5 +1,6 @@
 import { Routes } from '@routes/pagesData/interfaces/routes';
 import { MainPageMap } from '../MainPage.map'; // TODO: Разобраться, почему не работает @modules/mainPage/index
+import * as styles from './styles.module.scss';
 
 export class MainPageView extends MainPageMap {
   public elements = {
@@ -13,6 +14,7 @@ export class MainPageView extends MainPageMap {
 
   public create(): MainPageView {
     const { header, mainContent, root } = this.elements;
+    header.classList.add(styles.header);
     root.append(header);
     root.append(mainContent);
 

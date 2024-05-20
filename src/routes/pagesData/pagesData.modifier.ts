@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
-import { PageModel } from 'routes/pagesData/interfaces/PageModel';
-import { LinkModel } from '@modules/mainPage/components/header/components/nav/nav.view/interfaces';
-import { PagesDataModifierModel } from './interfaces/PagesDataModifierModel';
-import { PagesDataModel } from './interfaces/pagesDataModel';
-import { Routes } from './interfaces/routes';
+import { PageModel } from '@routes/pagesData';
+import { LinkModel } from '@modules/mainPage/components/nav';
+import { PagesDataModifierModel, PagesDataModel, Routes } from './interfaces';
 
 export class PagesDataModifier implements PagesDataModifierModel {
   private pagesData: PagesDataModel;
@@ -18,7 +16,7 @@ export class PagesDataModifier implements PagesDataModifierModel {
     this.pagesData = pagesData;
   }
 
-  public getAvailablePages(): LinkModel[] {
+  public getAvailableLinks(): LinkModel[] {
     const result: LinkModel[] = [];
     Object.entries(this.pagesData).forEach((pageObj: [string, PageModel]) => {
       const { hash, name, status, current, type } = pageObj[1];

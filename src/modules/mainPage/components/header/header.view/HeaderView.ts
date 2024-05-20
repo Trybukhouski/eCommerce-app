@@ -31,9 +31,9 @@ export class HeaderView extends HeaderMap {
 
   protected navVisibility(visible: true | false): void {
     if (visible) {
-      this.elements.nav?.classList.remove(styles.nav_display_none);
+      this.elements.nav.removeAttribute('data-display');
     } else {
-      this.elements.nav?.classList.add(styles.nav_display_none);
+      this.elements.nav.setAttribute('data-display', 'none');
     }
   }
 }

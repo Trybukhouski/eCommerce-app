@@ -1,8 +1,5 @@
-import {
-  NavActions as Nav,
-  BurgerView as Burger,
-} from '@modules/mainPage/components/header/components';
-import { PagesDataModifierModel } from '../../../../routes/pagesData/interfaces/PagesDataModifierModel';
+import { Nav, Burger } from '@modules/mainPage/components';
+import { PagesDataModifierModel } from '@routes/index';
 
 export class HeaderMap {
   protected db: PagesDataModifierModel;
