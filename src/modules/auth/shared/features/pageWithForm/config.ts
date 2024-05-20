@@ -16,4 +16,10 @@ interface FormPageOptions extends FormOptions {
   }[];
 }
 
-export { InputUnion, InputElements, UnionInputOptions, FormPageOptions };
+interface AddLinkOptions {
+  textBeforeLink: string;
+  textAfterLink: string;
+  linkText: string;
+}
+
+export { InputUnion, InputElements, UnionInputOptions, FormPageOptions, AddLinkOptions };

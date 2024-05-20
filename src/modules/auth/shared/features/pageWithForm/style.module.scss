@@ -68,4 +68,10 @@
   h2 {
     @include title();
   }
+
+  > p {
+    text-align: center;
+    @include regularText();
+    margin-top: var(--padding-xlg);
+  }
 }

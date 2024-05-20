@@ -1,6 +1,6 @@
 import { Input, Form } from '@shared';
 import * as style from './style.module.scss';
-import { InputUnion, InputElements, FormPageOptions } from './config';
+import { InputUnion, InputElements, FormPageOptions, AddLinkOptions } from './config';
 
 class FormPageUI {
   public section: HTMLElement;
@@ -16,6 +16,11 @@ class FormPageUI {
   public inputElements: InputElements = {};
 
   private formClass: Form;
+
+  public link: {
+    paragraph: HTMLParagraphElement;
+    link: HTMLAnchorElement;
+  } | null = null;
 
   public subGroups: {
     [id: string]: {
@@ -85,6 +90,21 @@ class FormPageUI {
   public toggleButtonDisabled(): void {
     const isDisabled = this.submitButton.disabled;
     this.submitButton.disabled = !isDisabled;
+  }
+
+  public addLinkToOppositePage(options: AddLinkOptions) {
+    const paragraph = document.createElement('p');
+    const link = document.createElement('a');
+    link.textContent = options.linkText;
+    const textBeforeLink = document.createTextNode(options.textBeforeLink);
+    const textAfterLink = document.createTextNode(options.textAfterLink);
+    paragraph.append(textBeforeLink, link, textAfterLink);
+    this.section.append(paragraph);
+
+    this.link = {
+      paragraph,
+      link,
+    };
   }
 }
 

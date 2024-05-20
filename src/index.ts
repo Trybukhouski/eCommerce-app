@@ -26,5 +26,3 @@ router.addSubscriber(nav);
 router.observeHashChange();
 
 document.body.append(mainPage.elements.root);
-
-// init

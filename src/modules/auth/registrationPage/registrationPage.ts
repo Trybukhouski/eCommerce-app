@@ -41,6 +41,12 @@ class RegistrPage {
     }
 
     this.submitButton = this.uiApi.submitButton;
+
+    this.uiApi.addLinkToOppositePage({
+      linkText: 'Log in',
+      textBeforeLink: `Do you already have a page? `,
+      textAfterLink: ` here!`,
+    });
   }
 
   private addSubmitListeners(): void {
