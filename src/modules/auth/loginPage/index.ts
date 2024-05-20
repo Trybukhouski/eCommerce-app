@@ -24,6 +24,7 @@ class LoginPage {
       textBeforeLink: `Haven't registered yet? `,
       textAfterLink: ` here!`,
     });
+    this.uiApi.setLinkHref('#registration');
   }
 
   private initialize(): void {

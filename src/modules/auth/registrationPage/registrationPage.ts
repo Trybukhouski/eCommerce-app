@@ -47,6 +47,7 @@ class RegistrPage {
       textBeforeLink: `Do you already have a page? `,
       textAfterLink: ` here!`,
     });
+    this.uiApi.setLinkHref('#login');
   }
 
   private addSubmitListeners(): void {

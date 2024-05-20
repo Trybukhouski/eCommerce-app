@@ -92,7 +92,7 @@ class FormPageUI {
     this.submitButton.disabled = !isDisabled;
   }
 
-  public addLinkToOppositePage(options: AddLinkOptions) {
+  public addLinkToOppositePage(options: AddLinkOptions): void {
     const paragraph = document.createElement('p');
     const link = document.createElement('a');
     link.textContent = options.linkText;
@@ -105,6 +105,12 @@ class FormPageUI {
       paragraph,
       link,
     };
+  }
+
+  public setLinkHref(href: string): void {
+    if (this.link?.link) {
+      this.link.link.href = href;
+    }
   }
 }
 
