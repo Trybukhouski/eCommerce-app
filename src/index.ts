@@ -13,6 +13,17 @@ pagesCollection.setBlockedPagesAccordingUserStatus(isUserAuthorised);
 
 const mainPage = new MainPage(pagesCollection, router);
 mainPage.create();
+mainPage.elements.root.addEventListener('logined', (event) => {
+  if (event instanceof CustomEvent) {
+    if (!event.detail.logined) {
+      LocalStorageService.clearAuthorisedToken();
+    }
+    pagesCollection.setBlockedPagesAccordingUserStatus(event.detail.logined);
+    const { header } = mainPage.components;
+    const { nav } = header.components;
+    nav.createLinks(pagesCollection.getAvailableLinks());
+  }
+});
 
 if (router.getHash() as Routes) {
   const route = router.getHash() as Routes;

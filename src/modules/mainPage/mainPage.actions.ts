@@ -10,9 +10,19 @@ export class MainPageActions extends MainPageView {
   private updateHashAccordingClickInNavLink() {
     this.elements.root.addEventListener('clickOnNav', (event) => {
       if (event instanceof CustomEvent) {
-        const incomingHash = event.detail.redirection;
-        // const newHash = this.database.setCurrentPage(incomingHash);
-        this.services.router.setHash(`${incomingHash}`);
+        if (event.detail.redirection === 'signOut') {
+          this.elements.root.dispatchEvent(
+            new CustomEvent('logined', {
+              bubbles: true,
+              detail: {
+                logined: false,
+              },
+            })
+          );
+        } else {
+          const incomingHash = event.detail.redirection;
+          this.services.router.setHash(`${incomingHash}`);
+        }
       }
     });
   }

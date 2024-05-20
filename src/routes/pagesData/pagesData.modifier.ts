@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { PageModel } from '@routes/pagesData';
@@ -38,7 +40,6 @@ export class PagesDataModifier implements PagesDataModifierModel {
     const currentLinksObject = Object.values(this.pagesData).filter(
       (pageObj) => pageObj.current === true
     );
-    console.log(currentLinksObject);
     if (currentLinksObject[0] && currentLinksObject.length === 1) {
       newCurrentLink = currentLinksObject[0].name;
     } else {
@@ -66,17 +67,17 @@ export class PagesDataModifier implements PagesDataModifierModel {
   }
 
   public setBlockedPagesAccordingUserStatus(authorised: boolean): void {
-    Object.entries(this.pagesData).forEach(([pageName, pageObject]) => {
-      if (authorised) {
-        if (this.blockedPages.forAuthorisedUsers.includes(pageName)) {
-          pageObject.status = 'blocked';
-        }
-      } else if (this.blockedPages.forUnAuthorisedUsers.includes(pageName)) {
-        pageObject.status = 'blocked';
-      } else {
-        pageObject.status = 'available';
-      }
-    });
+    const blockedPages = authorised
+      ? this.blockedPages.forAuthorisedUsers
+      : this.blockedPages.forUnAuthorisedUsers;
+
+    for (const key in this.pagesData) {
+      this.pagesData[key as Routes].status = blockedPages.includes(
+        this.pagesData[key as Routes].hash
+      )
+        ? 'blocked'
+        : 'available';
+    }
   }
 
   public setCurrentPage(route: Routes): Routes {

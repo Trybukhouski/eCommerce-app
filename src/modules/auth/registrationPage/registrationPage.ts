@@ -125,6 +125,14 @@ class RegistrPage {
       const response = await AuthService.register(userData);
       await this.setAddresses(response);
       NotificationService.displaySuccess('Account created successfully!');
+      this.elem.dispatchEvent(
+        new CustomEvent('logined', {
+          bubbles: true,
+          detail: {
+            logined: true,
+          },
+        })
+      );
       this.redirectToMain();
       this.uiApi.toggleButtonDisabled();
     } catch (error) {

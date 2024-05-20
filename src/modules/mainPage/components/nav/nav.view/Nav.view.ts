@@ -26,6 +26,8 @@ class NavView extends NavMap {
   }
 
   public createLinks(linksObject: LinkModel[]): void {
+    Array.from(this.elements.navByAccount.children).forEach((el) => el.remove());
+    Array.from(this.elements.navByShop.children).forEach((el) => el.remove());
     linksObject.forEach((linkObject) => {
       const link = document.createElement('a');
       link.innerHTML = `${linkObject.name[0]?.toUpperCase()}${linkObject.name
