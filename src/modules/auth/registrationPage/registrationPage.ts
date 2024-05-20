@@ -50,6 +50,10 @@ class RegistrPage {
     this.uiApi.setLinkHref('#login');
   }
 
+  private redirectToMain(): void {
+    window.location.hash = '#main';
+  }
+
   private addSubmitListeners(): void {
     this.submitButton.addEventListener('click', this.handleRegistration.bind(this));
     this.submitButton.focus();
@@ -121,6 +125,7 @@ class RegistrPage {
       const response = await AuthService.register(userData);
       await this.setAddresses(response);
       NotificationService.displaySuccess('Account created successfully!');
+      this.redirectToMain();
       this.uiApi.toggleButtonDisabled();
     } catch (error) {
       NotificationService.displayError(

@@ -27,6 +27,10 @@ class LoginPage {
     this.uiApi.setLinkHref('#registration');
   }
 
+  private redirectToMain(): void {
+    window.location.hash = '#main';
+  }
+
   private initialize(): void {
     this.emailInput = this.elem.querySelector('input[name="email"]');
     this.passwordInput = this.elem.querySelector('input[name="password"]');
@@ -62,9 +66,7 @@ class LoginPage {
         NotificationService.displaySuccess('Logged in successfully!');
         // console.log('Authentication successful:', data);
 
-        setTimeout(() => {
-          window.location.href = '/main.html';
-        }, 2000);
+        this.redirectToMain();
       } else {
         throw new Error('Access Token is missing');
       }
