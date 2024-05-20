@@ -76,16 +76,6 @@ class LoginPage {
       this.uiApi.toggleButtonDisabled();
     }
   }
-
-  /* private addLinkToOppositePage() {
-    const paragraph = document.createElement('p');
-    const link = document.createElement('a');
-    link.textContent = 'Sign up';
-    const textBeforeLink = document.createTextNode(`Haven't registered yet? `);
-    const textAfterLink = document.createTextNode(` here!`);
-    paragraph.append(textBeforeLink, link, textAfterLink);
-    this.uiApi.section.append(paragraph);
-  } */
 }
 
 export { LoginPage };
