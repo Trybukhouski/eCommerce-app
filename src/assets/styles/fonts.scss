@@ -2,8 +2,20 @@
   font-family: 'Lalezar', system-ui;
   font-weight: 700;
   font-style: normal;
-  font-size: var(--font-size-m);
+  font-size: var(--font-size-md);
   text-align: center;
   margin: 0;
   margin-bottom: 1.8125rem;
+}
+
+@mixin regularText {
+  font-family: 'Actor', system-ui;
+  font-size: var(--font-size-sm);
+  font-style: normal;
+  margin: 0;
+}
+
+@mixin label {
+  @include regularText();
+  margin-bottom: var(--label-margin-bottom);
 }

@@ -1,3 +1,5 @@
+@import '@assets/styles/fonts.scss';
+
 .simple-button {
   $disabled-button-bg-color: var(--orange-200);
   $hover-button-bg-color: var(--orange-500);
@@ -6,8 +8,10 @@
   $border-radius: var(--big-border-radius);
 
   $min-button-width: 10.1875rem; // 163px
-  $button-padidings: var(--block-paddings-button);
-  $button-font-size: var(--font-size-s);
+  $button-padidings: var(--padding-lg) var(--padding-xsm);
+  $button-font-size: var(--font-size-sm);
+
+  @include regularText();
 
   box-sizing: border-box;
   font-size: $button-font-size;

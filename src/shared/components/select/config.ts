@@ -6,7 +6,10 @@ interface SelectOptions {
   multiple?: boolean;
   required?: boolean;
   disabled?: boolean;
-  options?: string[];
+  options?: {
+    value: string;
+    text: string;
+  }[];
 }
 
 const defaultSelectOptions: Required<SelectOptions> = {

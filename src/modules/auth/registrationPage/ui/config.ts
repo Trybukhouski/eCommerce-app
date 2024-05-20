@@ -8,7 +8,9 @@ import {
   FormOptions,
 } from '@shared';
 
-type InputOptionsType = NonNullable<FormOptions['inputsOptions']>[number]['type'];
+type InputOptions = NonNullable<FormOptions['inputsOptions']>[number];
+
+type InputOptionsType = InputOptions['type'];
 
 const passwordType: InputOptionsType = 'password';
 
@@ -18,7 +20,7 @@ const formId = 'registration';
 
 const requiredWithHintPattern = {
   hasHint: true,
-  require: true,
+  required: true,
 };
 
 const emailInputOptions = {
@@ -62,7 +64,24 @@ const countrySelectOptions = {
   labelText: 'Country:',
   size: 1,
   required: true,
-  options: 'Russia, Belarus, USA, Kazakhstan'.split(', '),
+  options: [
+    {
+      value: 'RU',
+      text: 'Russia',
+    },
+    {
+      value: 'BY',
+      text: 'Belarus',
+    },
+    {
+      value: 'US',
+      text: 'United States of America',
+    },
+    {
+      value: 'KZ',
+      text: 'Kazakhstan',
+    },
+  ],
 };
 
 const cityInputOption = {
@@ -97,8 +116,98 @@ const postInputOption = {
   postInputOption,
 ].forEach((o) => Object.assign(o, requiredWithHintPattern));
 
+const defaultAddressCheckboxOptions = {
+  name: 'default',
+  labelText: 'Set as default address',
+  type: 'checkbox',
+};
+
+const matchAddressCheckboxOptions: InputOptions['options'] = {
+  name: 'address-match',
+  labelText: 'Also use as billing address',
+  type: 'checkbox',
+};
+
+const [
+  deliveryCountrySelectOptions,
+  deliveryCityInputOption,
+  deliveryStreetInputOptions,
+  deliveryPostInputOption,
+  deliveryDefaultAddressCheckboxOptions,
+]: Partial<InputOptions>[] = [{}, {}, {}, {}, {}];
+
+const deliveryInputOptions = [
+  deliveryCountrySelectOptions,
+  deliveryCityInputOption,
+  deliveryStreetInputOptions,
+  deliveryPostInputOption,
+  deliveryDefaultAddressCheckboxOptions,
+];
+
+const [
+  billsCountrySelectOptions,
+  billsCityInputOption,
+  billsStreetInputOptions,
+  billsPostInputOption,
+  billsDefaultAddressCheckboxOptions,
+]: Partial<InputOptions>[] = [{}, {}, {}, {}, {}];
+
+const billsInputOptions = [
+  billsCountrySelectOptions,
+  billsCityInputOption,
+  billsStreetInputOptions,
+  billsPostInputOption,
+  billsDefaultAddressCheckboxOptions,
+];
+
+const addressInputOptions = [
+  {
+    options: countrySelectOptions,
+    type: selectType,
+  },
+  {
+    options: cityInputOption,
+    rule: nameValidation,
+  },
+  {
+    options: streetInputOptions,
+    rule: streetValidation,
+  },
+  {
+    options: postInputOption,
+    rule: postValidation,
+  },
+  {
+    options: defaultAddressCheckboxOptions,
+  },
+];
+
+// The object is copied here and the name property is changed in order to have 2 address fields
+const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
+  deliveryInputOptions,
+  billsInputOptions,
+].map((group, index) => {
+  const namePrefix = index === 0 ? 'delivery' : 'bills';
+  const newGroup = group.map((i, ind) => {
+    const address = addressInputOptions[ind];
+    const addressName = address?.options.name;
+    if (i === undefined || !address) {
+      return {} as InputOptions;
+    }
+    const newOptions = { ...address.options, name: `${namePrefix}-${addressName}` };
+    Object.assign(i, address, { options: newOptions });
+    if (index === 1) {
+      Object.defineProperty(i.options, 'required', { value: false });
+    }
+    return i as InputOptions;
+  });
+  return newGroup;
+}) as [InputOptions[], InputOptions[]];
+
+nonNullableDeliveryInputOptions.push({ options: matchAddressCheckboxOptions });
+
 const formOptions = {
-  hasFieldset: true,
+  hasFieldset: false,
   inputsOptions: [
     {
       options: firstNameInputOptions,
@@ -121,21 +230,17 @@ const formOptions = {
       options: birthDateInputOptions,
       rule: birthDateValidation,
     },
+  ],
+  subGroups: [
     {
-      options: countrySelectOptions,
-      type: selectType,
+      inputOptions: nonNullableDeliveryInputOptions,
+      id: 'delivery',
+      legend: 'Delivery address:',
     },
     {
-      options: cityInputOption,
-      rule: nameValidation,
-    },
-    {
-      options: streetInputOptions,
-      rule: streetValidation,
-    },
-    {
-      options: postInputOption,
-      rule: postValidation,
+      inputOptions: nonNullableBillsInputOptions,
+      id: 'bills',
+      legend: 'Bills address:',
     },
   ],
   buttonOptions: {

@@ -13,7 +13,7 @@ export class MainPageMap {
   protected pages: {
     errorPage: ErrorPage;
     registrationPage: RegistrationPage;
-    loginPage: RegistrationPage;
+    loginPage: LoginPage;
   } = {
     errorPage: new ErrorPage().create(),
     registrationPage: new RegistrationPage(),

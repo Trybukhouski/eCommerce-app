@@ -91,7 +91,7 @@ class ValidationRule {
   }
 
   private countHintHeight(s: string): number {
-    const lettersPerStroke = 30; // approximately 30 chars fits into line with a screen width of 320px
+    const lettersPerStroke = 18; // approximately 18 chars fits into line with a screen width of 320px
     return Math.ceil(s.length / lettersPerStroke);
   }
 }

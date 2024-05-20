@@ -18,25 +18,23 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "class-methods-use-this": "off",
     "import/prefer-default-export": "off",
+    "dot-notation": "off",
   },
   overrides: [
     {
       // Настройки для JavaScript файлов
-      files: ["*.js"],  // Вы можете добавить 'webpack.config.js' если хотите явно указать только этот файл
-      parser: "espree",  // Используйте ESLint стандартный парсер для JavaScript
+      files: ["*.js"],
+      parser: "espree",
       env: {
-        node: true  // Укажите, что это Node.js среда для JavaScript файлов
+        node: true
       },
       rules: {
-        // Отключите или переопределите TypeScript-специфичные правила, которые не применимы к JavaScript
         "@typescript-eslint/no-var-requires": "off"
       }
     },
     {
-      // Настройки для TypeScript файлов
       files: ["*.ts", "*.tsx"],
       rules: {
-        // TypeScript-специфичные правила
       }
     }
   ],

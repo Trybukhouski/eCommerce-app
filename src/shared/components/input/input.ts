@@ -18,13 +18,21 @@ class Input {
     this.label = document.createElement('label');
     this.input = document.createElement('input');
     this.container.append(this.input);
-    this.container.classList.add(style.input);
+    this.addStyle(options?.type);
 
     if (configs.hasHint) {
       this.addHint();
     }
 
     this.setAtributes(configs);
+  }
+
+  private addStyle(type?: InputOptions['type']) {
+    if (type !== 'checkbox') {
+      this.container.classList.add(style.input);
+    } else {
+      this.container.classList.add(style.checkbox);
+    }
   }
 
   private addHint(): void {

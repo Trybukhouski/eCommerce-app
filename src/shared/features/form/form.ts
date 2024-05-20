@@ -1,12 +1,12 @@
 import { Input, Button, PasswordInput, Select } from '@shared';
-import { defaultFormOptions, FormOptions } from './config';
+import { defaultFormOptions, FormOptions, FormInputs } from './config';
 
 type InputsOptionsWithRule = NonNullable<FormOptions['inputsOptions']>;
 
 class Form {
   public container: HTMLElement;
 
-  public inputArr: (Input | Select)[];
+  public inputArr: FormInputs[];
 
   public form: HTMLFormElement;
 
@@ -39,9 +39,9 @@ class Form {
     }
   }
 
-  private addInputs(arr: InputsOptionsWithRule): void {
+  public addInputs(arr: InputsOptionsWithRule): FormInputs[] {
     const { container } = this;
-    arr.forEach((i) => {
+    return arr.map((i) => {
       let input;
       if (i.type === 'password') {
         input = new PasswordInput(i.options);
@@ -56,6 +56,7 @@ class Form {
       if (i.rule && input instanceof Input) {
         i.rule.setRules(input);
       }
+      return input;
     });
   }
 
@@ -63,7 +64,10 @@ class Form {
     this.form.addEventListener('input', () => {
       const isValid = !this.inputArr.some((i) => {
         if (i instanceof Input) {
-          return i.input.validity.valid === false || i.input.value.length === 0;
+          if (i.input.required === true) {
+            return i.input.validity.valid === false || i.input.value.length === 0;
+          }
+          return i.input.validity.valid === false && i.input.value.length !== 0;
         }
         return false;
       });

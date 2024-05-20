@@ -1,4 +1,4 @@
-import { ValidationRule } from './class/validation';
+import { ValidationRule } from './ValidationRule';
 
 const emailValidation = new ValidationRule({
   pattern: `^[\\w\\d!#$%&*+=\\?^_\\|~\\-]+?@(\\w|\\d|\\.|_|-){1,}\\.(\\w|\\d|\\.|_|-){1,}$`,
