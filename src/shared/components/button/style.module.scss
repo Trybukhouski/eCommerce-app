@@ -1,0 +1,35 @@
+@import '@assets/styles/fonts.scss';
+
+.simple-button {
+  $disabled-button-bg-color: var(--orange-200);
+  $hover-button-bg-color: var(--orange-500);
+  $normal-button-bg-color: var(--orange-400);
+  $button-color: var(--white-100);
+  $border-radius: var(--big-border-radius);
+
+  $min-button-width: 10.1875rem; // 163px
+  $button-padidings: var(--padding-lg) var(--padding-xsm);
+  $button-font-size: var(--font-size-sm);
+
+  @include regularText();
+
+  box-sizing: border-box;
+  font-size: $button-font-size;
+  color: $button-color;
+  padding: $button-padidings;
+  min-width: $min-button-width;
+  background-color: $normal-button-bg-color;
+  border: none;
+  border-radius: $border-radius;
+  transition: 0.3s background-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover-button-bg-color;
+  }
+
+  &:disabled {
+    background-color: $disabled-button-bg-color;
+    cursor: auto;
+  }
+}

@@ -1,0 +1,16 @@
+@import '@assets/styles/mixins/inputBoxMixin.scss';
+@import '@assets/styles/fonts.scss';
+
+.select {
+  @include inputBox();
+
+  label {
+    @include label();
+  }
+
+  option,
+  select {
+    @include regularText();
+    margin-bottom: 0;
+  }
+}
