@@ -17,6 +17,7 @@ mainPage.elements.root.addEventListener('logined', (event) => {
   if (event instanceof CustomEvent) {
     if (!event.detail.logined) {
       LocalStorageService.clearAuthorisedToken();
+      router.setHash('main');
     }
     pagesCollection.setBlockedPagesAccordingUserStatus(event.detail.logined);
     const { header } = mainPage.components;
