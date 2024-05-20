@@ -64,10 +64,18 @@ class Form {
     this.form.addEventListener('input', () => {
       const isValid = !this.inputArr.some((i) => {
         if (i instanceof Input) {
-          if (i.input.required === true) {
+          const fieldset = i.input.closest('fieldset');
+          const isFieldsetHidden = fieldset?.classList.contains('hidden');
+          if (isFieldsetHidden === true) {
+            return false;
+          }
+          if (i.input.required === true && !isFieldsetHidden) {
             return i.input.validity.valid === false || i.input.value.length === 0;
           }
-          return i.input.validity.valid === false && i.input.value.length !== 0;
+          if (i.input.required === false) {
+            return i.input.validity.valid === false && i.input.value.length !== 0;
+          }
+          return false;
         }
         return false;
       });

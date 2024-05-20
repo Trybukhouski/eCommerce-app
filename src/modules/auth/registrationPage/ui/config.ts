@@ -196,9 +196,6 @@ const [nonNullableDeliveryInputOptions, nonNullableBillsInputOptions] = [
     }
     const newOptions = { ...address.options, name: `${namePrefix}-${addressName}` };
     Object.assign(i, address, { options: newOptions });
-    if (index === 1) {
-      Object.defineProperty(i.options, 'required', { value: false });
-    }
     return i as InputOptions;
   });
   return newGroup;
