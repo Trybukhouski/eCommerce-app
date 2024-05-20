@@ -1,3 +1,4 @@
+import { AuthService } from '@services';
 import { HeaderView } from './header.view/HeaderView';
 
 export class HeaderActions extends HeaderView {
@@ -7,6 +8,7 @@ export class HeaderActions extends HeaderView {
     this.changeNavVisibilityAfterClickOnBurger();
     this.changeHeaderViewAfterWindowResize();
     this.setHeaderConfig();
+    this.addSignOutEventListener();
 
     return this;
   }
@@ -54,5 +56,19 @@ export class HeaderActions extends HeaderView {
       getComputedStyle(document.documentElement).getPropertyValue('--tablet').slice(0, -2)
     );
     return window.innerWidth <= tabletViewSize;
+  }
+
+  private addSignOutEventListener(): void {
+    const signOutLink = this.elements.nav.querySelector('[data-name="signOut"]');
+
+    if (signOutLink) {
+      signOutLink.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        if (AuthService.isAuthenticated()) {
+          AuthService.logout();
+        }
+      });
+    }
   }
 }

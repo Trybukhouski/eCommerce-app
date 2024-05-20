@@ -1,5 +1,6 @@
-import { Routes } from '@routes/index';
+import { blockedPages, Routes } from '@routes/index';
 import { LinkModel } from '@modules/mainPage/components/nav';
+import { AuthService } from '@services';
 import { NavMap } from '../nav.map';
 import * as styles from './styles.module.scss';
 
@@ -27,6 +28,13 @@ class NavView extends NavMap {
 
   public createLinks(linksObject: LinkModel[]): void {
     linksObject.forEach((linkObject) => {
+      if (
+        (linkObject.hash === 'signOut' && !AuthService.isAuthenticated()) ||
+        (blockedPages.forAuthorisedUsers.includes(linkObject.hash) && AuthService.isAuthenticated())
+      ) {
+        return;
+      }
+
       const link = document.createElement('a');
       link.innerHTML = `${linkObject.name[0]?.toUpperCase()}${linkObject.name
         .slice(1)

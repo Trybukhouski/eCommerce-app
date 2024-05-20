@@ -132,4 +132,13 @@ export class AuthService {
     }
     return handleResponse(response);
   }
+
+  public static isAuthenticated(): boolean {
+    return !!localStorage.getItem('accessToken');
+  }
+
+  public static logout(): void {
+    localStorage.removeItem('accessToken');
+    window.location.href = '/login';
+  }
 }
