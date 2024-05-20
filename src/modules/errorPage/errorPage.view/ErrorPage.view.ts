@@ -27,6 +27,17 @@ export class ErrorPageView {
     content.append(backHomeBtn);
     root.append(content);
 
+    backHomeBtn.addEventListener('click', () => {
+      backHomeBtn.dispatchEvent(
+        new CustomEvent('clickOnNav', {
+          bubbles: true,
+          detail: {
+            redirection: 'main',
+          },
+        })
+      );
+    });
+
     return this;
   }
 }

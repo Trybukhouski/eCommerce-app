@@ -4,6 +4,7 @@ import { Routes } from './routes';
 export interface PagesDataModifierModel {
   getAvailableLinks(): LinkModel[];
   getCurrentPageName(): string;
+  getHashOfCurrentPage(): Routes;
   getPagesHash(): Routes[];
   setBlockedPagesAccordingUserStatus(authorised: boolean): void;
   setCurrentPage(page: Routes): void;

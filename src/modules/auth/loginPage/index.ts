@@ -64,6 +64,14 @@ class LoginPage {
       if (data.access_token) {
         localStorage.setItem('accessToken', data.access_token);
         NotificationService.displaySuccess('Logged in successfully!');
+        this.elem.dispatchEvent(
+          new CustomEvent('logined', {
+            bubbles: true,
+            detail: {
+              logined: true,
+            },
+          })
+        );
         // console.log('Authentication successful:', data);
 
         this.redirectToMain();

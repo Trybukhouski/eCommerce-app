@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { PageModel } from '@routes/pagesData';
@@ -41,9 +43,23 @@ export class PagesDataModifier implements PagesDataModifierModel {
     if (currentLinksObject[0] && currentLinksObject.length === 1) {
       newCurrentLink = currentLinksObject[0].name;
     } else {
-      throw new Error('Not single current page');
+      newCurrentLink = '111';
+      // throw new Error('Not single current page');
     }
     return newCurrentLink;
+  }
+
+  public getHashOfCurrentPage(): Routes {
+    let newCurrentHash: Routes;
+    const currentLinksObject = Object.values(this.pagesData).filter(
+      (pageObj) => pageObj.current === true
+    );
+    if (currentLinksObject[0] && currentLinksObject.length === 1) {
+      newCurrentHash = currentLinksObject[0].hash;
+    } else {
+      throw new Error('Not single current page');
+    }
+    return newCurrentHash;
   }
 
   public getPagesHash(): Routes[] {
@@ -51,39 +67,28 @@ export class PagesDataModifier implements PagesDataModifierModel {
   }
 
   public setBlockedPagesAccordingUserStatus(authorised: boolean): void {
-    Object.entries(this.pagesData).forEach(([pageName, pageObject]) => {
-      if (authorised) {
-        if (this.blockedPages.forAuthorisedUsers.includes(pageName)) {
-          pageObject.status = 'blocked';
-        }
-      } else if (this.blockedPages.forUnAuthorisedUsers.includes(pageName)) {
-        pageObject.status = 'blocked';
-      } else {
-        pageObject.status = 'available';
-      }
-    });
+    const blockedPages = authorised
+      ? this.blockedPages.forAuthorisedUsers
+      : this.blockedPages.forUnAuthorisedUsers;
+
+    for (const key in this.pagesData) {
+      this.pagesData[key as Routes].status = blockedPages.includes(
+        this.pagesData[key as Routes].hash
+      )
+        ? 'blocked'
+        : 'available';
+    }
   }
 
   public setCurrentPage(route: Routes): Routes {
-    let finalHash: Routes;
-    const pageObjects = Object.values(this.pagesData);
-    pageObjects.forEach((obj) => {
-      obj.current = false;
-    });
-    const filteredPageObjects = pageObjects.filter((obj) => obj.hash === route);
-    if (filteredPageObjects[0] && filteredPageObjects.length === 1) {
-      if (filteredPageObjects[0].status === 'blocked') {
-        const newCurrentPage = filteredPageObjects[0].ifBlocked.redirectionPage;
-        this.pagesData[newCurrentPage].current === true;
-        finalHash = this.pagesData[newCurrentPage].hash;
-      } else {
-        filteredPageObjects[0].current === true;
-        finalHash = filteredPageObjects[0].hash;
-      }
-    } else {
-      throw new Error('More than one objects have the same hash');
+    const newCurrenPage =
+      this.pagesData[route].status === 'blocked'
+        ? this.pagesData[route].ifBlocked.redirectionPage
+        : route;
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (const key in this.pagesData) {
+      this.pagesData[key as Routes].current = key === newCurrenPage;
     }
-
-    return finalHash;
+    return newCurrenPage;
   }
 }

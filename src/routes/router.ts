@@ -1,21 +1,27 @@
-import { Routes } from '@routes/pagesData/interfaces/routes';
+import { Routes, PagesDataModifierModel } from '@routes/index';
 import { RouterModel, Subscriber } from './interfaces';
 
 export class Router implements RouterModel {
   private subscribers: Subscriber[] = [];
 
-  private routes: Routes[];
+  private pagesDataModifier: PagesDataModifierModel;
 
-  constructor(routes: Routes[]) {
-    this.routes = routes;
+  constructor(PagesDataModifier: PagesDataModifierModel) {
+    this.pagesDataModifier = PagesDataModifier;
   }
 
   public observeHashChange(): void {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.slice(1);
-      const outputHash: Routes = this.routes.includes(hash as Routes) ? (hash as Routes) : 'error';
-      this.setHash(outputHash);
-      this.subscribers.forEach((subscriber) => subscriber.inform(outputHash));
+      const hashAfterAvailablePagesCheck: Routes = this.pagesDataModifier
+        .getPagesHash()
+        .includes(hash as Routes)
+        ? (hash as Routes)
+        : 'error';
+      this.pagesDataModifier.setCurrentPage(hashAfterAvailablePagesCheck);
+      const hashAfterRedirectionCheck = this.pagesDataModifier.getHashOfCurrentPage();
+      this.setHash(hashAfterRedirectionCheck);
+      this.subscribers.forEach((subscriber) => subscriber.inform(hashAfterRedirectionCheck));
     });
   }
 
