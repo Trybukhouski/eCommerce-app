@@ -74,8 +74,6 @@ export interface AddressAction {
   addressId?: string;
   addressKey?: string;
 }
-<<<<<<< HEAD
-=======
 
 // product interfaces
 
@@ -122,4 +120,3 @@ export interface Price {
     fractionDigits: number;
   };
 }
->>>>>>> RSS-ECOMM-3_C011/fetching-and-displaying-product-data
