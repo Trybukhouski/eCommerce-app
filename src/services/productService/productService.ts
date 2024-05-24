@@ -35,4 +35,16 @@ export class ProductService {
 
     return handleResponse(response);
   }
+
+  public static async getProductImagesById(id: string): Promise<string[]> {
+    const product = await this.getProductById(id);
+    const images = product.masterData.current.masterVariant.images.map((img) => img.url);
+    return images;
+  }
+
+  public static async getProductImagesByKey(key: string): Promise<string[]> {
+    const product = await this.getProductByKey(key);
+    const images = product.masterData.current.masterVariant.images.map((img) => img.url);
+    return images;
+  }
 }
