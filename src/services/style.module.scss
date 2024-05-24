@@ -1,28 +1,29 @@
 .notification {
-  color: white;
+  color: var(--white-100);
   font-size: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: var(--padding-sm);
   position: fixed;
-  top: 5%;
-  border: 1px solid transparent;
-  border-radius: 5px;
+  top: 45%;
+  border: var(--border-width-m) solid transparent;
+  border-radius: var(--small-border-radius);
   z-index: 1000;
   width: 50%;
   right: 50%;
   transform: translateX(50%);
 }
 
+
 .notification.success {
-  background-color: green;
+  background-color: var(--correct-warning-color);
 }
 
 .notification.error {
-  background-color: red;
+  background-color: var(--wrong-warning-color);
 }
 
 .notification.info {
-  background-color: blue;
+  background-color: var(--information-color);
 }

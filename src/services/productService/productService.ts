@@ -1,6 +1,7 @@
 import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
 import { Product } from '@root/services/interfaces';
+import { getHeaders } from '@root/shared/utils/apiHelpers';
 
 export class ProductService {
   private static baseUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/products`;
@@ -9,10 +10,7 @@ export class ProductService {
     const url = `${this.baseUrl}/key=${key}`;
     const response = await fetch(url, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        'Content-Type': 'application/json',
-      },
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -27,10 +25,7 @@ export class ProductService {
     const url = `${this.baseUrl}/${id}`;
     const response = await fetch(url, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        'Content-Type': 'application/json',
-      },
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
