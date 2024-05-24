@@ -57,7 +57,7 @@ class FormPageUI {
     this.addInputElements();
   }
 
-  private addInputElements() {
+  private addInputElements(): void {
     this.inputArr.forEach((i) => {
       const key = i instanceof Input ? i.input.name : i.select.name;
       this.inputElements[key] = i;

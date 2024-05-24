@@ -1,5 +1,4 @@
-import { FormPageUI, FormPageOptions } from '@modules/auth/shared';
-import { Input, FormInputs } from '@shared';
+import { FormPageUI, FormPageOptions, Input, FormInputs } from '@shared';
 import * as style from './style.module.scss';
 
 class RegistrationPageUI extends FormPageUI {

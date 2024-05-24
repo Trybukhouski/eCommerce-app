@@ -1,7 +1,5 @@
-import { ErrorPage } from '@modules/errorPage';
 import { PagesDataModifierModel, RouterModel } from '@routes/index';
-import { RegistrPage as RegistrationPage, LoginPage } from '@modules/auth';
-import { Header } from '@modules/mainPage/components';
+import { Header } from '../components';
 
 export class MainPageMap {
   public components: {
@@ -9,16 +7,6 @@ export class MainPageMap {
   };
 
   protected database: PagesDataModifierModel;
-
-  protected pages: {
-    errorPage: ErrorPage;
-    registrationPage: RegistrationPage;
-    loginPage: LoginPage;
-  } = {
-    errorPage: new ErrorPage().create(),
-    registrationPage: new RegistrationPage(),
-    loginPage: new LoginPage(),
-  };
 
   protected services: {
     router: RouterModel;
