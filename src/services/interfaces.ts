@@ -73,4 +73,5 @@ export interface AddressAction {
   action: string;
   addressId?: string;
   addressKey?: string;
+  dateOfBirth?: string;
 }

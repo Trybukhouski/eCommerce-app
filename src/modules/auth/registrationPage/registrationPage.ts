@@ -123,7 +123,7 @@ class RegistrPage {
     try {
       await AuthService.getToken();
       const response = await AuthService.register(userData);
-      await this.setAddresses(response);
+      await this.setAddressesAndBirthday(response, userData.birthDate);
       NotificationService.displaySuccess('Account created successfully!');
       this.elem.dispatchEvent(
         new CustomEvent('logined', {
@@ -171,12 +171,17 @@ class RegistrPage {
     ] as [string | undefined, AddressAction, AddressAction];
   }
 
-  private async setAddresses(response: RegistrationResponse) {
+  private rotateBirthDate(date: string) {
+    return date
+      .split(/[.-]/)
+      .map((_, ind, arr) => arr[arr.length - ind - 1])
+      .join('-');
+  }
+
+  private async setAddressesAndBirthday(response: RegistrationResponse, birthDate?: string) {
     const customerId = response.customer.id;
     const { addresses } = response.customer;
-    if (!addresses || !customerId) {
-      return;
-    }
+    if (!addresses || !customerId) return;
 
     if (addresses.length === 1) {
       const billsAddress: CreateActionsObjectsOptions = {};
@@ -192,9 +197,7 @@ class RegistrPage {
       const actions: AddressAction[] = [];
 
       const [isDefault, addAddressIdAction, setDefaultAddressAction] = this.createActionsObjects(a);
-      if (!isDefault) {
-        return;
-      }
+      if (!isDefault) return;
 
       actions.push(addAddressIdAction);
       if (isDefault === 'true') {
@@ -202,9 +205,12 @@ class RegistrPage {
       }
       actionsArr.push(...actions);
     });
+    if (birthDate) {
+      actionsArr.push({ action: 'setDateOfBirth', dateOfBirth: this.rotateBirthDate(birthDate) });
+    }
 
     try {
-      AuthService.sendAddressActions(customerId, actionsArr);
+      AuthService.sendAddressAndBirthdayActions(customerId, actionsArr);
     } catch (error) {
       NotificationService.displayError(
         error instanceof Error ? error.message : 'Error fetching customer version'
