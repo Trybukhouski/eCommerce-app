@@ -1,0 +1,45 @@
+.eye {
+  $margin-top: calc(var(--font-size-sm) + var(--label-margin-bottom) + var(--border-width-m));
+  $margin-right: calc(var(--padding-md) + var(--border-width-m) + 50px);
+  $height: calc((var(--padding-sm) + var(--border-width-m)) * 2 + 18px);
+  $paddings: var(--padding-sm) var(--padding-xxsm);
+
+  position: absolute;
+  right: 0;
+  margin-right: $margin-right;
+  margin-top: $margin-top;
+  height: $height;
+  padding: $paddings;
+  caret-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+
+  svg {
+    position: absolute;
+    margin: auto;
+  }
+
+  & > :last-child {
+    transform: scale(1.1) scaleY(1.1);
+  }
+
+  &:global(.eye-password-hide) {
+    :first-child {
+      opacity: 0;
+    }
+    :last-child {
+      opacity: 1;
+    }
+  }
+
+  &:global(.eye-password-show) {
+    :last-child {
+      opacity: 0;
+    }
+    :first-child {
+      opacity: 1;
+    }
+  }
+}
