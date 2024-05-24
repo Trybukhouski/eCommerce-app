@@ -1,5 +1,5 @@
 import { clientCredentials } from '@root/config';
-import { handleResponse } from '@shared';
+import { handleProductImages, handleResponse } from '@shared';
 import { Product } from '@root/services/interfaces';
 import { getHeaders } from '@root/shared/utils/apiHelpers';
 
@@ -37,14 +37,10 @@ export class ProductService {
   }
 
   public static async getProductImagesById(id: string): Promise<string[]> {
-    const product = await this.getProductById(id);
-    const images = product.masterData.current.masterVariant.images.map((img) => img.url);
-    return images;
+    return handleProductImages(() => this.getProductById(id));
   }
 
   public static async getProductImagesByKey(key: string): Promise<string[]> {
-    const product = await this.getProductByKey(key);
-    const images = product.masterData.current.masterVariant.images.map((img) => img.url);
-    return images;
+    return handleProductImages(() => this.getProductByKey(key));
   }
 }
