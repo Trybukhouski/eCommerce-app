@@ -42,18 +42,3 @@ export async function handleResponse(response: Response) {
 
   return response.json();
 }
-
-export function getPlaceholderImage(): string {
-  return 'https://via.placeholder.com/150'; // URL изображения-заглушки
-}
-
-export async function handleProductImages(fetchProduct: () => Promise<Product>): Promise<string[]> {
-  try {
-    const product = await fetchProduct();
-    const images = product.masterData.current.masterVariant.images.map((img) => img.url);
-    return images.length > 0 ? images : [getPlaceholderImage()];
-  } catch (error) {
-    console.error('Error fetching product images:', error);
-    return [getPlaceholderImage()];
-  }
-}
