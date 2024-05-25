@@ -45,7 +45,7 @@ export class AuthService {
   public static async register(userData: UserData): Promise<RegistrationResponse> {
     const body = JSON.stringify(userData);
 
-    const token = localStorage.getItem('accessToken');
+    const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
       throw new Error('No access token found');
     }
@@ -65,7 +65,7 @@ export class AuthService {
   }
 
   public static async getCustomerVersion(userId: string): Promise<number> {
-    const token = localStorage.getItem('accessToken');
+    const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
       throw new Error('No access token found');
     }
@@ -96,7 +96,7 @@ export class AuthService {
     };
     const body = JSON.stringify(request);
 
-    const token = localStorage.getItem('accessToken');
+    const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
       throw new Error('No access token found');
     }
