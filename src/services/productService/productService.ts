@@ -42,7 +42,7 @@ export class ProductService {
       const images = product.masterData.current.masterVariant.images.map((img) => img.url);
       return images.length > 0 ? images : [this.getPlaceholderImage()];
     } catch (error) {
-      console.error('Error fetching product images by ID:', error);
+      // console.error('Error fetching product images by ID:', error);
       return [this.getPlaceholderImage()];
     }
   }
@@ -53,7 +53,7 @@ export class ProductService {
       const images = product.masterData.current.masterVariant.images.map((img) => img.url);
       return images.length > 0 ? images : [this.getPlaceholderImage()];
     } catch (error) {
-      console.error('Error fetching product images by key:', error);
+      // console.error('Error fetching product images by key:', error);
       return [this.getPlaceholderImage()];
     }
   }
