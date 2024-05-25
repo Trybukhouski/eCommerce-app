@@ -1,0 +1,23 @@
+form {
+  position: relative;
+
+  button:first-child {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+  }
+}
+
+form:not(.editable) {
+  button:last-child {
+    transform: scale(0);
+    transition: transform 0.5s;
+  }
+}
+
+form.editable {
+  button:last-child {
+    transform: scale(1);
+    transition: transform 0.5s;
+  }
+}

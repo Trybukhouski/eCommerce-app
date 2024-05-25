@@ -3,7 +3,7 @@ import { LocalStorageService } from '@services';
 import {
   MainPageActions as MainPage,
   LoginPage,
-  ProfilePageUI,
+  ProfilePage,
   RegistrPage,
   ErrorPage,
 } from './modules';
@@ -36,7 +36,7 @@ export class Application {
   private createMainPage(): void {
     this.mainPage.create();
     this.mainPage.addPagesContent([
-      ['profilePage', new ProfilePageUI().elem],
+      ['profilePage', new ProfilePage().elem],
       ['loginPage', new LoginPage().elem],
       ['registrationPage', new RegistrPage().elem],
       ['errorPage', new ErrorPage().create().elements.root],

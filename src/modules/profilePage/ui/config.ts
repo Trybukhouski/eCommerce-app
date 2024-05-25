@@ -8,8 +8,6 @@ import {
   billsInputOptionsWithRuleArr,
 } from '@shared';
 
-const formId = 'profile';
-
 const mainInputOptionsWithRuleArr = [
   firstNameInputOptionsWithRule,
   lastNameInputOptionsWithRule,
@@ -17,32 +15,31 @@ const mainInputOptionsWithRuleArr = [
   birthDateInputOptionsWithRule,
 ];
 
-const formOptions = {
-  hasFieldset: false,
-  inputsOptions: [],
-  subGroups: [
-    {
-      inputOptions: mainInputOptionsWithRuleArr,
-      id: 'basic',
-      legend: 'Main Info:',
-    },
-    {
-      inputOptions: deliveryInputOptionsWithRuleArr,
-      id: 'delivery',
-      legend: 'Delivery address:',
-    },
-    {
-      inputOptions: billsInputOptionsWithRuleArr,
-      id: 'bills',
-      legend: 'Bills address:',
-    },
-  ],
-  buttonOptions: {
-    text: 'Create account',
-    type: 'submit' as const,
-    disabled: true,
-  },
-  id: formId,
+const buttonOptions = {
+  text: 'Update',
+  type: 'submit' as const,
+  disabled: true,
 };
 
-export { formOptions };
+const profilePageOptions = {
+  basic: {
+    hasFieldset: true,
+    inputsOptions: mainInputOptionsWithRuleArr,
+    buttonOptions,
+    id: 'basic',
+  },
+  delivery: {
+    hasFieldset: true,
+    inputsOptions: deliveryInputOptionsWithRuleArr,
+    buttonOptions,
+    id: 'profile-delivery',
+  },
+  bills: {
+    hasFieldset: true,
+    inputsOptions: billsInputOptionsWithRuleArr,
+    buttonOptions,
+    id: 'profile-bills',
+  },
+};
+
+export { profilePageOptions };
