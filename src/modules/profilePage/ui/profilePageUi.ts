@@ -4,7 +4,7 @@ import { Form, Button } from '@shared';
 import { profilePageOptions } from './config';
 
 type KeyOfProfileForms = keyof typeof profilePageOptions;
-const formTypes: KeyOfProfileForms[] = ['basic', 'delivery', 'bills'];
+const formTypes: KeyOfProfileForms[] = ['basic', 'password', 'delivery', 'bills'];
 
 class ProfilePageUI {
   public elem: HTMLElement;
@@ -29,6 +29,10 @@ class ProfilePageUI {
   public forms = {
     basic: {
       form: new Form(profilePageOptions.basic),
+      editButton: this.editButtonProto.cloneNode(true),
+    },
+    password: {
+      form: new Form(profilePageOptions.password),
       editButton: this.editButtonProto.cloneNode(true),
     },
     delivery: {
@@ -64,7 +68,9 @@ class ProfilePageUI {
     const form = this.forms[formkey];
     form.form.inputArr.forEach((i) => {
       const elem = Form.getInputElement(i);
-      elem.required = isRequired;
+      if (elem.type !== 'checkbox') {
+        elem.required = isRequired;
+      }
     });
   }
 

@@ -2,7 +2,7 @@ import {
   firstNameInputOptionsWithRule,
   lastNameInputOptionsWithRule,
   emailInputOptionsWithRule,
-  // passwordInputOptionsWithRule,
+  passwordInputOptionsWithRule,
   birthDateInputOptionsWithRule,
   deliveryInputOptionsWithRuleArr,
   billsInputOptionsWithRuleArr,
@@ -13,6 +13,11 @@ const mainInputOptionsWithRuleArr = [
   lastNameInputOptionsWithRule,
   emailInputOptionsWithRule,
   birthDateInputOptionsWithRule,
+];
+
+const passwordInputOptionsWithRuleArr = [
+  passwordInputOptionsWithRule,
+  passwordInputOptionsWithRule,
 ];
 
 const buttonOptions = {
@@ -27,6 +32,12 @@ const profilePageOptions = {
     inputsOptions: mainInputOptionsWithRuleArr,
     buttonOptions,
     id: 'basic',
+  },
+  password: {
+    hasFieldset: true,
+    inputsOptions: passwordInputOptionsWithRuleArr,
+    buttonOptions,
+    id: 'password',
   },
   delivery: {
     hasFieldset: true,
