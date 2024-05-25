@@ -1,4 +1,4 @@
-import { FormPageUI, FormPageOptions, Input, FormInputs } from '@shared';
+import { FormPageUI, FormPageOptions, Input, FormInputs, Form } from '@shared';
 import * as style from './style.module.scss';
 
 class RegistrationPageUI extends FormPageUI {
@@ -50,15 +50,14 @@ class RegistrationPageUI extends FormPageUI {
   }
 
   public getValue(input: FormInputs): string | boolean {
-    let inputElement;
-    if (input instanceof Input) {
-      inputElement = input.input;
+    const inputElement = Form.getInputElement(input);
+    if (inputElement instanceof HTMLInputElement) {
       if (inputElement.type === 'checkbox') {
         return inputElement.checked;
       }
       return inputElement.value;
     }
-    return input.select.value;
+    return inputElement.value;
   }
 }
 

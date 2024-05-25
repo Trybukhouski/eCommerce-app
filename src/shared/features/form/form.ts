@@ -91,6 +91,13 @@ class Form {
       this.form.addEventListener('input', this.checkValidityFunction);
     }
   }
+
+  public static getInputElement(input: FormInputs) {
+    if (input instanceof Input) {
+      return input.input;
+    }
+    return input.select;
+  }
 }
 
 export { Form };

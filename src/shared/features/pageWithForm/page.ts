@@ -1,4 +1,4 @@
-import { Input, Form } from '@shared';
+import { Form } from '@shared';
 import * as style from './style.module.scss';
 import { InputUnion, InputElements, FormPageOptions, AddLinkOptions } from './config';
 
@@ -59,7 +59,8 @@ class FormPageUI {
 
   private addInputElements(): void {
     this.inputArr.forEach((i) => {
-      const key = i instanceof Input ? i.input.name : i.select.name;
+      const element = Form.getInputElement(i);
+      const key = element.name;
       this.inputElements[key] = i;
     });
   }

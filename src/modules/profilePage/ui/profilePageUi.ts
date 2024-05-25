@@ -1,6 +1,6 @@
 import './style.scss';
 import editIcon from '@assets/sprites/edit/edit-clipboard.svg';
-import { Form, Input, Button } from '@shared';
+import { Form, Button } from '@shared';
 import { profilePageOptions } from './config';
 
 type KeyOfProfileForms = keyof typeof profilePageOptions;
@@ -63,12 +63,7 @@ class ProfilePageUI {
   public changeRequired(formkey: KeyOfProfileForms, isRequired: boolean): void {
     const form = this.forms[formkey];
     form.form.inputArr.forEach((i) => {
-      let elem: HTMLInputElement | HTMLSelectElement;
-      if (i instanceof Input) {
-        elem = i.input;
-      } else {
-        elem = i.select;
-      }
+      const elem = Form.getInputElement(i);
       elem.required = isRequired;
     });
   }
