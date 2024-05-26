@@ -1,5 +1,7 @@
 import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
+import { getFormHeaders, getJsonHeaders } from '@root/shared/utils/apiHelpers';
+import { LocalStorageService } from '@root/services/localStorageService';
 import { LoginResponse, RegistrationResponse, UserData, AddressAction } from './interfaces';
 
 export class AuthService {
@@ -19,12 +21,7 @@ export class AuthService {
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${btoa(
-          `${clientCredentials.clientId}:${clientCredentials.clientSecret}`
-        )}`,
-      },
+      headers: getFormHeaders(),
       body,
     });
 
@@ -34,12 +31,7 @@ export class AuthService {
   public static async getToken(): Promise<void> {
     const response = await fetch(this.tokenUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${btoa(
-          `${clientCredentials.clientId}:${clientCredentials.clientSecret}`
-        )}`,
-      },
+      headers: getFormHeaders(),
     });
 
     if (!response.ok) {
@@ -47,23 +39,20 @@ export class AuthService {
     }
 
     const data = await handleResponse(response);
-    localStorage.setItem('accessToken', data.access_token);
+    LocalStorageService.setAuthorisedToken(data.access_token);
   }
 
   public static async register(userData: UserData): Promise<RegistrationResponse> {
     const body = JSON.stringify(userData);
 
-    const token = localStorage.getItem('accessToken');
+    const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
       throw new Error('No access token found');
     }
 
     const response = await fetch(this.registerUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getJsonHeaders(),
       body,
     });
 
@@ -76,7 +65,7 @@ export class AuthService {
   }
 
   public static async getCustomerVersion(userId: string): Promise<number> {
-    const token = localStorage.getItem('accessToken');
+    const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
       throw new Error('No access token found');
     }
@@ -84,10 +73,7 @@ export class AuthService {
     const url = `${this.registerUrl}/${userId}`;
     const response = await fetch(url, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getJsonHeaders(),
     });
 
     if (!response.ok) {
@@ -110,7 +96,7 @@ export class AuthService {
     };
     const body = JSON.stringify(request);
 
-    const token = localStorage.getItem('accessToken');
+    const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
       throw new Error('No access token found');
     }
@@ -118,10 +104,7 @@ export class AuthService {
     const url = `${this.registerUrl}/${userId}`;
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getJsonHeaders(),
       body,
     });
 

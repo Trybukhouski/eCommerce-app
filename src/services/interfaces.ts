@@ -75,3 +75,49 @@ export interface AddressAction {
   addressKey?: string;
   dateOfBirth?: string;
 }
+
+// product interfaces
+
+export interface Product {
+  id: string;
+  version: number;
+  masterData: MasterData;
+}
+
+export interface MasterData {
+  current: CurrentData;
+}
+
+export interface CurrentData {
+  name: LocalizedString;
+  description: LocalizedString;
+  masterVariant: MasterVariant;
+}
+
+export interface LocalizedString {
+  [locale: string]: string;
+}
+
+export interface MasterVariant {
+  id: number;
+  sku: string;
+  images: Image[];
+  prices: Price[];
+}
+
+export interface Image {
+  url: string;
+  dimensions: {
+    w: number;
+    h: number;
+  };
+}
+
+export interface Price {
+  id: string;
+  value: {
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+}
