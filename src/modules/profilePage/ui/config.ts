@@ -8,6 +8,15 @@ import {
   billsInputOptionsWithRuleArr,
 } from '@shared';
 
+const prevPasswordOptions = { ...passwordInputOptionsWithRule.options };
+const newPasswordOptions = {
+  ...prevPasswordOptions,
+  labelText: 'New password:',
+  name: 'new-password',
+};
+const newPassword = { ...passwordInputOptionsWithRule };
+newPassword.options = newPasswordOptions;
+
 const mainInputOptionsWithRuleArr = [
   firstNameInputOptionsWithRule,
   lastNameInputOptionsWithRule,
@@ -15,10 +24,7 @@ const mainInputOptionsWithRuleArr = [
   birthDateInputOptionsWithRule,
 ];
 
-const passwordInputOptionsWithRuleArr = [
-  passwordInputOptionsWithRule,
-  passwordInputOptionsWithRule,
-];
+const passwordInputOptionsWithRuleArr = [passwordInputOptionsWithRule, newPassword];
 
 const buttonOptions = {
   text: 'Update',
