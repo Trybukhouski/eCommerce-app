@@ -1,25 +1,20 @@
-import { Customer } from '@services';
+import { Address, Customer } from '@services';
 import { Form } from '@shared';
 import { ProfilePageUI } from './ui';
 import { ProfileService } from './services';
-
-type SettingsInnerFields = {
-  fields: {
-    inputName: string;
-    dataKey: keyof Customer;
-  }[];
-};
-type Settings = Record<typeof ProfilePageUI.prototype.formTypes[number], SettingsInnerFields>;
+import { AddressField, CustomerField, Settings, SettingsKeys } from './interfaces';
 
 export class ProfilePage {
   public elem: HTMLElement;
 
-  private uiApi = new ProfilePageUI();
+  private uiApi: ProfilePageUI;
 
   private serverService = ProfileService;
 
+  static readonly formTypes = ProfilePageUI.formTypes;
+
   private readonly fillingFieldsSettingsObject: Settings = {
-    [this.uiApi.formTypes[0]]: {
+    [ProfilePage.formTypes[0]]: {
       fields: [
         {
           inputName: 'first-name',
@@ -39,18 +34,58 @@ export class ProfilePage {
         },
       ],
     },
-    [this.uiApi.formTypes[1]]: {
-      fields: [],
+    [ProfilePage.formTypes[2]]: {
+      fields: [
+        {
+          inputName: 'delivery-country',
+          dataKey: 'country',
+        },
+        {
+          inputName: 'delivery-city',
+          dataKey: 'city',
+        },
+        {
+          inputName: 'delivery-street',
+          dataKey: 'streetName',
+        },
+        {
+          inputName: 'delivery-index',
+          dataKey: 'postalCode',
+        },
+      ],
+      defaultCheckbox: {
+        inputName: 'delivery-default',
+        dataKey: 'defaultShippingAddressId',
+      },
     },
-    [this.uiApi.formTypes[2]]: {
-      fields: [],
-    },
-    [this.uiApi.formTypes[3]]: {
-      fields: [],
+    [ProfilePage.formTypes[3]]: {
+      fields: [
+        {
+          inputName: 'bills-country',
+          dataKey: 'country',
+        },
+        {
+          inputName: 'bills-city',
+          dataKey: 'city',
+        },
+        {
+          inputName: 'bills-street',
+          dataKey: 'streetName',
+        },
+        {
+          inputName: 'bills-index',
+          dataKey: 'postalCode',
+        },
+      ],
+      defaultCheckbox: {
+        inputName: 'bills-default',
+        dataKey: 'defaultBillingAddressId',
+      },
     },
   };
 
   constructor() {
+    this.uiApi = new ProfilePageUI();
     this.elem = this.uiApi.elem;
 
     this.addEditClickListener();
@@ -64,7 +99,7 @@ export class ProfilePage {
       const formEntry = Object.entries(this.uiApi.forms).find(
         (entry) => entry[1].editButton === button
       );
-      const formKey = this.uiApi.formTypes.find((k) => (formEntry ? formEntry[0] === k : false));
+      const formKey = ProfilePage.formTypes.find((k) => (formEntry ? formEntry[0] === k : false));
 
       if (!target || !button || !isEditButton || !formEntry || !formKey) {
         return;
@@ -74,8 +109,9 @@ export class ProfilePage {
       this.uiApi.changeRequired(formKey, !!isDisabled);
       this.uiApi.disableFieldset(formKey, !isDisabled);
       this.uiApi.toggleFormEditing(formKey);
-
-      this.displayUserData(); // TODO: убрать, когда закончу разработку
+      if (!isDisabled) {
+        this.displayUserData(); // TODO: убрать, когда закончу разработку
+      }
     });
   }
 
@@ -85,19 +121,68 @@ export class ProfilePage {
   }
 
   private addBasicUserData(data: Customer): void {
-    const formKey = this.uiApi.formTypes[0];
-    const fieldsSettingsForFilling = this.fillingFieldsSettingsObject[formKey];
-    const { fields } = fieldsSettingsForFilling;
-    fields.forEach((field) => {
-      const input = this.uiApi.getFormInputByName(formKey, field.inputName);
-      let value = data[field.dataKey];
-      if (!input || !value) {
+    const { formTypes } = ProfilePage;
+    this.writeDataIntoFormFields(data, formTypes[0]);
+
+    const { addresses } = data;
+
+    const { shippingAddressIds } = data;
+    const { billingAddressIds } = data;
+
+    const lastShippingAddressId = shippingAddressIds[billingAddressIds.length - 1];
+    const lastBillingAddressId = billingAddressIds[billingAddressIds.length - 1];
+
+    ([
+      [lastShippingAddressId, formTypes[2]],
+      [lastBillingAddressId, formTypes[3]],
+    ] as const).forEach(([id, formKey]) => {
+      const address = addresses?.find((a) => a.id === id);
+      if (!id || !addresses || !address) {
         return;
       }
-      if (field.dataKey === 'dateOfBirth' && typeof value === 'string') {
-        value = Form.rotateBirthDate(value);
-      }
-      Form.getInputElement(input).value = (value ?? '').toString();
+      this.writeDataIntoFormFields(address, formKey);
+      this.addInputValue(data, formKey, this.fillingFieldsSettingsObject[formKey].defaultCheckbox);
     });
+  }
+
+  private writeDataIntoFormFields(data: Customer | Address, formKey: SettingsKeys): void {
+    const fieldsSettingsForFilling = this.fillingFieldsSettingsObject[formKey];
+
+    const { fields } = fieldsSettingsForFilling;
+    fields.forEach((field) => {
+      this.addInputValue(data, formKey, field);
+    });
+  }
+
+  private addInputValue(
+    data: Customer | Address,
+    formKey: SettingsKeys,
+    field: (CustomerField | AddressField)['fields'][number]
+  ): void {
+    const input = this.uiApi.getFormInputByName(formKey, field.inputName);
+    const inputElement = input ? Form.getInputElement(input) : undefined;
+
+    const isCheckbox = inputElement instanceof HTMLInputElement && inputElement.type === 'checkbox';
+    let value: Customer[keyof Customer];
+    if (isCheckbox || formKey === ProfilePage.formTypes[0]) {
+      value = (data as Customer)[field.dataKey as keyof Customer];
+    } else {
+      value = (data as Address)[field.dataKey as keyof Address];
+    }
+
+    if (!input || value === undefined || !inputElement) {
+      return;
+    }
+
+    if (isCheckbox && typeof value === 'boolean') {
+      inputElement.checked = value;
+      return;
+    }
+
+    if (field.dataKey === 'dateOfBirth' && typeof value === 'string') {
+      value = Form.rotateBirthDate(value);
+    }
+
+    inputElement.value = (value ?? '').toString();
   }
 }

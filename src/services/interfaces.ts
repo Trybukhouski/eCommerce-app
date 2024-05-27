@@ -26,6 +26,8 @@ export interface Customer {
   // stores: Store[];
   dateOfBirth: string;
   authenticationMode: string;
+  defaultBillingAddressId?: string;
+  defaultShippingAddressId?: string;
 }
 
 export interface ModifiedBy {

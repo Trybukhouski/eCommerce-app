@@ -6,6 +6,8 @@ import { profilePageOptions, profilePageOptionsKeys } from './config';
 type KeyOfProfileForms = typeof profilePageOptionsKeys[number];
 
 class ProfilePageUI {
+  static readonly formTypes = profilePageOptionsKeys;
+
   public section: HTMLElement;
 
   public elem: HTMLElement;
@@ -14,27 +16,25 @@ class ProfilePageUI {
 
   public readonly editableClass = 'editable';
 
-  public readonly formTypes = profilePageOptionsKeys;
-
   private editButtonProto = this.createEditButtonProto();
 
   public forms = {
-    [this.formTypes[0]]: {
+    [ProfilePageUI.formTypes[0]]: {
       form: new Form(profilePageOptions.basic),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Profile information',
     },
-    [this.formTypes[1]]: {
+    [ProfilePageUI.formTypes[1]]: {
       form: new Form(profilePageOptions.password),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Password',
     },
-    [this.formTypes[2]]: {
+    [ProfilePageUI.formTypes[2]]: {
       form: new Form(profilePageOptions.delivery),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Delivery address',
     },
-    [this.formTypes[3]]: {
+    [ProfilePageUI.formTypes[3]]: {
       form: new Form(profilePageOptions.bills),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Bills address',
@@ -46,7 +46,7 @@ class ProfilePageUI {
     section.classList.add(style['profile']);
     this.section = section;
     this.elem = section;
-    const formElements = this.formTypes.map((k) => this.forms[k].form.form);
+    const formElements = ProfilePageUI.formTypes.map((k) => this.forms[k].form.form);
     this.elem.append(...formElements);
 
     this.setInitialFormsSettings();
@@ -87,7 +87,7 @@ class ProfilePageUI {
     heading.textContent = 'Profile';
     this.section.prepend(heading);
 
-    this.formTypes.forEach((key) => {
+    ProfilePageUI.formTypes.forEach((key) => {
       const form = this.forms[key];
       const { legendText } = form;
       const fieldset = form.form.fieldsetElement;
