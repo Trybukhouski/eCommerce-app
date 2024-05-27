@@ -1,4 +1,4 @@
-import { PagesDataModifierModel } from '@routes/pagesData/interfaces/PagesDataModifierModel';
+import { PagesDataModifierModel } from '@routes';
 import { checkWhetherLinkIsClicked } from './utils/checkWhetherLinkIsClicked';
 
 export class NavMap {

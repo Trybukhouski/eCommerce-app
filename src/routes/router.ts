@@ -1,4 +1,4 @@
-import { Routes, PagesDataModifierModel } from '@routes/index';
+import { Routes, PagesDataModifierModel } from '@routes';
 import { RouterModel, Subscriber } from './interfaces';
 
 export class Router implements RouterModel {

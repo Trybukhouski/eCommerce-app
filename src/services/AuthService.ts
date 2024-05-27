@@ -85,7 +85,7 @@ export class AuthService {
     return data.version;
   }
 
-  public static async sendAddressActions(
+  public static async sendAddressAndBirthdayActions(
     userId: string,
     actions: AddressAction[]
   ): Promise<RegistrationResponse> {

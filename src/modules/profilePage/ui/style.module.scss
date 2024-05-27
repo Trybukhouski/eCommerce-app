@@ -1,0 +1,78 @@
+@import '@assets/styles/mixins/adaptivePaddings.scss';
+@import '@assets/styles/fonts.scss';
+
+.profile {
+  @include adaptivePaddings(var(--breakpoint-mobile), var(--padding-xlg), var(--padding-xxxlg));
+
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column;
+  gap: 2rem;
+
+  h2 {
+    @include title();
+  }
+
+  form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white-200);
+    border-radius: var(--big-border-radius);
+    @include adaptivePaddings(
+      var(--breakpoint-mobile),
+      var(--padding-lg),
+      var(--padding-xxlg),
+      var(--padding-xlg),
+      var(--padding-xxlg),
+      2
+    );
+
+    fieldset {
+      border: none;
+
+      legend {
+        @include regularText();
+        font-weight: bolder;
+        margin: 1rem 0;
+      }
+    }
+
+    button:first-child {
+      position: absolute;
+      right: 1rem;
+      z-index: 1;
+    }
+
+    button:last-child {
+      margin: 1.6875rem auto 0;
+      transition: 0.3s;
+    }
+  }
+
+  form:not(:global(.editable)) {
+    button:last-child {
+      transform: scale(0);
+      width: 0;
+      height: 0;
+    }
+  }
+
+  form:global(.editable) {
+    button:last-child {
+      transform: scale(1);
+    }
+  }
+
+  @media (min-width: 1180px) {
+    max-width: 1440px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+
+    > :first-child {
+      grid-column: 1 / 3;
+    }
+  }
+}

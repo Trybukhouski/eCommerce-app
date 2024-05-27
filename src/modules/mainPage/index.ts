@@ -1,1 +1,1 @@
-export * from './mainPage.view';
+export * from './mainPage.actions';

@@ -1,5 +1,4 @@
-import { Routes } from '@routes/index';
-import { LinkModel } from '@modules/mainPage/components/nav';
+import { Routes, LinkModel } from '@routes';
 import { NavMap } from '../nav.map';
 import * as styles from './styles.module.scss';
 

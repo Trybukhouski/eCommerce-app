@@ -43,3 +43,11 @@
     }
   }
 }
+
+fieldset:disabled .eye {
+  pointer-events: none;
+  svg {
+    fill-opacity: 0.4;
+    stroke-opacity: 0.4;
+  }
+}
