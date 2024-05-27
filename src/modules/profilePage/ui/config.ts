@@ -32,31 +32,33 @@ const buttonOptions = {
   disabled: true,
 };
 
+const profilePageOptionsKeys = ['basic', 'password', 'delivery', 'bills'] as const;
+
 const profilePageOptions = {
-  basic: {
+  [profilePageOptionsKeys[0]]: {
     hasFieldset: true,
     inputsOptions: mainInputOptionsWithRuleArr,
     buttonOptions,
     id: 'basic',
   },
-  password: {
+  [profilePageOptionsKeys[1]]: {
     hasFieldset: true,
     inputsOptions: passwordInputOptionsWithRuleArr,
     buttonOptions,
     id: 'password',
   },
-  delivery: {
+  [profilePageOptionsKeys[2]]: {
     hasFieldset: true,
     inputsOptions: deliveryInputOptionsWithRuleArr,
     buttonOptions,
     id: 'profile-delivery',
   },
-  bills: {
+  [profilePageOptionsKeys[3]]: {
     hasFieldset: true,
     inputsOptions: billsInputOptionsWithRuleArr,
     buttonOptions,
     id: 'profile-bills',
   },
-};
+} as const;
 
-export { profilePageOptions };
+export { profilePageOptions, profilePageOptionsKeys };

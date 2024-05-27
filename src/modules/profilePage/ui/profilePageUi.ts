@@ -1,10 +1,9 @@
 import editIcon from '@assets/sprites/edit/edit-clipboard.svg';
 import { Form, Button } from '@shared';
 import * as style from './style.module.scss';
-import { profilePageOptions } from './config';
+import { profilePageOptions, profilePageOptionsKeys } from './config';
 
-type KeyOfProfileForms = keyof typeof profilePageOptions;
-const formTypes: KeyOfProfileForms[] = ['basic', 'password', 'delivery', 'bills'];
+type KeyOfProfileForms = typeof profilePageOptionsKeys[number];
 
 class ProfilePageUI {
   public section: HTMLElement;
@@ -15,25 +14,27 @@ class ProfilePageUI {
 
   public readonly editableClass = 'editable';
 
+  public readonly formTypes = profilePageOptionsKeys;
+
   private editButtonProto = this.createEditButtonProto();
 
   public forms = {
-    basic: {
+    [this.formTypes[0]]: {
       form: new Form(profilePageOptions.basic),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Profile information',
     },
-    password: {
+    [this.formTypes[1]]: {
       form: new Form(profilePageOptions.password),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Password',
     },
-    delivery: {
+    [this.formTypes[2]]: {
       form: new Form(profilePageOptions.delivery),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Delivery address',
     },
-    bills: {
+    [this.formTypes[3]]: {
       form: new Form(profilePageOptions.bills),
       editButton: this.editButtonProto.cloneNode(true),
       legendText: 'Bills address',
@@ -45,7 +46,7 @@ class ProfilePageUI {
     section.classList.add(style['profile']);
     this.section = section;
     this.elem = section;
-    const formElements = formTypes.map((k) => this.forms[k].form.form);
+    const formElements = this.formTypes.map((k) => this.forms[k].form.form);
     this.elem.append(...formElements);
 
     this.setInitialFormsSettings();
@@ -81,7 +82,7 @@ class ProfilePageUI {
     heading.textContent = 'Profile';
     this.section.prepend(heading);
 
-    formTypes.forEach((key) => {
+    this.formTypes.forEach((key) => {
       const form = this.forms[key];
       const { legendText } = form;
       const fieldset = form.form.fieldsetElement;
@@ -118,4 +119,4 @@ class ProfilePageUI {
   }
 }
 
-export { ProfilePageUI, formTypes };
+export { ProfilePageUI };

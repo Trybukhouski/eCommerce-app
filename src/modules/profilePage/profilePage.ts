@@ -1,4 +1,4 @@
-import { ProfilePageUI, formTypes } from './ui';
+import { ProfilePageUI } from './ui';
 
 export class ProfilePage {
   public elem: HTMLElement;
@@ -20,7 +20,7 @@ export class ProfilePage {
       const formEntry = Object.entries(this.uiApi.forms).find(
         (entry) => entry[1].editButton === button
       );
-      const formKey = formTypes.find((k) => (formEntry ? formEntry[0] === k : false));
+      const formKey = this.uiApi.formTypes.find((k) => (formEntry ? formEntry[0] === k : false));
 
       if (!target || !button || !isEditButton || !formEntry || !formKey) {
         return;
