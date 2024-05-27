@@ -11,7 +11,9 @@ class ProfilePageUI {
 
   public elem: HTMLElement;
 
-  public editButtonClassName = 'edit-form';
+  public readonly editButtonClassName = 'edit-form';
+
+  public readonly editableClass = 'editable';
 
   private editButtonProto = this.createEditButtonProto();
 
@@ -48,6 +50,30 @@ class ProfilePageUI {
 
     this.setInitialFormsSettings();
     this.addDecorativeElements();
+  }
+
+  public changeRequired(formkey: KeyOfProfileForms, isRequired: boolean): void {
+    const form = this.forms[formkey];
+    form.form.inputArr.forEach((i) => {
+      const elem = Form.getInputElement(i);
+      if (elem.type !== 'checkbox') {
+        elem.required = isRequired;
+      }
+    });
+  }
+
+  public disableFieldset(formkey: KeyOfProfileForms, isDisabled: boolean): void {
+    const form = this.forms[formkey];
+    const fieldset = form.form.fieldsetElement;
+    if (!fieldset) {
+      return;
+    }
+    fieldset.disabled = isDisabled;
+  }
+
+  public toggleFormEditing(formkey: KeyOfProfileForms): void {
+    const { form } = this.forms[formkey].form;
+    form.classList.toggle(this.editableClass);
   }
 
   private addDecorativeElements(): void {
@@ -89,35 +115,6 @@ class ProfilePageUI {
       const form = this.forms[k];
       form.form.form.prepend(form.editButton);
     });
-  }
-
-  public changeRequired(formkey: KeyOfProfileForms, isRequired: boolean): void {
-    const form = this.forms[formkey];
-    form.form.inputArr.forEach((i) => {
-      const elem = Form.getInputElement(i);
-      if (elem.type !== 'checkbox') {
-        elem.required = isRequired;
-      }
-    });
-  }
-
-  public disableFieldset(formkey: KeyOfProfileForms, isDisabled: boolean): void {
-    const form = this.forms[formkey];
-    const fieldset = form.form.fieldsetElement;
-    if (!fieldset) {
-      return;
-    }
-    fieldset.disabled = isDisabled;
-  }
-
-  public toggleFormEditing(formkey: KeyOfProfileForms): void {
-    const { form } = this.forms[formkey].form;
-    const isEditable = form.classList.contains('editable');
-    if (isEditable) {
-      form.classList.remove('editable');
-    } else {
-      form.classList.add('editable');
-    }
   }
 }
 

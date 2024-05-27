@@ -1,4 +1,4 @@
-import { Routes } from '@routes/pagesData/interfaces/routes';
+import { Routes } from '@routes';
 import { MainPageMap } from './MainPage.map';
 import * as styles from './styles.module.scss';
 import { PagesElements } from './interfaces';

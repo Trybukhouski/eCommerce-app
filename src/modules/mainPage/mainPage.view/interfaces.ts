@@ -1,10 +1,4 @@
-type Pages =
-  | 'errorPage'
-  | 'registrationPage'
-  | 'loginPage'
-  | 'profilePage'
-  | 'catalogPage'
-  | 'aboutPage';
+import { Pages } from '@routes';
 
 type PagesElements = Partial<Record<Pages, HTMLElement>>;
 interface PagesElementsAndRoot extends PagesElements {

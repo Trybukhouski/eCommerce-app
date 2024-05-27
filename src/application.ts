@@ -1,4 +1,4 @@
-import { Router, Routes, PagesDataModifier, pagesData } from '@routes/index';
+import { Router, Routes, PagesDataModifier, pagesData } from '@routes';
 import { LocalStorageService } from '@services';
 import {
   MainPageActions as MainPage,
@@ -22,7 +22,7 @@ export class Application {
     this.mainPage = new MainPage(this.pagesCollection, this.router);
   }
 
-  public init() {
+  public init(): void {
     this.createMainPage();
     this.addLoginedListener();
     this.routerStaff(); // TODO: add correct name to this method

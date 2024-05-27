@@ -1,4 +1,4 @@
-import { Routes } from '@routes/pagesData/interfaces/routes';
+import { Routes } from './routes';
 
 export interface LinkModel {
   hash: Routes;

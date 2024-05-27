@@ -1,4 +1,4 @@
-import { PagesDataModifierModel, RouterModel } from '@routes/index';
+import { PagesDataModifierModel, RouterModel } from '@routes';
 import { Header } from '../components';
 
 export class MainPageMap {

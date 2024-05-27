@@ -6,13 +6,13 @@
     "baseUrl": "./src",
     "paths": {
       "@shared": ["shared"],
-      "@core/*": ["modules/core/*"],
+      "@core": ["modules/core"],
       "@assets/*": ["assets/*"],
-      "@modules/*": ["modules/*"],
+      "@modules": ["modules"],
       "@config": ["config.ts"],
       "@services": ["services"],
       "@interfaces": ["interfaces"],
-      "@routes/*": ["routes/*"],
+      "@routes": ["routes"],
       "@root/*": ["*"],
 
     },
