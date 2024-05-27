@@ -24,6 +24,7 @@ export interface Customer {
   billingAddressIds: string[];
   isEmailVerified: boolean;
   // stores: Store[];
+  dateOfBirth: string;
   authenticationMode: string;
 }
 

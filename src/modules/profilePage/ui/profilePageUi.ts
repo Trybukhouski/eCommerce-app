@@ -1,5 +1,5 @@
 import editIcon from '@assets/sprites/edit/edit-clipboard.svg';
-import { Form, Button } from '@shared';
+import { Form, Button, FormInputs } from '@shared';
 import * as style from './style.module.scss';
 import { profilePageOptions, profilePageOptionsKeys } from './config';
 
@@ -51,6 +51,11 @@ class ProfilePageUI {
 
     this.setInitialFormsSettings();
     this.addDecorativeElements();
+  }
+
+  public getFormInputByName(formkey: KeyOfProfileForms, name: string): FormInputs | undefined {
+    const form = this.forms[formkey];
+    return form.form.inputArr.find((i) => Form.getInputElement(i).name === name);
   }
 
   public changeRequired(formkey: KeyOfProfileForms, isRequired: boolean): void {

@@ -61,7 +61,10 @@ export class AuthService {
       const errorJson = JSON.parse(errorText);
       throw new Error(errorJson.message || 'Registration failed');
     }
-    return handleResponse(response);
+
+    const handlingResponse: RegistrationResponse = await handleResponse(response);
+    LocalStorageService.setUserId(handlingResponse.customer.id);
+    return handlingResponse;
   }
 
   public static async getCustomerVersion(userId: string): Promise<number> {

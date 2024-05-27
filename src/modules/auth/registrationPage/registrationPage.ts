@@ -6,7 +6,7 @@ import {
   AddressAction,
   UserData,
 } from '@services';
-import { Input } from '@shared';
+import { Input, Form } from '@shared';
 import { registrPageUI } from './ui';
 
 interface CreateActionsObjectsOptions extends Address {
@@ -171,13 +171,6 @@ class RegistrPage {
     ] as [string | undefined, AddressAction, AddressAction];
   }
 
-  private rotateBirthDate(date: string) {
-    return date
-      .split(/[.-]/)
-      .map((_, ind, arr) => arr[arr.length - ind - 1])
-      .join('-');
-  }
-
   private async setAddressesAndBirthday(response: RegistrationResponse, birthDate?: string) {
     const customerId = response.customer.id;
     const { addresses } = response.customer;
@@ -206,7 +199,7 @@ class RegistrPage {
       actionsArr.push(...actions);
     });
     if (birthDate) {
-      actionsArr.push({ action: 'setDateOfBirth', dateOfBirth: this.rotateBirthDate(birthDate) });
+      actionsArr.push({ action: 'setDateOfBirth', dateOfBirth: Form.rotateBirthDate(birthDate) });
     }
 
     try {
