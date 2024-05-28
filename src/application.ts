@@ -6,6 +6,7 @@ import {
   ProfilePage,
   RegistrPage,
   ErrorPage,
+  DetailedProductPage,
 } from './modules';
 
 export class Application {
@@ -40,6 +41,7 @@ export class Application {
       ['loginPage', new LoginPage().elem],
       ['registrationPage', new RegistrPage().elem],
       ['errorPage', new ErrorPage().create().elements.root],
+      ['detailedProductPage', new DetailedProductPage().create().elements.root],
     ]);
   }
 

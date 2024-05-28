@@ -18,6 +18,11 @@ declare module '*.png' {
   export default string;
 }
 
+declare module '*.jpg' {
+  const value: string;
+  export default string;
+}
+
 declare module '*.ico' {
   const value: string;
   export default string;
