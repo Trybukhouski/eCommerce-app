@@ -41,7 +41,7 @@ export class Application {
       ['loginPage', new LoginPage().elem],
       ['registrationPage', new RegistrPage().elem],
       ['errorPage', new ErrorPage().create().elements.root],
-      ['aboutPage', new DetailedProductPage().elem], //TODO: убрать detailed page с about
+      ['aboutPage', new DetailedProductPage().elem], // TODO: убрать detailed page с about
     ]);
   }
 
