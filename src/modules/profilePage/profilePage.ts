@@ -84,6 +84,8 @@ export class ProfilePage {
     },
   };
 
+  private userDataCash?: Customer;
+
   constructor() {
     this.uiApi = new ProfilePageUI();
     this.elem = this.uiApi.elem;
@@ -116,8 +118,12 @@ export class ProfilePage {
   }
 
   public async displayUserData(): Promise<void> {
-    const response = await this.serverService.getCustomer();
-    this.addBasicUserData(response);
+    if (!this.userDataCash) {
+      const response = await this.serverService.getCustomer();
+      this.userDataCash = response;
+    }
+    const data = this.userDataCash;
+    this.addBasicUserData(data);
   }
 
   private addBasicUserData(data: Customer): void {
@@ -174,8 +180,8 @@ export class ProfilePage {
       return;
     }
 
-    if (isCheckbox && typeof value === 'boolean') {
-      inputElement.checked = value;
+    if (isCheckbox) {
+      inputElement.checked = Boolean(value);
       return;
     }
 
