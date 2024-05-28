@@ -1,4 +1,4 @@
-import { Address, Customer } from '@services';
+import { Address, Customer, LocalStorageService } from '@services';
 import { Form } from '@shared';
 import { ProfilePageUI } from './ui';
 import { ProfileService } from './services';
@@ -91,6 +91,33 @@ export class ProfilePage {
     this.elem = this.uiApi.elem;
 
     this.addEditClickListener();
+    this.addLoginedListener();
+  }
+
+  public async displayUserData(update = false): Promise<void> {
+    if (!this.userDataCash || update) {
+      const response = await this.serverService.getCustomer();
+      this.userDataCash = response;
+    }
+    const data = this.userDataCash;
+    this.addBasicUserData(data);
+  }
+
+  private addLoginedListener(): void {
+    const id = LocalStorageService.getUserId();
+    if (id) {
+      this.displayUserData(true);
+    }
+    document.addEventListener('logined', (e: Event) => {
+      if (!(e instanceof CustomEvent)) {
+        return;
+      }
+      const { detail } = e;
+      const isLogined = detail.logined;
+      if (isLogined) {
+        this.displayUserData(true);
+      }
+    });
   }
 
   private addEditClickListener(): void {
@@ -115,15 +142,6 @@ export class ProfilePage {
         this.displayUserData(); // TODO: убрать, когда закончу разработку
       }
     });
-  }
-
-  public async displayUserData(): Promise<void> {
-    if (!this.userDataCash) {
-      const response = await this.serverService.getCustomer();
-      this.userDataCash = response;
-    }
-    const data = this.userDataCash;
-    this.addBasicUserData(data);
   }
 
   private addBasicUserData(data: Customer): void {
