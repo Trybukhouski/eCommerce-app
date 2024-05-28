@@ -116,7 +116,6 @@ export class DetailedProductPageUI {
       },
     };
     const addToCartButton = new Button(buttonOptions);
-    addToCartButton.button.classList.add(styles['small-button']);
     column3.appendChild(addToCartButton.button);
   }
 }
