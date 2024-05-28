@@ -117,6 +117,11 @@ export interface Image {
 export interface Price {
   country: string;
   id: string;
+  discounted?: {
+    value: {
+      centAmount: number;
+    };
+  };
   value: {
     currencyCode: string;
     centAmount: number;
