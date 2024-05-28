@@ -61,4 +61,31 @@ export class ProductService {
   private static getPlaceholderImage(): string {
     return 'https://via.placeholder.com/150'; // URL изображения-заглушки
   }
+
+  public static async getProducts(): Promise<Product[]> {
+    const url = `${this.baseUrl}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch products: ${errorText}`);
+    }
+
+    const data = await handleResponse(response);
+    return data.results;
+  }
+
+  public static async getProductList(): Promise<
+    { name: string; image: string; description: string }[]
+  > {
+    const products = await this.getProducts();
+    return products.map((product) => ({
+      name: product.masterData.current.name?.['en'] || 'No Name',
+      image: product.masterData.current.masterVariant.images[0]?.url || this.getPlaceholderImage(),
+      description: product.masterData.current.description?.['en'] || 'No Description',
+    }));
+  }
 }
