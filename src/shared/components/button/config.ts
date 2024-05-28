@@ -8,6 +8,7 @@ interface ButtonOptions {
   disabled?: boolean;
   isLink?: boolean;
   href?: string;
+  customColor?: 'blue';
 }
 
 const defaultButtonOptions: Required<ButtonOptions> = {
@@ -19,6 +20,7 @@ const defaultButtonOptions: Required<ButtonOptions> = {
   disabled: false,
   isLink: false,
   href: '',
+  customColor: 'blue',
 };
 
 export { ButtonOptions, defaultButtonOptions };

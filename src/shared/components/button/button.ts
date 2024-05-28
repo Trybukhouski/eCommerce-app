@@ -27,6 +27,10 @@ class Button {
     if (configs.icon.sprite) {
       this.addIcon(configs.icon.sprite, configs.icon.towhere);
     }
+
+    if (configs.customColor) {
+      this.button.setAttribute('data-customColor', configs.customColor);
+    }
   }
 
   private addIcon(sprite: BrowserSpriteSymbol, where: Location): void {
