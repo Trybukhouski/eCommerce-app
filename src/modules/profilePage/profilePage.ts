@@ -139,7 +139,7 @@ export class ProfilePage {
       this.uiApi.disableFieldset(formKey, !isDisabled);
       this.uiApi.toggleFormEditing(formKey);
       if (!isDisabled) {
-        this.displayUserData(); // TODO: убрать, когда закончу разработку
+        this.displayUserData();
       }
     });
   }
