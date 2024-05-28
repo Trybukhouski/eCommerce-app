@@ -10,7 +10,7 @@ export class MainPageView extends MainPageMap {
     root: document.createElement('main'),
   };
 
-  public addPagesContent(pairs: ([string, HTMLElement] | [string, HTMLElement] | [string, HTMLElement] | [string, HTMLDivElement] | [string, void])[]): void {
+  public addPagesContent(pairs: [keyof PagesElements, HTMLElement][]): void {
     pairs.forEach(([key, value]) => {
       this.elements[key] = value;
     });

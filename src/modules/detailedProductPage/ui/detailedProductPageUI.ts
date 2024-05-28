@@ -1,6 +1,6 @@
 import { Button, ButtonOptions } from '@shared';
-import mainImagePath from '../../assets/images/main-image.jpg';
-import thumbnail1Path from '../../assets/images/thumbnail1.jpg';
+import mainImagePath from '@assets/images/main-image.jpg';
+import thumbnail1Path from '@assets/images/thumbnail1.jpg';
 import * as styles from './styles.module.scss';
 
 export class DetailedProductPageUI {
