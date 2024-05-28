@@ -2,9 +2,8 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
-import { PageModel } from '@routes/pagesData';
-import { LinkModel } from '@modules/mainPage/components/nav';
-import { PagesDataModifierModel, PagesDataModel, Routes } from './interfaces';
+import { PageModel } from '@routes';
+import { LinkModel, PagesDataModifierModel, PagesDataModel, Routes } from './interfaces';
 
 export class PagesDataModifier implements PagesDataModifierModel {
   private pagesData: PagesDataModel;

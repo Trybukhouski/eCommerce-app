@@ -1,4 +1,4 @@
-import { MainPageView } from './index';
+import { MainPageView } from './mainPage.view';
 
 export class MainPageActions extends MainPageView {
   public create(): MainPageView {

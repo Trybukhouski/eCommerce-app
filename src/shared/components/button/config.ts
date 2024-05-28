@@ -1,4 +1,5 @@
 interface ButtonOptions {
+  className?: 'simple' | 'edit-icon';
   text?: string;
   type?: 'submit' | 'reset' | 'button';
   icon?: {
@@ -12,6 +13,7 @@ interface ButtonOptions {
 }
 
 const defaultButtonOptions: Required<ButtonOptions> = {
+  className: 'simple',
   text: '',
   type: 'button',
   icon: {
