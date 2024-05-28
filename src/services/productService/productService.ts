@@ -2,6 +2,7 @@ import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
 import { getHeaders } from '@root/shared/utils/apiHelpers';
 import { Product } from '@root/services/interfaces';
+import placeholderImage from '@assets/images/placeholderImage.jpg';
 
 export class ProductService {
   private static baseUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/products`;
@@ -59,7 +60,7 @@ export class ProductService {
   }
 
   private static getPlaceholderImage(): string {
-    return 'https://via.placeholder.com/150'; // URL изображения-заглушки
+    return placeholderImage;
   }
 
   public static async getProducts(): Promise<Product[]> {
