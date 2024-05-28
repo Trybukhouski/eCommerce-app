@@ -123,7 +123,7 @@ export interface Price {
 }
 
 export interface LoginCustomer {
-  addresses: any[];
+  addresses: Address[];
   email: string;
   firstName: string;
   id: string;
@@ -134,7 +134,7 @@ export interface LoginCustomer {
   createdAt: string;
   lastModifiedAt: string;
   authenticationMode: string;
-  stores: any[];
+  stores: Store[];
 }
 
 export interface CustomerSignInResult {
