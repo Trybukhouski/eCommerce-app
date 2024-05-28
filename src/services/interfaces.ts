@@ -121,3 +121,22 @@ export interface Price {
     fractionDigits: number;
   };
 }
+
+export interface LoginCustomer {
+  addresses: any[];
+  email: string;
+  firstName: string;
+  id: string;
+  isEmailVerified: boolean;
+  lastName: string;
+  password: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  authenticationMode: string;
+  stores: any[];
+}
+
+export interface CustomerSignInResult {
+  customer: LoginCustomer;
+}
