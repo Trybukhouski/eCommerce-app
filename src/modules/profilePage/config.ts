@@ -2,28 +2,34 @@ import { Address, Customer } from '@services';
 import { ProfilePageUI } from './ui';
 
 type CustomerField = {
-  fields: {
-    inputName: string;
-    dataKey: keyof Customer;
-  }[];
+  actionName: string;
+  inputName: string;
+  dataKey: keyof Customer;
 };
 
 type AddressField = {
-  fields: {
-    inputName: string;
-    dataKey: keyof Address;
-  }[];
-  defaultCheckbox: {
-    inputName: string;
-    dataKey: keyof Customer;
-  };
+  inputName: string;
+  dataKey: keyof Address;
+};
+
+type CustomerFields = {
+  fields: CustomerField[];
+};
+
+interface DefaultCheckboxType extends CustomerField {
+  removeActionName: string;
+}
+
+type AddressFields = {
+  fields: AddressField[];
+  defaultCheckbox: DefaultCheckboxType;
 };
 
 const { formTypes } = ProfilePageUI;
 const addressSettingsTypes = [formTypes[2], formTypes[3]] as const;
 
-type BasicFieldsSettings = Record<typeof formTypes[0], CustomerField>;
-type AddressFieldsSettings = Record<typeof addressSettingsTypes[number], AddressField>;
+type BasicFieldsSettings = Record<typeof formTypes[0], CustomerFields>;
+type AddressFieldsSettings = Record<typeof addressSettingsTypes[number], AddressFields>;
 
 const settingsTypes = [formTypes[0], formTypes[2], formTypes[3]] as const;
 type SettingsKeys = typeof settingsTypes[number];
@@ -35,18 +41,22 @@ const fillingFieldsSettingsObject: Settings = {
       {
         inputName: 'first-name',
         dataKey: 'firstName',
+        actionName: 'setFirstName',
       },
       {
         inputName: 'last-name',
         dataKey: 'lastName',
+        actionName: 'setLastName',
       },
       {
         inputName: 'email',
         dataKey: 'email',
+        actionName: 'changeEmail',
       },
       {
         inputName: 'birth-date',
         dataKey: 'dateOfBirth',
+        actionName: 'setDateOfBirth',
       },
     ],
   },
@@ -72,6 +82,8 @@ const fillingFieldsSettingsObject: Settings = {
     defaultCheckbox: {
       inputName: 'delivery-default',
       dataKey: 'defaultShippingAddressId',
+      actionName: 'setDefaultShippingAddress',
+      removeActionName: 'removeShippingAddressId',
     },
   },
   [ProfilePageUI.formTypes[3]]: {
@@ -96,8 +108,10 @@ const fillingFieldsSettingsObject: Settings = {
     defaultCheckbox: {
       inputName: 'bills-default',
       dataKey: 'defaultBillingAddressId',
+      actionName: 'setDefaultBillingAddress',
+      removeActionName: 'removeBillingAddressId',
     },
   },
 };
 
-export { Settings, SettingsKeys, AddressField, CustomerField, fillingFieldsSettingsObject };
+export { Settings, SettingsKeys, AddressFields, CustomerFields, fillingFieldsSettingsObject };

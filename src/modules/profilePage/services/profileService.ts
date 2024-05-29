@@ -1,5 +1,5 @@
 import { clientCredentials } from '@root/config';
-import { LocalStorageService, Customer } from '@services';
+import { LocalStorageService, Customer, RegistrationResponse, AuthService } from '@services';
 import { getJsonHeaders, handleResponse } from '@shared';
 
 class ProfileService {
@@ -27,6 +27,43 @@ class ProfileService {
     const data: Customer = await handleResponse(response);
 
     return data;
+  }
+
+  public static async sendActions(
+    actions: {
+      [key: string]: string | boolean;
+      action: string;
+    }[]
+  ): Promise<RegistrationResponse> {
+    const userId = LocalStorageService.getUserId();
+    if (userId === null) {
+      throw new Error(`Can't find customer's id`);
+    }
+    const currentVersion = await AuthService.getCustomerVersion(userId);
+    const request = {
+      version: currentVersion,
+      actions,
+    };
+    const body = JSON.stringify(request);
+
+    const token = LocalStorageService.getAuthorisedToken();
+    if (!token) {
+      throw new Error('No access token found');
+    }
+
+    const url = `${this.customersUrl}/${userId}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: getJsonHeaders(),
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'The addresses could not be set');
+    }
+    return handleResponse(response);
   }
 }
 

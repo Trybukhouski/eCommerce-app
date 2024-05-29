@@ -1,9 +1,10 @@
-import { Address, Customer, LocalStorageService } from '@services';
-import { Form } from '@shared';
+import { Address, Customer, LocalStorageService, NotificationService } from '@services';
+import { Form, FormInputs } from '@shared';
 import { ProfilePageUI } from './ui';
 import { ProfileService } from './services';
-import { AddressField, CustomerField, SettingsKeys, fillingFieldsSettingsObject } from './config';
+import { AddressFields, CustomerFields, SettingsKeys, fillingFieldsSettingsObject } from './config';
 
+type FormTypes = typeof ProfilePageUI.formTypes[number];
 export class ProfilePage {
   public elem: HTMLElement;
 
@@ -69,13 +70,89 @@ export class ProfilePage {
       }
 
       const isDisabled = this.uiApi.forms[formKey].form.fieldsetElement?.disabled;
-      this.uiApi.changeRequired(formKey, !!isDisabled);
-      this.uiApi.disableFieldset(formKey, !isDisabled);
-      this.uiApi.toggleFormEditing(formKey);
-      if (!isDisabled) {
+      if (isDisabled === undefined) {
+        return;
+      }
+
+      this.uiApi.toggleFormEditing(formKey, isDisabled);
+      if (isDisabled) {
+        this.createEditingSession(formKey);
+      } else {
         this.displayUserData();
       }
     });
+  }
+
+  private createEditingSession(formKey: FormTypes): void {
+    const form = this.uiApi.forms[formKey];
+    const formElement = form.form.form;
+    const inputs = form.form.inputArr;
+    const oldValues = inputs.map((i) => this.uiApi.getInputValue(i));
+
+    let submitListener: (e: SubmitEvent) => void;
+    const removeSubmitListener = () => {
+      formElement.removeEventListener('submit', submitListener);
+    };
+    submitListener = (e) => {
+      e.preventDefault();
+      const valuesAndInputs = inputs.map((i) => [i, this.uiApi.getInputValue(i)] as const);
+      const changed = valuesAndInputs.filter((pair, ind) => pair[1] !== oldValues[ind]);
+      if (changed.length === 0) {
+        this.uiApi.toggleFormEditing(formKey, false);
+        removeSubmitListener();
+        return;
+      }
+      this.sendEditRequest(formKey, changed, removeSubmitListener);
+    };
+
+    formElement.addEventListener('submit', submitListener);
+    formElement.firstChild?.addEventListener('click', removeSubmitListener);
+  }
+
+  private async sendEditRequest(
+    formKey: FormTypes,
+    changed: (readonly [FormInputs, string | boolean])[],
+    removeSubmitListener: () => void
+  ) {
+    if (formKey === ProfilePage.formTypes[0]) {
+      const actions = this.createProfileInfoActions(formKey, changed);
+      try {
+        await ProfileService.sendActions(actions);
+        NotificationService.displaySuccess('The information has been updated');
+      } catch (error) {
+        NotificationService.displayError(
+          error instanceof Error ? error.message : 'Error fetching customer version'
+        );
+      }
+    }
+    removeSubmitListener();
+    this.uiApi.toggleFormEditing(formKey, false);
+  }
+
+  private createProfileInfoActions(
+    formKey: typeof ProfilePage.formTypes[0],
+    changed: (readonly [FormInputs, string | boolean])[]
+  ) {
+    const fieldsSettings = this.fillingFieldsSettingsObject[formKey];
+    const actions: {
+      [key: string]: string | boolean;
+      action: string;
+    }[] = [];
+    changed.forEach(([input, value]) => {
+      const inputElement = Form.getInputElement(input);
+      const inputName = inputElement.name;
+      const settings = fieldsSettings.fields.find((f) => f.inputName === inputName);
+      if (!settings) {
+        return;
+      }
+      const correctValue =
+        settings.dataKey === 'dateOfBirth' ? Form.rotateBirthDate(`${value}`) : value;
+      actions.push({
+        action: settings.actionName,
+        [settings.dataKey]: correctValue,
+      });
+    });
+    return actions;
   }
 
   private addBasicUserData(data: Customer): void {
@@ -115,7 +192,7 @@ export class ProfilePage {
   private addInputValue(
     data: Customer | Address,
     formKey: SettingsKeys,
-    field: (CustomerField | AddressField)['fields'][number]
+    field: (CustomerFields | AddressFields)['fields'][number]
   ): void {
     const input = this.uiApi.getFormInputByName(formKey, field.inputName);
     const inputElement = input ? Form.getInputElement(input) : undefined;
