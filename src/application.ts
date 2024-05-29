@@ -24,7 +24,7 @@ export class Application {
 
   public init(): void {
     this.createMainPage();
-    this.addLoginedListener();
+    this.addLoggedInListener();
     this.routerStaff(); // TODO: add correct name to this method
   }
 
@@ -43,7 +43,7 @@ export class Application {
     ]);
   }
 
-  private addLoginedListener(): void {
+  private addLoggedInListener(): void {
     this.mainPage.elements.root.addEventListener('logined', (event) => {
       if (event instanceof CustomEvent) {
         if (!event.detail.logined) {

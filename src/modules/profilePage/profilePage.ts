@@ -84,26 +84,26 @@ export class ProfilePage {
     },
   };
 
-  private userDataCash?: Customer;
+  private userDataCache?: Customer;
 
   constructor() {
     this.uiApi = new ProfilePageUI();
     this.elem = this.uiApi.elem;
 
     this.addEditClickListener();
-    this.addLoginedListener();
+    this.addLoggedInListener();
   }
 
   public async displayUserData(update = false): Promise<void> {
-    if (!this.userDataCash || update) {
+    if (!this.userDataCache || update) {
       const response = await this.serverService.getCustomer();
-      this.userDataCash = response;
+      this.userDataCache = response;
     }
-    const data = this.userDataCash;
+    const data = this.userDataCache;
     this.addBasicUserData(data);
   }
 
-  private addLoginedListener(): void {
+  private addLoggedInListener(): void {
     const id = LocalStorageService.getUserId();
     if (id) {
       this.displayUserData(true);
@@ -113,8 +113,8 @@ export class ProfilePage {
         return;
       }
       const { detail } = e;
-      const isLogined = detail.logined;
-      if (isLogined) {
+      const isLoggedIn = detail.logined;
+      if (isLoggedIn) {
         this.displayUserData(true);
       }
     });
