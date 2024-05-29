@@ -2,7 +2,7 @@ import { Address, Customer, LocalStorageService } from '@services';
 import { Form } from '@shared';
 import { ProfilePageUI } from './ui';
 import { ProfileService } from './services';
-import { AddressField, CustomerField, Settings, SettingsKeys } from './interfaces';
+import { AddressField, CustomerField, SettingsKeys, fillingFieldsSettingsObject } from './config';
 
 export class ProfilePage {
   public elem: HTMLElement;
@@ -13,76 +13,7 @@ export class ProfilePage {
 
   static readonly formTypes = ProfilePageUI.formTypes;
 
-  private readonly fillingFieldsSettingsObject: Settings = {
-    [ProfilePage.formTypes[0]]: {
-      fields: [
-        {
-          inputName: 'first-name',
-          dataKey: 'firstName',
-        },
-        {
-          inputName: 'last-name',
-          dataKey: 'lastName',
-        },
-        {
-          inputName: 'email',
-          dataKey: 'email',
-        },
-        {
-          inputName: 'birth-date',
-          dataKey: 'dateOfBirth',
-        },
-      ],
-    },
-    [ProfilePage.formTypes[2]]: {
-      fields: [
-        {
-          inputName: 'delivery-country',
-          dataKey: 'country',
-        },
-        {
-          inputName: 'delivery-city',
-          dataKey: 'city',
-        },
-        {
-          inputName: 'delivery-street',
-          dataKey: 'streetName',
-        },
-        {
-          inputName: 'delivery-index',
-          dataKey: 'postalCode',
-        },
-      ],
-      defaultCheckbox: {
-        inputName: 'delivery-default',
-        dataKey: 'defaultShippingAddressId',
-      },
-    },
-    [ProfilePage.formTypes[3]]: {
-      fields: [
-        {
-          inputName: 'bills-country',
-          dataKey: 'country',
-        },
-        {
-          inputName: 'bills-city',
-          dataKey: 'city',
-        },
-        {
-          inputName: 'bills-street',
-          dataKey: 'streetName',
-        },
-        {
-          inputName: 'bills-index',
-          dataKey: 'postalCode',
-        },
-      ],
-      defaultCheckbox: {
-        inputName: 'bills-default',
-        dataKey: 'defaultBillingAddressId',
-      },
-    },
-  };
+  private readonly fillingFieldsSettingsObject = fillingFieldsSettingsObject;
 
   private userDataCache?: Customer;
 
