@@ -31,6 +31,9 @@ export class ProfilePage {
       this.userDataCache = response;
     }
     const data = this.userDataCache;
+    if (!data) {
+      return;
+    }
     this.addBasicUserData(data);
   }
 

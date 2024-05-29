@@ -5,9 +5,14 @@ import { getJsonHeaders, handleResponse } from '@shared';
 class ProfileService {
   private static customersUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/customers`;
 
-  public static async getCustomer(): Promise<Customer> {
+  public static async getCustomer(): Promise<Customer | undefined> {
     const id = LocalStorageService.getUserId();
     const url = `${this.customersUrl}/${id}`;
+
+    const token = LocalStorageService.getAuthorisedToken();
+    if (!token) {
+      return undefined;
+    }
 
     const response = await fetch(url, {
       method: 'GET',

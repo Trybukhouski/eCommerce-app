@@ -121,7 +121,6 @@ class RegistrPage {
     }
     this.uiApi.toggleButtonDisabled();
     try {
-      await AuthService.getToken();
       const response = await AuthService.register(userData);
       await this.setAddressesAndBirthday(response, userData.birthDate);
       NotificationService.displaySuccess('Account created successfully!');
