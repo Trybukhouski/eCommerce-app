@@ -17,6 +17,7 @@ export class LocalStorageService {
 
   public static clearAuthorisedToken(): void {
     localStorage.removeItem('accessToken');
+    LocalStorageService.clearUserId();
   }
 
   public static getAuthorisedToken(): string | null {
