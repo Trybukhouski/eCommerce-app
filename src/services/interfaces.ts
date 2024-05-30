@@ -24,10 +24,10 @@ export interface Customer {
   billingAddressIds: string[];
   isEmailVerified: boolean;
   // stores: Store[];
-  dateOfBirth: string;
   authenticationMode: string;
-  defaultBillingAddressId?: string;
+  dateOfBirth?: string;
   defaultShippingAddressId?: string;
+  defaultBillingAddressId?: string;
 }
 
 export interface ModifiedBy {
@@ -137,9 +137,9 @@ export interface LoginCustomer {
   createdAt: string;
   lastModifiedAt: string;
   authenticationMode: string;
-  // stores: Store[];
+  stores: Storage[];
 }
 
 export interface CustomerSignInResult {
-  customer: Customer;
+  customer: LoginCustomer;
 }

@@ -18,11 +18,22 @@ declare module '*.png' {
   export default string;
 }
 
+declare module '*.jpg' {
+  const value: string;
+  export default string;
+}
+
 declare module '*.ico' {
   const value: string;
   export default string;
 }
 
+declare module '*.module.scss' {
+  const classes: { [key: string]: string };
+  export default classes;
+}
+
+// styles.d.ts
 declare module '*.module.scss' {
   const classes: { [key: string]: string };
   export default classes;
