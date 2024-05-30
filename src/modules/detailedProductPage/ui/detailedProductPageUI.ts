@@ -6,105 +6,110 @@ import * as styles from './styles.module.scss';
 export class DetailedProductPageUI {
   public elem: HTMLElement;
 
+  private productName: HTMLElement;
+
+  private productDetails: HTMLElement;
+
+  private mainImage: HTMLImageElement;
+
+  private thumbnailsContainer: HTMLElement;
+
+  private productDescription: HTMLElement;
+
+  private priceContainer: HTMLElement;
+
+  private addToCartButton: HTMLElement;
+
   constructor() {
-    this.elem = this.createUI();
+    this.elem = document.createElement('div');
+    this.elem.className = styles['page-container'];
+
+    this.productName = document.createElement('h1');
+    this.productName.className = styles['product-name'];
+    this.productName.textContent = 'Product Name';
+
+    this.productDetails = document.createElement('div');
+    this.productDetails.className = styles['product-details'];
+
+    this.mainImage = document.createElement('img');
+    this.mainImage.className = styles['main-image'];
+    this.mainImage.src = mainImagePath;
+    this.mainImage.alt = 'Main Product Image';
+
+    this.thumbnailsContainer = this.createThumbnailImages([
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+    ]);
+    this.productDescription = this.createDescription();
+    this.priceContainer = this.createPriceContainer();
+    this.addToCartButton = this.createAddToCartButton();
+
+    this.assembleUI();
   }
 
-  private createUI(): HTMLElement {
-    const container = document.createElement('div');
-    container.className = styles['page-container'];
-
-    this.createProductName(container);
-    this.createProductDetails(container);
-
-    return container;
+  private assembleUI(): void {
+    this.productDetails.append(
+      this.createImageColumn(),
+      this.createDescriptionColumn(),
+      this.createDetailsColumn()
+    );
+    this.elem.append(this.productName, this.productDetails);
   }
 
-  private createProductName(parent: HTMLElement) {
-    const productName = document.createElement('h1');
-    productName.className = styles['product-name'];
-    productName.textContent = 'Product Name';
-    parent.appendChild(productName);
+  private createImageColumn(): HTMLElement {
+    const column = document.createElement('div');
+    column.className = `${styles.column} ${styles['image-column']}`;
+    column.append(this.mainImage, this.thumbnailsContainer);
+    return column;
   }
 
-  private createProductDetails(parent: HTMLElement) {
-    const productDetails = document.createElement('div');
-    productDetails.className = styles['product-details'];
-    parent.appendChild(productDetails);
-
-    this.createImageColumn(productDetails);
-    this.createDescriptionColumn(productDetails);
-    this.createDetailsColumn(productDetails);
-  }
-
-  private createImageColumn(parent: HTMLElement) {
-    const column1 = document.createElement('div');
-    column1.className = `${styles.column} ${styles['image-column']}`;
-    parent.appendChild(column1);
-
-    const mainImage = document.createElement('img');
-    mainImage.src = mainImagePath;
-    mainImage.alt = 'Main Product Image';
-    mainImage.className = styles['main-image'];
-    column1.appendChild(mainImage);
-
-    const thumbnailImages = document.createElement('div');
-    thumbnailImages.className = styles['thumbnail-images'];
-    [thumbnail1Path, thumbnail1Path, thumbnail1Path, thumbnail1Path].forEach((src) => {
+  private createThumbnailImages(paths: string[]): HTMLElement {
+    const thumbnails = document.createElement('div');
+    thumbnails.className = styles['thumbnail-images'];
+    paths.forEach((path) => {
       const img = document.createElement('img');
-      img.src = src;
-      img.alt = `Thumbnail ${src}`;
-      thumbnailImages.appendChild(img);
+      img.src = path;
+      img.alt = `Thumbnail of ${path}`;
+      thumbnails.appendChild(img);
     });
-    column1.appendChild(thumbnailImages);
+    return thumbnails;
   }
 
-  private createDescriptionColumn(parent: HTMLElement) {
-    const column2 = document.createElement('div');
-    column2.className = `${styles.column} ${styles['description-column']}`;
-    parent.appendChild(column2);
-
-    const productDescription = document.createElement('div');
-    productDescription.className = styles['product-description'];
-    column2.appendChild(productDescription);
-
-    const descriptionText = document.createElement('p');
-    descriptionText.textContent =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum....';
-    productDescription.appendChild(descriptionText);
-
-    const price = document.createElement('p');
-    price.innerHTML = 'Price: <span>$ 1000</span>';
-    productDescription.appendChild(price);
-
-    const material = document.createElement('p');
-    material.innerHTML = 'Material: <span>Gold</span>';
-    productDescription.appendChild(material);
-
-    const color = document.createElement('p');
-    color.innerHTML = 'Color: <span>Golden</span>';
-    productDescription.appendChild(color);
+  private createDescriptionColumn(): HTMLElement {
+    const column = document.createElement('div');
+    column.className = `${styles.column} ${styles['description-column']}`;
+    column.appendChild(this.productDescription);
+    return column;
   }
 
-  private createDetailsColumn(parent: HTMLElement) {
-    const column3 = document.createElement('div');
-    column3.className = `${styles.column} ${styles['cart-column']}`;
-    parent.appendChild(column3);
+  private createDescription(): HTMLElement {
+    const description = document.createElement('div');
+    description.className = styles['product-description'];
+    description.innerHTML = `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum...</p>
+      <p>Price: <span>$1000</span></p>
+      <p>Material: <span>Gold</span></p>
+      <p>Color: <span>Golden</span></p>`;
+    return description;
+  }
 
+  private createDetailsColumn(): HTMLElement {
+    const column = document.createElement('div');
+    column.className = `${styles.column} ${styles['cart-column']}`;
+    column.append(this.priceContainer, this.addToCartButton);
+    return column;
+  }
+
+  private createPriceContainer(): HTMLElement {
     const priceContainer = document.createElement('div');
     priceContainer.className = styles.price;
-    column3.appendChild(priceContainer);
+    priceContainer.innerHTML = `<span class="${styles['current-price']}">$80.00</span>
+      <span class="${styles['original-price']}">$100.00</span>`;
+    return priceContainer;
+  }
 
-    const currentPrice = document.createElement('span');
-    currentPrice.className = styles['current-price'];
-    currentPrice.textContent = '$80.00';
-    priceContainer.appendChild(currentPrice);
-
-    const originalPrice = document.createElement('span');
-    originalPrice.className = styles['original-price'];
-    originalPrice.textContent = '$100.00';
-    priceContainer.appendChild(originalPrice);
-
+  private createAddToCartButton(): HTMLElement {
     const buttonOptions: ButtonOptions = {
       text: 'Add to Cart',
       type: 'button',
@@ -115,7 +120,44 @@ export class DetailedProductPageUI {
         towhere: 'start',
       },
     };
-    const addToCartButton = new Button(buttonOptions);
-    column3.appendChild(addToCartButton.button);
+    const { button } = new Button(buttonOptions);
+    button.className = styles['add-to-cart'];
+    return button;
+  }
+
+  public activateElement(elementKey: keyof DetailedProductPageUI): void {
+    this.addClass(elementKey, 'active');
+  }
+
+  public deactivateElement(elementKey: keyof DetailedProductPageUI): void {
+    this.removeClass(elementKey, 'active');
+  }
+
+  private addClass(elementKey: keyof DetailedProductPageUI, className: string): void {
+    const element = this[elementKey];
+    if (element instanceof HTMLElement) {
+      element.classList.add(styles[className]);
+    }
+  }
+
+  private removeClass(elementKey: keyof DetailedProductPageUI, className: string): void {
+    const element = this[elementKey];
+    if (element instanceof HTMLElement) {
+      element.classList.remove(styles[className]);
+    }
+  }
+
+  public updateTextContent(elementKey: keyof DetailedProductPageUI, text: string): void {
+    const element = this[elementKey];
+    if (element instanceof HTMLElement) {
+      element.textContent = text;
+    }
+  }
+
+  public updateClassName(elementKey: keyof DetailedProductPageUI, className: string): void {
+    const element = this[elementKey];
+    if (element instanceof HTMLElement) {
+      element.className = styles[className];
+    }
   }
 }

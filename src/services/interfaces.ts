@@ -134,7 +134,7 @@ export interface LoginCustomer {
   createdAt: string;
   lastModifiedAt: string;
   authenticationMode: string;
-  stores: Store[];
+  stores: Storage[];
 }
 
 export interface CustomerSignInResult {
