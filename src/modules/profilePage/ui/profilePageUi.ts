@@ -135,4 +135,4 @@ class ProfilePageUI {
   }
 }
 
-export { ProfilePageUI };
+export { ProfilePageUI, KeyOfProfileForms as FormTypes };

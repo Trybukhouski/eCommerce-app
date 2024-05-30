@@ -65,6 +65,45 @@ class ProfileService {
     }
     return handleResponse(response);
   }
+
+  public static async changePassword(
+    currentPassword: string,
+    newPassword: string
+  ): Promise<Customer | undefined> {
+    const userId = LocalStorageService.getUserId();
+    const url = `${ProfileService.customersUrl}/password`;
+
+    const token = LocalStorageService.getAuthorisedToken();
+    if (!token || !userId) {
+      return undefined;
+    }
+
+    const currentVersion = await AuthService.getCustomerVersion(userId);
+    const request = {
+      id: userId,
+      version: currentVersion,
+      currentPassword,
+      newPassword,
+    };
+    const body = JSON.stringify(request);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: getJsonHeaders(),
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to get info about customer: ${errorText}`);
+    }
+
+    const data: Customer = await handleResponse(response);
+
+    AuthService.login(data.email, newPassword);
+
+    return data;
+  }
 }
 
 export { ProfileService };

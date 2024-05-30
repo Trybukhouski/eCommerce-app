@@ -1,10 +1,11 @@
 import { Address, Customer, LocalStorageService, NotificationService } from '@services';
 import { Form, FormInputs } from '@shared';
-import { ProfilePageUI } from './ui';
+import { ProfilePageUI, FormTypes } from './ui';
 import { ProfileService } from './services';
 import { AddressFields, CustomerFields, SettingsKeys, fillingFieldsSettingsObject } from './config';
 
-type FormTypes = typeof ProfilePageUI.formTypes[number];
+type ChangedInputsWithValues = (readonly [FormInputs, string | boolean])[];
+
 export class ProfilePage {
   public elem: HTMLElement;
 
@@ -111,28 +112,70 @@ export class ProfilePage {
 
   private async sendEditRequest(
     formKey: FormTypes,
-    changed: (readonly [FormInputs, string | boolean])[],
+    changed: ChangedInputsWithValues,
     removeSubmitListener: () => void
-  ) {
+  ): Promise<void> {
+    let request: () => void;
     if (formKey === ProfilePage.formTypes[0]) {
       const actions = this.createProfileInfoActions(formKey, changed);
-      try {
-        await ProfileService.sendActions(actions);
-        NotificationService.displaySuccess('The information has been updated');
-      } catch (error) {
-        NotificationService.displayError(
-          error instanceof Error ? error.message : 'Error fetching customer version'
-        );
-      }
+      request = ProfileService.sendActions.bind(null, actions);
+    } else if (formKey === ProfilePage.formTypes[1]) {
+      request = this.createPasswordRequest(changed);
+    } else {
+      request = () => {};
     }
-    removeSubmitListener();
-    this.uiApi.toggleFormEditing(formKey, false);
+    try {
+      await request();
+      NotificationService.displaySuccess('The information has been updated');
+      removeSubmitListener();
+      this.uiApi.toggleFormEditing(formKey, false);
+      if (formKey === ProfilePage.formTypes[1]) {
+        this.cleanPasswordFields();
+      }
+    } catch (error) {
+      NotificationService.displayError(
+        error instanceof Error ? error.message : 'Error fetching customer version'
+      );
+    }
+  }
+
+  private createPasswordRequest(changed: ChangedInputsWithValues): () => void {
+    const { formTypes } = ProfilePage;
+    const settings = this.fillingFieldsSettingsObject[formTypes[1]].fields;
+    const currentPasswordPair = changed.find(
+      (pair) => Form.getInputElement(pair[0]).name === settings[0]?.inputName
+    );
+    const newPasswordPair = changed.find(
+      (pair) => Form.getInputElement(pair[0]).name === settings[1]?.inputName
+    );
+    if (!currentPasswordPair || !newPasswordPair) {
+      return () => {};
+    }
+    return ProfileService.changePassword.bind(
+      null,
+      `${currentPasswordPair[1]}`,
+      `${newPasswordPair[1]}`
+    );
+  }
+
+  private cleanPasswordFields(): void {
+    const { formTypes } = ProfilePage;
+    const settings = this.fillingFieldsSettingsObject[formTypes[1]].fields;
+    settings.forEach((s) => {
+      const input = this.uiApi.getFormInputByName(formTypes[1], s.inputName);
+      if (!input) return;
+      const inputElement = Form.getInputElement(input);
+      inputElement.value = '';
+    });
   }
 
   private createProfileInfoActions(
     formKey: typeof ProfilePage.formTypes[0],
-    changed: (readonly [FormInputs, string | boolean])[]
-  ) {
+    changed: ChangedInputsWithValues
+  ): {
+    [key: string]: string | boolean;
+    action: string;
+  }[] {
     const fieldsSettings = this.fillingFieldsSettingsObject[formKey];
     const actions: {
       [key: string]: string | boolean;

@@ -16,6 +16,13 @@ type CustomerFields = {
   fields: CustomerField[];
 };
 
+type PasswordFields = {
+  fields: {
+    inputName: string;
+    dataKey: string;
+  }[];
+};
+
 interface DefaultCheckboxType extends CustomerField {
   removeActionName: string;
 }
@@ -29,11 +36,12 @@ const { formTypes } = ProfilePageUI;
 const addressSettingsTypes = [formTypes[2], formTypes[3]] as const;
 
 type BasicFieldsSettings = Record<typeof formTypes[0], CustomerFields>;
+type PasswordFieldsSettings = Record<typeof formTypes[1], PasswordFields>;
 type AddressFieldsSettings = Record<typeof addressSettingsTypes[number], AddressFields>;
 
 const settingsTypes = [formTypes[0], formTypes[2], formTypes[3]] as const;
 type SettingsKeys = typeof settingsTypes[number];
-interface Settings extends BasicFieldsSettings, AddressFieldsSettings {}
+interface Settings extends BasicFieldsSettings, PasswordFieldsSettings, AddressFieldsSettings {}
 
 const fillingFieldsSettingsObject: Settings = {
   [ProfilePageUI.formTypes[0]]: {
@@ -57,6 +65,18 @@ const fillingFieldsSettingsObject: Settings = {
         inputName: 'birth-date',
         dataKey: 'dateOfBirth',
         actionName: 'setDateOfBirth',
+      },
+    ],
+  },
+  [ProfilePageUI.formTypes[1]]: {
+    fields: [
+      {
+        inputName: 'password',
+        dataKey: 'currentPassword',
+      },
+      {
+        inputName: 'new-password',
+        dataKey: 'newPassword',
       },
     ],
   },
