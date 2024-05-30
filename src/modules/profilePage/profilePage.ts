@@ -263,7 +263,7 @@ export class ProfilePage {
   }
 
   private writeDataIntoFormFields(data: Customer | Address, formKey: SettingsKeys): void {
-    const form = this.uiApi.forms[formKey].form.form;
+    const { form } = this.uiApi.forms[formKey].form;
     if (formKey === ProfilePage.formTypes[2] || formKey === ProfilePage.formTypes[3]) {
       form.setAttribute(ProfilePage.addressIdAttribute, data.id ?? '');
     }
