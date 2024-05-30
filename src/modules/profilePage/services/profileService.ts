@@ -1,5 +1,5 @@
 import { clientCredentials } from '@root/config';
-import { LocalStorageService, Customer, RegistrationResponse, AuthService } from '@services';
+import { LocalStorageService, Customer, AuthService } from '@services';
 import { getJsonHeaders, handleResponse } from '@shared';
 
 class ProfileService {
@@ -34,7 +34,7 @@ class ProfileService {
       [key: string]: string | boolean;
       action: string;
     }[]
-  ): Promise<RegistrationResponse> {
+  ): Promise<Customer> {
     const userId = LocalStorageService.getUserId();
     if (userId === null) {
       throw new Error(`Can't find customer's id`);
@@ -51,7 +51,7 @@ class ProfileService {
       throw new Error('No access token found');
     }
 
-    const url = `${this.customersUrl}/${userId}`;
+    const url = `${ProfileService.customersUrl}/${userId}`;
     const response = await fetch(url, {
       method: 'POST',
       headers: getJsonHeaders(),
@@ -63,7 +63,8 @@ class ProfileService {
       const errorJson = JSON.parse(errorText);
       throw new Error(errorJson.message || 'The addresses could not be set');
     }
-    return handleResponse(response);
+    const data = await handleResponse(response);
+    return data;
   }
 
   public static async changePassword(

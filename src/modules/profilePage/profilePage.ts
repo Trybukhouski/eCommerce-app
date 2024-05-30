@@ -15,6 +15,8 @@ export class ProfilePage {
 
   static readonly formTypes = ProfilePageUI.formTypes;
 
+  static readonly addressIdAttribute = 'data-address-id';
+
   private readonly fillingFieldsSettingsObject = fillingFieldsSettingsObject;
 
   private userDataCache?: Customer;
@@ -115,28 +117,65 @@ export class ProfilePage {
     changed: ChangedInputsWithValues,
     removeSubmitListener: () => void
   ): Promise<void> {
-    let request: () => void;
+    let request: () => void | Promise<Customer>;
     if (formKey === ProfilePage.formTypes[0]) {
       const actions = this.createProfileInfoActions(formKey, changed);
       request = ProfileService.sendActions.bind(null, actions);
     } else if (formKey === ProfilePage.formTypes[1]) {
       request = this.createPasswordRequest(changed);
     } else {
-      request = () => {};
+      request = this.createChangeAddressAction(formKey);
     }
     try {
-      await request();
+      const data = await request();
       NotificationService.displaySuccess('The information has been updated');
       removeSubmitListener();
       this.uiApi.toggleFormEditing(formKey, false);
       if (formKey === ProfilePage.formTypes[1]) {
         this.cleanPasswordFields();
+      } else if (data && formKey !== ProfilePage.formTypes[0]) {
+        this.addBasicUserData(data);
       }
     } catch (error) {
       NotificationService.displayError(
         error instanceof Error ? error.message : 'Error fetching customer version'
       );
     }
+  }
+
+  private createChangeAddressAction(
+    formKey: typeof ProfilePage.formTypes[2] | typeof ProfilePage.formTypes[3]
+  ): () => Promise<Customer> {
+    const settings = this.fillingFieldsSettingsObject[formKey].fields;
+    const addressKeys: {
+      [key: string]: string;
+    }[] = [];
+    settings.forEach((s) => {
+      const input = this.uiApi.getFormInputByName(formKey, s.inputName);
+      const value = input ? this.uiApi.getInputValue(input) : undefined;
+      if (!input || !value) {
+        addressKeys.push({
+          [s.dataKey]: '',
+        });
+      } else {
+        addressKeys.push({
+          [s.dataKey]: `${value}`,
+        });
+      }
+    });
+
+    const address = Object.assign({}, {}, ...addressKeys);
+    const addressId = this.uiApi.forms[formKey].form.form.getAttribute(
+      ProfilePage.addressIdAttribute
+    );
+
+    return ProfileService.sendActions.bind(null, [
+      {
+        action: 'changeAddress',
+        addressId: `${addressId}`,
+        address,
+      },
+    ]);
   }
 
   private createPasswordRequest(changed: ChangedInputsWithValues): () => void {
@@ -224,6 +263,10 @@ export class ProfilePage {
   }
 
   private writeDataIntoFormFields(data: Customer | Address, formKey: SettingsKeys): void {
+    const form = this.uiApi.forms[formKey].form.form;
+    if (formKey === ProfilePage.formTypes[2] || formKey === ProfilePage.formTypes[3]) {
+      form.setAttribute(ProfilePage.addressIdAttribute, data.id ?? '');
+    }
     const fieldsSettingsForFilling = this.fillingFieldsSettingsObject[formKey];
 
     const { fields } = fieldsSettingsForFilling;
