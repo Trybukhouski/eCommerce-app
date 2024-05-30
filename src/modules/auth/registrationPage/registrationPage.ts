@@ -202,7 +202,7 @@ class RegistrPage {
     }
 
     try {
-      AuthService.sendAddressAndBirthdayActions(customerId, actionsArr);
+      await AuthService.sendAddressAndBirthdayActions(customerId, actionsArr);
     } catch (error) {
       NotificationService.displayError(
         error instanceof Error ? error.message : 'Error fetching customer version'
