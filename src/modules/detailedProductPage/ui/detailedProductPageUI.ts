@@ -136,14 +136,14 @@ export class DetailedProductPageUI {
   private addClass(elementKey: keyof DetailedProductPageUI, className: string): void {
     const element = this[elementKey];
     if (element instanceof HTMLElement) {
-      element.classList.add(styles[className]);
+      element.classList.add(className);
     }
   }
 
   private removeClass(elementKey: keyof DetailedProductPageUI, className: string): void {
     const element = this[elementKey];
     if (element instanceof HTMLElement) {
-      element.classList.remove(styles[className]);
+      element.classList.remove(className);
     }
   }
 
@@ -154,7 +154,10 @@ export class DetailedProductPageUI {
     }
   }
 
-  public updateClassName(elementKey: keyof DetailedProductPageUI, className: string): void {
+  public updateClassName(
+    elementKey: keyof DetailedProductPageUI,
+    className: keyof typeof styles
+  ): void {
     const element = this[elementKey];
     if (element instanceof HTMLElement) {
       element.className = styles[className];
