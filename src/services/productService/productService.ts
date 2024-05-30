@@ -2,6 +2,7 @@ import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
 import { getHeaders } from '@root/shared/utils/apiHelpers';
 import { Product } from '@root/services/interfaces';
+import placeholderImage from '@assets/images/placeholderImage.jpg';
 
 export class ProductService {
   private static baseUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/products`;
@@ -59,6 +60,33 @@ export class ProductService {
   }
 
   private static getPlaceholderImage(): string {
-    return 'https://via.placeholder.com/150'; // URL изображения-заглушки
+    return placeholderImage;
+  }
+
+  public static async getProducts(): Promise<Product[]> {
+    const url = `${this.baseUrl}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch products: ${errorText}`);
+    }
+
+    const data = await handleResponse(response);
+    return data.results;
+  }
+
+  public static async getProductList(): Promise<
+    { name: string; image: string; description: string }[]
+  > {
+    const products = await this.getProducts();
+    return products.map((product) => ({
+      name: product.masterData.current.name?.['en'] || 'No Name',
+      image: product.masterData.current.masterVariant.images[0]?.url || this.getPlaceholderImage(),
+      description: product.masterData.current.description?.['en'] || 'No Description',
+    }));
   }
 }

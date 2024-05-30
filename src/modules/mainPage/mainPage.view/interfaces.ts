@@ -5,6 +5,7 @@ interface PagesElementsAndRoot extends PagesElements {
   header: HTMLElement;
   mainContent: HTMLElement;
   root: HTMLElement;
+  detailedProductPage?: HTMLElement;
 }
 
 export { PagesElementsAndRoot as PagesElements };
