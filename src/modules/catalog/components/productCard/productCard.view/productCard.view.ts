@@ -1,5 +1,5 @@
+import { ProductDetailOptions } from '@root/services/productService';
 import { ProductCardMap } from '../productCard.map';
-import { ProductDetailOptions } from '../interfaces/ProductDetailOptions';
 import * as styles from './styles.module.scss';
 
 export class ProductCardView extends ProductCardMap {
@@ -27,6 +27,7 @@ export class ProductCardView extends ProductCardMap {
     this.root.classList.add(styles.root);
     image.classList.add(styles.image);
     image.src = detail.urls.mainImage;
+    image.alt = `Image of ${detail.titleText || 'image of the product'}`;
     const imageFrame = document.createElement('div');
     imageFrame.classList.add(styles.imageFrame);
     imageFrame.append(image);
@@ -42,11 +43,7 @@ export class ProductCardView extends ProductCardMap {
     }
     regularPrice.innerHTML = `$${detail.priceInfo.regularPrice}`;
     price.append(regularPrice);
-    root.append(imageFrame);
-    root.append(title);
-    root.append(description);
-    root.append(price);
-    root.append(button);
+    root.append(imageFrame, title, description, price, button);
 
     return this;
   }

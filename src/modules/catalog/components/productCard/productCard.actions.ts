@@ -1,5 +1,5 @@
+import { ProductDetailOptions } from '@root/services/productService';
 import { ProductCardModel } from './productCard.model';
-import { ProductDetailOptions } from './interfaces/ProductDetailOptions';
 
 export class ProductCardActions extends ProductCardModel {
   constructor(detail: ProductDetailOptions) {

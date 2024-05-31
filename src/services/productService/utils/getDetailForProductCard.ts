@@ -1,5 +1,6 @@
 import { Product } from '@root/services/interfaces';
-import { ProductDetailOptions } from '@root/modules/catalog/components/productCard';
+import { ProductDetailOptions } from '@root/services/productService';
+import errorImage from '@assets/images/errorImage.png';
 
 export function getDetailForProductCard(product: Product, locale = 'en-GB'): ProductDetailOptions {
   const responseDetail = product.masterData.current;
@@ -14,7 +15,7 @@ export function getDetailForProductCard(product: Product, locale = 'en-GB'): Pro
       ...(discontPrice !== undefined && { discontPrice: discontPrice / 100 }),
     },
     urls: {
-      mainImage: responseDetail.masterVariant.images[0]?.url || 'error',
+      mainImage: responseDetail.masterVariant.images[0]?.url || errorImage,
     },
   };
 }

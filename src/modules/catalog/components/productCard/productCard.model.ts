@@ -1,5 +1,5 @@
+import { ProductDetailOptions } from '@root/services/productService';
 import { ProductCardView } from './productCard.view/productCard.view';
-import { ProductDetailOptions } from './interfaces/ProductDetailOptions';
 
 export class ProductCardModel extends ProductCardView {
   protected id: string;
