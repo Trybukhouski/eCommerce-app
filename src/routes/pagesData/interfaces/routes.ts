@@ -1,6 +1,7 @@
 export type Routes =
   | 'main'
   | 'catalog'
+  | 'card'
   | 'about'
   | 'registration'
   | 'login'

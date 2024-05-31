@@ -11,8 +11,17 @@ export class Router implements RouterModel {
   }
 
   public observeHashChange(): void {
+    const paramsObj: Record<string, string> = {};
     window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.slice(1);
+      const [hash, params] = window.location.hash.slice(1).split('?');
+      if (params) {
+        params.split('&').forEach((param) => {
+          const [key, value] = param.split('=');
+          if (typeof key === 'string' && typeof value === 'string') {
+            paramsObj[key] = value;
+          }
+        });
+      }
       const hashAfterAvailablePagesCheck: Routes = this.pagesDataModifier
         .getPagesHash()
         .includes(hash as Routes)
@@ -20,17 +29,27 @@ export class Router implements RouterModel {
         : 'error';
       this.pagesDataModifier.setCurrentPage(hashAfterAvailablePagesCheck);
       const hashAfterRedirectionCheck = this.pagesDataModifier.getHashOfCurrentPage();
-      this.setHash(hashAfterRedirectionCheck);
+      if (params) {
+        this.setHash(hashAfterRedirectionCheck, paramsObj);
+      } else {
+        this.setHash(hashAfterRedirectionCheck);
+      }
       this.subscribers.forEach((subscriber) => subscriber.inform(hashAfterRedirectionCheck));
     });
   }
 
-  public setHash(hash: Routes): void {
-    window.location.hash = `#${hash}`;
+  public setHash(hash: string, params?: Record<string, string>): void {
+    let paramString = '';
+    if (params) {
+      const urlParams = new URLSearchParams(params);
+      paramString = `?${urlParams.toString()}`;
+    }
+    window.location.hash = `${hash}${paramString}`;
   }
 
-  public getHash(): string {
-    return window.location.hash.slice(1);
+  public getHash(): string | undefined {
+    const [hash] = window.location.hash.slice(1).split('?');
+    return hash;
   }
 
   public addSubscriber(subscriber: Subscriber) {
