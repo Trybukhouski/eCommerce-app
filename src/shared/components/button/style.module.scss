@@ -24,6 +24,10 @@
   transition: 0.3s background-color;
   cursor: pointer;
 
+  &[data-customColor='blue'] {
+    background-color: var(--blue-500);
+  }
+
   &:hover {
     background-color: $hover-button-bg-color;
   }

@@ -22,13 +22,15 @@ export class PagesDataModifier implements PagesDataModifierModel {
     Object.entries(this.pagesData).forEach((pageObj: [string, PageModel]) => {
       const { hash, name, status, current, type } = pageObj[1];
       if (status === 'available') {
-        const linkObj: LinkModel = {
-          hash,
-          name,
-          current,
-          type,
-        };
-        result.push(linkObj);
+        if (name !== 'card') {
+          const linkObj: LinkModel = {
+            hash,
+            name,
+            current,
+            type,
+          };
+          result.push(linkObj);
+        }
       }
     });
     return result;
