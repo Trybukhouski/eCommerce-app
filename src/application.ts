@@ -6,6 +6,7 @@ import {
   ProfilePage,
   RegistrPage,
   ErrorPage,
+  DetailedProductPage,
 } from './modules';
 
 export class Application {
@@ -24,7 +25,7 @@ export class Application {
 
   public init(): void {
     this.createMainPage();
-    this.addLoginedListener();
+    this.addLoggedInListener();
     this.routerStaff(); // TODO: add correct name to this method
   }
 
@@ -40,10 +41,11 @@ export class Application {
       ['loginPage', new LoginPage().elem],
       ['registrationPage', new RegistrPage().elem],
       ['errorPage', new ErrorPage().create().elements.root],
+      ['aboutPage', new DetailedProductPage().elem], // TODO: убрать detailed page с about
     ]);
   }
 
-  private addLoginedListener(): void {
+  private addLoggedInListener(): void {
     this.mainPage.elements.root.addEventListener('logined', (event) => {
       if (event instanceof CustomEvent) {
         if (!event.detail.logined) {

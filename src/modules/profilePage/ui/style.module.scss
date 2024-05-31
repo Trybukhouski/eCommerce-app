@@ -51,11 +51,41 @@
     }
   }
 
+  form:nth-child(4),
+  form:nth-child(5) {
+    fieldset > div:last-child {
+      label {
+        width: 12rem;
+        max-height: 3.75rem;
+      }
+      transition: opacity 0.3s;
+      align-items: center;
+    }
+
+    &:not(:global(.editable)) {
+      fieldset > div:last-child {
+        user-select: none;
+        opacity: 0;
+      }
+    }
+
+    &:global(.editable) {
+      fieldset > div:last-child {
+        user-select: unset;
+        opacity: 1;
+      }
+    }
+  }
+
   form:not(:global(.editable)) {
     button:last-child {
       transform: scale(0);
       width: 0;
       height: 0;
+    }
+
+    &:nth-child(3) input::placeholder {
+      color: transparent;
     }
   }
 

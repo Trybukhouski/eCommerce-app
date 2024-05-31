@@ -8,14 +8,26 @@ import {
   billsInputOptionsWithRuleArr,
 } from '@shared';
 
-const prevPasswordOptions = { ...passwordInputOptionsWithRule.options };
-const newPasswordOptions = {
-  ...prevPasswordOptions,
+function cloneObject(obj: { options: object }, options: object) {
+  const objOptions = { ...obj.options };
+  const newObjOptions = { ...objOptions, ...options };
+  const newObj = { ...obj };
+  newObj.options = newObjOptions;
+  return newObj;
+}
+
+const newPassword = cloneObject(passwordInputOptionsWithRule, {
   labelText: 'New password:',
   name: 'new-password',
-};
-const newPassword = { ...passwordInputOptionsWithRule };
-newPassword.options = newPasswordOptions;
+});
+
+const addressMatch = deliveryInputOptionsWithRuleArr[deliveryInputOptionsWithRuleArr.length - 1];
+if (addressMatch) {
+  const addressMatchBills = cloneObject(addressMatch, {
+    labelText: 'Also use as shipping address',
+  });
+  billsInputOptionsWithRuleArr.push(addressMatchBills);
+}
 
 const mainInputOptionsWithRuleArr = [
   firstNameInputOptionsWithRule,

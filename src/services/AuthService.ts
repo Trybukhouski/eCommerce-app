@@ -2,7 +2,13 @@ import { clientCredentials } from '@root/config';
 import { handleResponse } from '@shared';
 import { getFormHeaders, getJsonHeaders } from '@root/shared/utils/apiHelpers';
 import { LocalStorageService } from '@root/services/localStorageService';
-import { LoginResponse, RegistrationResponse, UserData, AddressAction } from './interfaces';
+import {
+  LoginResponse,
+  RegistrationResponse,
+  UserData,
+  AddressAction,
+  CustomerSignInResult,
+} from './interfaces';
 
 export class AuthService {
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
@@ -10,6 +16,8 @@ export class AuthService {
   private static registerUrl = `${clientCredentials.apiUrl}/ecommerce2024/customers`;
 
   private static tokenUrl = `${clientCredentials.authUrl}/oauth/token?grant_type=client_credentials`;
+
+  private static authUrl = `${clientCredentials.apiUrl}/{projectKey}/login`;
 
   public static async login(username: string, password: string): Promise<LoginResponse> {
     const url = `${this.baseUrl}/token`;
@@ -24,6 +32,32 @@ export class AuthService {
       headers: getFormHeaders(),
       body,
     });
+
+    return handleResponse(response);
+  }
+
+  public static async authenticateCustomer(
+    email: string,
+    password: string
+  ): Promise<CustomerSignInResult> {
+    const { projectKey } = clientCredentials;
+    if (!projectKey) {
+      throw new Error('Project key is not defined');
+    }
+
+    const url = this.authUrl.replace('{projectKey}', projectKey);
+    const body = JSON.stringify({ email, password });
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: getJsonHeaders(),
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to authenticate customer: ${errorText}`);
+    }
 
     return handleResponse(response);
   }

@@ -92,6 +92,13 @@ class Form {
     }
   }
 
+  public static rotateBirthDate(date: string): string {
+    return date
+      .split(/[.-]/)
+      .map((_, ind, arr) => arr[arr.length - ind - 1])
+      .join('-');
+  }
+
   public static getInputElement(input: FormInputs) {
     if (input instanceof Input) {
       return input.input;

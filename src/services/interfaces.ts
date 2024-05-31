@@ -25,6 +25,9 @@ export interface Customer {
   isEmailVerified: boolean;
   // stores: Store[];
   authenticationMode: string;
+  dateOfBirth?: string;
+  defaultShippingAddressId?: string;
+  defaultBillingAddressId?: string;
 }
 
 export interface ModifiedBy {
@@ -127,4 +130,23 @@ export interface Price {
     centAmount: number;
     fractionDigits: number;
   };
+}
+
+export interface LoginCustomer {
+  addresses: Address[];
+  email: string;
+  firstName: string;
+  id: string;
+  isEmailVerified: boolean;
+  lastName: string;
+  password: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  authenticationMode: string;
+  stores: Storage[];
+}
+
+export interface CustomerSignInResult {
+  customer: LoginCustomer;
 }
