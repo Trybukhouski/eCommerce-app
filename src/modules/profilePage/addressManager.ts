@@ -14,18 +14,14 @@ interface AddressAction {
 }
 
 class AddressManager {
-  private fillingFieldsSettingsObject = fillingFieldsSettingsObject;
+  public addressIdAttribute = 'data-address-id';
 
-  private addressIdAttribute = 'data-address-id';
+  private fillingFieldsSettingsObject = fillingFieldsSettingsObject;
 
   private uiApi: ProfilePageUI;
 
   constructor(uiApi: ProfilePageUI) {
     this.uiApi = uiApi;
-  }
-
-  public getAddressId(formKey: AddressKeys) {
-    return this.uiApi.forms[formKey].form.form.getAttribute(this.addressIdAttribute);
   }
 
   public async chooseAddOrUpdateAddress(
@@ -36,9 +32,8 @@ class AddressManager {
     const secondKey = formKey === formTypes[2] ? formTypes[3] : formTypes[2];
     const [firstId, secondId] = [formKey, secondKey].map((k) => this.getAddressId(k));
     const isIdMatch = firstId === secondId;
-    const input = this.uiApi.getFormInputByName(formKey, 'address-match');
-    const useAlsoValue = input ? this.uiApi.getInputValue(input) : undefined;
-    if (useAlsoValue === undefined || !input || !firstId || !secondId) {
+    const useAlsoValue = this.uiApi.getInputValueByName(formKey, 'address-match');
+    if (useAlsoValue === undefined || !firstId || !secondId) {
       return () => {};
     }
 
@@ -47,7 +42,7 @@ class AddressManager {
       actions = this.createChangeAddressAction(formKey, changed);
     } else if (!isIdMatch && useAlsoValue) {
       actions = [
-        ...(this.createAddOrRemoveAddressAction({
+        ...(this.createAddAndRemoveAddressAction({
           formKey: secondKey,
           prevId: secondId,
           nextId: firstId,
@@ -57,7 +52,7 @@ class AddressManager {
     } else if (isIdMatch && !useAlsoValue) {
       const addAction = this.createChangeAddressAction(formKey, changed, true);
       const response = await (addAction ? ProfileService.sendActions(addAction) : undefined);
-      actions = this.createAddOrRemoveAddressAction({
+      actions = this.createAddAndRemoveAddressAction({
         formKey,
         customer: response,
         prevId: secondId,
@@ -69,7 +64,11 @@ class AddressManager {
     return ProfileService.sendActions.bind(null, actions);
   }
 
-  public createAddOrRemoveAddressAction(options: {
+  private getAddressId(formKey: AddressKeys): string | null {
+    return this.uiApi.forms[formKey].form.form.getAttribute(this.addressIdAttribute);
+  }
+
+  private createAddAndRemoveAddressAction(options: {
     formKey: AddressKeys;
     customer?: Customer;
     prevId?: string | null;
@@ -105,7 +104,7 @@ class AddressManager {
     ];
   }
 
-  public createChangeAddressAction(
+  private createChangeAddressAction(
     formKey: AddressKeys,
     changed: ChangedInputsWithValues,
     isAdd = false
@@ -115,16 +114,15 @@ class AddressManager {
       [key: string]: string;
     }[] = [];
     settings.forEach((s) => {
-      const input = this.uiApi.getFormInputByName(formKey, s.inputName);
-      const value = input ? this.uiApi.getInputValue(input) : undefined;
-      if (!input || !value) {
+      const value = this.uiApi.getInputValueByName(formKey, s.inputName);
+      if (!value) {
         addressKeys.push({ [s.dataKey]: '' });
       } else {
         addressKeys.push({ [s.dataKey]: `${value}` });
       }
     });
     const address = Object.assign({}, ...addressKeys);
-    const addressId = this.uiApi.forms[formKey].form.form.getAttribute(this.addressIdAttribute);
+    const addressId = this.getAddressId(formKey);
     if (addressId === null) return undefined;
     const actionsArr: AddressAction[] = [
       {
@@ -143,7 +141,7 @@ class AddressManager {
     return actionsArr;
   }
 
-  public createDefaultAddressAction(
+  private createDefaultAddressAction(
     formKey: AddressKeys,
     changed: ChangedInputsWithValues,
     addressId: string

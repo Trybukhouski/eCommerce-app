@@ -14,8 +14,6 @@ export class ProfilePage {
 
   static readonly formTypes = ProfilePageUI.formTypes;
 
-  static readonly addressIdAttribute = 'data-address-id';
-
   private readonly fillingFieldsSettingsObject = fillingFieldsSettingsObject;
 
   private userDataCache?: Customer;
@@ -168,9 +166,8 @@ export class ProfilePage {
     const { formTypes } = ProfilePage;
     const settings = this.fillingFieldsSettingsObject[formTypes[1]].fields;
     settings.forEach((s) => {
-      const input = this.uiApi.getFormInputByName(formTypes[1], s.inputName);
-      if (!input) return;
-      const inputElement = Form.getInputElement(input);
+      const inputElement = this.uiApi.getInputElementByName(formTypes[1], s.inputName);
+      if (!inputElement) return;
       inputElement.value = '';
     });
   }
@@ -232,7 +229,7 @@ export class ProfilePage {
   private writeDataIntoFormFields(data: Customer | Address, formKey: SettingsKeys): void {
     const { form } = this.uiApi.forms[formKey].form;
     if (formKey === ProfilePage.formTypes[2] || formKey === ProfilePage.formTypes[3]) {
-      form.setAttribute(ProfilePage.addressIdAttribute, data.id ?? '');
+      form.setAttribute(this.addressManager.addressIdAttribute, data.id ?? '');
     }
     const fieldsSettingsForFilling = this.fillingFieldsSettingsObject[formKey];
 
@@ -247,8 +244,7 @@ export class ProfilePage {
     formKey: SettingsKeys,
     field: (CustomerFields | AddressFields)['fields'][number]
   ): void {
-    const input = this.uiApi.getFormInputByName(formKey, field.inputName);
-    const inputElement = input ? Form.getInputElement(input) : undefined;
+    const inputElement = this.uiApi.getInputElementByName(formKey, field.inputName);
 
     const isCheckbox = inputElement instanceof HTMLInputElement && inputElement.type === 'checkbox';
     let value: Customer[keyof Customer];
@@ -258,7 +254,7 @@ export class ProfilePage {
       value = (data as Address)[field.dataKey as keyof Address];
     }
 
-    if (!input || value === undefined || !inputElement) {
+    if (!inputElement || value === undefined || !inputElement) {
       return;
     }
 

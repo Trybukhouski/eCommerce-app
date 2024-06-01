@@ -53,6 +53,22 @@ class ProfilePageUI {
     this.addDecorativeElements();
   }
 
+  public getInputValueByName(
+    formkey: KeyOfProfileForms,
+    name: string
+  ): string | boolean | undefined {
+    const input = this.getFormInputByName(formkey, name);
+    return input ? this.getInputValue(input) : undefined;
+  }
+
+  public getInputElementByName(
+    formkey: KeyOfProfileForms,
+    name: string
+  ): HTMLInputElement | HTMLSelectElement | undefined {
+    const input = this.getFormInputByName(formkey, name);
+    return input ? Form.getInputElement(input) : undefined;
+  }
+
   public getFormInputByName(formkey: KeyOfProfileForms, name: string): FormInputs | undefined {
     const form = this.forms[formkey];
     return form.form.inputArr.find((i) => Form.getInputElement(i).name === name);
