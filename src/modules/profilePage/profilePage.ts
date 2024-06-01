@@ -6,6 +6,11 @@ import { AddressFields, CustomerFields, SettingsKeys, fillingFieldsSettingsObjec
 
 type ChangedInputsWithValues = (readonly [FormInputs, string | boolean])[];
 
+interface AddressAction {
+  [key: string]: string | boolean | null;
+  action: string;
+}
+
 export class ProfilePage {
   public elem: HTMLElement;
 
@@ -29,9 +34,9 @@ export class ProfilePage {
     this.addLoggedInListener();
   }
 
-  public async displayUserData(update = false): Promise<void> {
+  public async displayUserData(update = false, customer?: Customer): Promise<void> {
     if (!this.userDataCache || update) {
-      const response = await this.serverService.getCustomer();
+      const response = customer ? customer : await this.serverService.getCustomer();
       this.userDataCache = response;
     }
     const data = this.userDataCache;
@@ -124,7 +129,7 @@ export class ProfilePage {
     } else if (formKey === ProfilePage.formTypes[1]) {
       request = this.createPasswordRequest(changed);
     } else {
-      request = this.createChangeAddressAction(formKey);
+      request = await this.chooseAddOrUpdateAddress(formKey, changed);
     }
     try {
       const data = await request();
@@ -134,7 +139,7 @@ export class ProfilePage {
       if (formKey === ProfilePage.formTypes[1]) {
         this.cleanPasswordFields();
       } else if (data && formKey !== ProfilePage.formTypes[0]) {
-        this.addBasicUserData(data);
+        this.displayUserData(true, data);
       }
     } catch (error) {
       NotificationService.displayError(
@@ -143,9 +148,91 @@ export class ProfilePage {
     }
   }
 
+  private getAddressId(formKey: typeof ProfilePage.formTypes[2] | typeof ProfilePage.formTypes[3]) {
+    return this.uiApi.forms[formKey].form.form.getAttribute(ProfilePage.addressIdAttribute);
+  }
+
+  private checkAddressIdMatch(): boolean {
+    const formTypes = ProfilePage.formTypes;
+    const ids = [formTypes[2], formTypes[3]].map((t) => this.getAddressId(t));
+    return !!(ids[0] && ids[1] && ids[0] === ids[1]);
+  }
+
+  private async chooseAddOrUpdateAddress(
+    formKey: typeof ProfilePage.formTypes[2] | typeof ProfilePage.formTypes[3],
+    changed: ChangedInputsWithValues
+  ) {
+    const formTypes = ProfilePage.formTypes;
+    const isIdMatch = this.checkAddressIdMatch();
+
+    const input = this.uiApi.getFormInputByName(formKey, 'address-match');
+    const useAlsoValue = input ? this.uiApi.getInputValue(input) : undefined;
+    if (undefined) {
+      () => {};
+    }
+
+    const secondKey = formKey === formTypes[2] ? formTypes[3] : formTypes[2];
+    const secondID = this.getAddressId(secondKey);
+    const actionsArr: AddressAction[] = [];
+
+    let actions: AddressAction[] | undefined;
+    if ((isIdMatch && useAlsoValue) || (!isIdMatch && !useAlsoValue)) {
+      actions = this.createChangeAddressAction(formKey, changed);
+    } else if (!isIdMatch && useAlsoValue) {
+      // this.createChangeAddressAction(); formKey
+      // this.createDeleteAddressAction(); secondKey
+      // this.createAddAddressAction(); secondKey
+    } else if (isIdMatch && !useAlsoValue) {
+      const addAction = this.createChangeAddressAction(formKey, changed, true);
+      const response = await (addAction ? ProfileService.sendActions(addAction) : undefined);
+      actions = this.createAddOrRemoveAddressAction(formKey, response, secondID);
+    }
+    actions ? actionsArr.push(...actions) : {};
+
+    return ProfileService.sendActions.bind(null, actionsArr);
+  }
+
+  private createAddOrRemoveAddressAction(
+    formKey: typeof ProfilePage.formTypes[2] | typeof ProfilePage.formTypes[3],
+    customer?: Customer,
+    prevId?: string | null
+  ) {
+    const addresses = customer ? customer.addresses : undefined;
+    const id = addresses ? addresses[addresses.length - 1]?.id : undefined;
+    console.log(id);
+    if (!addresses || !id || !prevId) {
+      return undefined;
+    }
+    if (formKey === ProfilePage.formTypes[2]) {
+      return [
+        {
+          action: 'addShippingAddressId',
+          addressId: id,
+        },
+        {
+          action: 'removeShippingAddressId',
+          addressId: prevId,
+        },
+      ];
+    } else {
+      return [
+        {
+          action: 'addBillingAddressId',
+          addressId: id,
+        },
+        {
+          action: 'removeBillingAddressId',
+          addressId: prevId,
+        },
+      ];
+    }
+  }
+
   private createChangeAddressAction(
-    formKey: typeof ProfilePage.formTypes[2] | typeof ProfilePage.formTypes[3]
-  ): () => Promise<Customer> {
+    formKey: typeof ProfilePage.formTypes[2] | typeof ProfilePage.formTypes[3],
+    changed: ChangedInputsWithValues,
+    isAdd = false
+  ) {
     const settings = this.fillingFieldsSettingsObject[formKey].fields;
     const addressKeys: {
       [key: string]: string;
@@ -154,13 +241,9 @@ export class ProfilePage {
       const input = this.uiApi.getFormInputByName(formKey, s.inputName);
       const value = input ? this.uiApi.getInputValue(input) : undefined;
       if (!input || !value) {
-        addressKeys.push({
-          [s.dataKey]: '',
-        });
+        addressKeys.push({ [s.dataKey]: '' });
       } else {
-        addressKeys.push({
-          [s.dataKey]: `${value}`,
-        });
+        addressKeys.push({ [s.dataKey]: `${value}` });
       }
     });
 
@@ -168,14 +251,46 @@ export class ProfilePage {
     const addressId = this.uiApi.forms[formKey].form.form.getAttribute(
       ProfilePage.addressIdAttribute
     );
-
-    return ProfileService.sendActions.bind(null, [
+    if (addressId === null) {
+      return undefined;
+    }
+    const actionsArr: AddressAction[] = [
       {
-        action: 'changeAddress',
+        action: isAdd ? 'addAddress' : 'changeAddress',
         addressId: `${addressId}`,
         address,
       },
-    ]);
+    ];
+    if (isAdd && actionsArr[0]) {
+      delete actionsArr[0]['addressId'];
+    }
+    const defaultAction = this.createDefaultAddressAction(formKey, changed, addressId);
+    defaultAction ? actionsArr.push(defaultAction) : {};
+
+    return actionsArr;
+  }
+
+  private createDefaultAddressAction(
+    formKey: typeof ProfilePage.formTypes[2] | typeof ProfilePage.formTypes[3],
+    changed: ChangedInputsWithValues,
+    addressId: string
+  ):
+    | {
+        [key: string]: string | boolean | null;
+        action: string;
+      }
+    | undefined {
+    const checkboxSettings = this.fillingFieldsSettingsObject[formKey].defaultCheckbox;
+    const checkboxInputAndValue = changed.find(
+      (pair) => Form.getInputElement(pair[0]).name === checkboxSettings.inputName
+    );
+    if (!checkboxInputAndValue) {
+      return undefined;
+    }
+    return {
+      action: 'setDefaultShippingAddress',
+      addressId: checkboxInputAndValue[1] ? addressId : null,
+    };
   }
 
   private createPasswordRequest(changed: ChangedInputsWithValues): () => void {
@@ -246,8 +361,8 @@ export class ProfilePage {
     const { shippingAddressIds } = data;
     const { billingAddressIds } = data;
 
-    const lastShippingAddressId = shippingAddressIds[billingAddressIds.length - 1];
-    const lastBillingAddressId = billingAddressIds[billingAddressIds.length - 1];
+    const lastShippingAddressId = shippingAddressIds[0];
+    const lastBillingAddressId = billingAddressIds[0];
 
     ([
       [lastShippingAddressId, formTypes[2]],

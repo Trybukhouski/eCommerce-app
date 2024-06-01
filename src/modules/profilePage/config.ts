@@ -23,9 +23,7 @@ type PasswordFields = {
   }[];
 };
 
-interface DefaultCheckboxType extends CustomerField {
-  removeActionName: string;
-}
+interface DefaultCheckboxType extends CustomerField {}
 
 type AddressFields = {
   fields: AddressField[];
@@ -103,7 +101,6 @@ const fillingFieldsSettingsObject: Settings = {
       inputName: 'delivery-default',
       dataKey: 'defaultShippingAddressId',
       actionName: 'setDefaultShippingAddress',
-      removeActionName: 'removeShippingAddressId',
     },
   },
   [ProfilePageUI.formTypes[3]]: {
@@ -129,7 +126,6 @@ const fillingFieldsSettingsObject: Settings = {
       inputName: 'bills-default',
       dataKey: 'defaultBillingAddressId',
       actionName: 'setDefaultBillingAddress',
-      removeActionName: 'removeBillingAddressId',
     },
   },
 };

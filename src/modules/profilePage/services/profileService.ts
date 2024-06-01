@@ -31,7 +31,7 @@ class ProfileService {
 
   public static async sendActions(
     actions: {
-      [key: string]: string | boolean;
+      [key: string]: string | boolean | null;
       action: string;
     }[]
   ): Promise<Customer> {
