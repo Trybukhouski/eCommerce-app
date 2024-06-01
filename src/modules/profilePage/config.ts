@@ -23,7 +23,7 @@ type PasswordFields = {
   }[];
 };
 
-interface DefaultCheckboxType extends CustomerField {}
+type DefaultCheckboxType = CustomerField;
 
 type AddressFields = {
   fields: AddressField[];
