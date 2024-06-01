@@ -1,3 +1,2 @@
-export { CatalogPageView as CatalogPage } from './catalogPage.view/catalogPage.view';
-export * from './catalogPage.view';
+export { CatalogPageState as CatalogPage } from './catalogPage.state';
 export * from './components';

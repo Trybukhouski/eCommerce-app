@@ -7,7 +7,7 @@ import {
   RegistrPage,
   ErrorPage,
   DetailedProductPage,
-  CatalogPageView as CatalogPage,
+  CatalogPage,
 } from './modules';
 
 export class Application {

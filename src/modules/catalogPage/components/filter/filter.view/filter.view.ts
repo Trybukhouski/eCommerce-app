@@ -8,6 +8,6 @@ export class FilterView {
   }
 
   private create(): void {
-    this.root.classList.add(styles.root);
+    this.root.classList.add(styles.filter);
   }
 }

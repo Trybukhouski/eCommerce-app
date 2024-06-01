@@ -25,6 +25,7 @@ export class ProductCardView extends ProductCardMap {
   public create(detail: ProductDetailOptions): ProductCardView {
     const { root, title, description, image, regularPrice, discontPrice, button } = this.elements;
     this.root.classList.add(styles.root);
+    this.root.id = detail.id;
     image.classList.add(styles.image);
     image.src = detail.urls.mainImage;
     image.alt = `Image of ${detail.titleText || 'image of the product'}`;

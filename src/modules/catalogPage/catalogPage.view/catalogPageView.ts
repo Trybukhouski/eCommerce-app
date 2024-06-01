@@ -1,3 +1,4 @@
+import { ProductDetailOptions } from '@services';
 import { catalogPageMap } from '../catalogPage.map';
 import * as styles from './styles.module.scss';
 
@@ -8,12 +9,7 @@ export class CatalogPageView extends catalogPageMap {
     filter: new this.components.Filter().root,
   };
 
-  constructor() {
-    super();
-    this.create();
-  }
-
-  private create(): void {
+  protected draw(cards: ProductDetailOptions[]): void {
     const { filter } = this.elements;
     this.root.classList.add(styles.root);
 
@@ -23,11 +19,27 @@ export class CatalogPageView extends catalogPageMap {
 
     const container = document.createElement('div');
     container.classList.add(styles.container);
-    container.append(filter);
 
     const grid = document.createElement('div');
     grid.classList.add(styles.grid);
 
+    container.append(filter, grid);
+
     this.root.append(title, container);
+
+    cards.forEach((card) => {
+      const cardEl = new this.components.ProductCard(card).root;
+      cardEl.addEventListener('click', () => {
+        cardEl.dispatchEvent(
+          new CustomEvent('clickOnCard', {
+            bubbles: true,
+            detail: {
+              id: cardEl.getAttribute('id'),
+            },
+          })
+        );
+      });
+      grid.append(cardEl);
+    });
   }
 }
