@@ -154,75 +154,79 @@ export class ProfilePage {
     return this.uiApi.forms[formKey].form.form.getAttribute(ProfilePage.addressIdAttribute);
   }
 
-  private checkAddressIdMatch(): boolean {
+  private async chooseAddOrUpdateAddress(
+    formKey: AddressKeys,
+    changed: ChangedInputsWithValues
+  ): Promise<() => void> {
     const { formTypes } = ProfilePage;
-    const ids = [formTypes[2], formTypes[3]].map((t) => this.getAddressId(t));
-    return !!(ids[0] && ids[1] && ids[0] === ids[1]);
-  }
-
-  private async chooseAddOrUpdateAddress(formKey: AddressKeys, changed: ChangedInputsWithValues) {
-    const { formTypes } = ProfilePage;
-    const isIdMatch = this.checkAddressIdMatch();
-
+    const secondKey = formKey === formTypes[2] ? formTypes[3] : formTypes[2];
+    const [firstId, secondId] = [formKey, secondKey].map((k) => this.getAddressId(k));
+    const isIdMatch = firstId === secondId;
     const input = this.uiApi.getFormInputByName(formKey, 'address-match');
     const useAlsoValue = input ? this.uiApi.getInputValue(input) : undefined;
-    if (useAlsoValue === undefined || !input) {
+    if (useAlsoValue === undefined || !input || !firstId || !secondId) {
       return () => {};
     }
-
-    const secondKey = formKey === formTypes[2] ? formTypes[3] : formTypes[2];
-    const secondID = this.getAddressId(secondKey);
-    const actionsArr: AddressAction[] = [];
 
     let actions: AddressAction[] | undefined;
     if ((isIdMatch && useAlsoValue) || (!isIdMatch && !useAlsoValue)) {
       actions = this.createChangeAddressAction(formKey, changed);
     } else if (!isIdMatch && useAlsoValue) {
-      // this.createChangeAddressAction(); formKey
-      // this.createDeleteAddressAction(); secondKey
-      // this.createAddAddressAction(); secondKey
+      actions = [
+        ...(this.createAddOrRemoveAddressAction({
+          formKey: secondKey,
+          prevId: secondId,
+          nextId: firstId,
+        }) ?? []),
+        ...(this.createChangeAddressAction(formKey, changed) ?? []),
+      ];
     } else if (isIdMatch && !useAlsoValue) {
       const addAction = this.createChangeAddressAction(formKey, changed, true);
       const response = await (addAction ? ProfileService.sendActions(addAction) : undefined);
-      actions = this.createAddOrRemoveAddressAction(formKey, response, secondID);
+      actions = this.createAddOrRemoveAddressAction({
+        formKey,
+        customer: response,
+        prevId: secondId,
+      });
     }
-    if (actions) {
-      actionsArr.push(...actions);
+    if (!actions) {
+      return () => {};
     }
-
-    return ProfileService.sendActions.bind(null, actionsArr);
+    return ProfileService.sendActions.bind(null, actions);
   }
 
-  private createAddOrRemoveAddressAction(
-    formKey: AddressKeys,
-    customer?: Customer,
-    prevId?: string | null
-  ) {
-    const addresses = customer ? customer.addresses : undefined;
-    const id = addresses ? addresses[addresses.length - 1]?.id : undefined;
-    if (!addresses || !id || !prevId) {
+  private createAddOrRemoveAddressAction(options: {
+    formKey: AddressKeys;
+    customer?: Customer;
+    prevId?: string | null;
+    nextId?: string | null;
+  }): AddressAction[] | undefined {
+    const addresses = options.customer ? options.customer.addresses : undefined;
+    let id = options.nextId ? options.nextId : undefined;
+    if (!id) {
+      id = addresses ? addresses[addresses.length - 1]?.id : undefined;
+    }
+    if (!id || !options.prevId) {
       return undefined;
     }
-    if (formKey === ProfilePage.formTypes[2]) {
-      return [
-        {
-          action: 'addShippingAddressId',
-          addressId: id,
-        },
-        {
-          action: 'removeShippingAddressId',
-          addressId: prevId,
-        },
-      ];
+
+    let addAddressAction: string;
+    let removeAddressAction: string;
+    if (options.formKey === ProfilePage.formTypes[2]) {
+      addAddressAction = 'addShippingAddressId';
+      removeAddressAction = 'removeShippingAddressId';
+    } else {
+      addAddressAction = 'addBillingAddressId';
+      removeAddressAction = 'removeBillingAddressId';
     }
     return [
       {
-        action: 'addBillingAddressId',
+        action: addAddressAction,
         addressId: id,
       },
       {
-        action: 'removeBillingAddressId',
-        addressId: prevId,
+        action: removeAddressAction,
+        addressId: options.prevId,
       },
     ];
   }
