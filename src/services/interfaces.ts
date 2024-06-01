@@ -83,6 +83,7 @@ export interface AddressAction {
 
 export interface Product {
   id: string;
+  key: string;
   version: number;
   masterData: MasterData;
 }
@@ -117,7 +118,13 @@ export interface Image {
 }
 
 export interface Price {
+  country: string;
   id: string;
+  discounted?: {
+    value: {
+      centAmount: number;
+    };
+  };
   value: {
     currencyCode: string;
     centAmount: number;
