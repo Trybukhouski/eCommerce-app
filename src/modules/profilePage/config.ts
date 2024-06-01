@@ -130,4 +130,6 @@ const fillingFieldsSettingsObject: Settings = {
   },
 };
 
+Object.freeze(fillingFieldsSettingsObject);
+
 export { Settings, SettingsKeys, AddressFields, CustomerFields, fillingFieldsSettingsObject };
