@@ -20,6 +20,12 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
+  private sliderIndex = 0;
+
+  private totalThumbnails: number;
+
+  private thumbnailsWrapper: HTMLElement | null = null;
+
   constructor() {
     this.elem = document.createElement('div');
     this.elem.className = styles['page-container'];
@@ -36,17 +42,21 @@ export class DetailedProductPageUI {
     this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
 
-    this.thumbnailsContainer = this.createThumbnailImages([
+    this.thumbnailsContainer = this.createThumbnailContainer([
+      thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
     ]);
+    this.totalThumbnails = 4;
+
     this.productDescription = this.createDescription();
     this.priceContainer = this.createPriceContainer();
     this.addToCartButton = this.createAddToCartButton();
 
     this.assembleUI();
+    this.updateThumbnails();
   }
 
   private assembleUI(): void {
@@ -65,16 +75,61 @@ export class DetailedProductPageUI {
     return column;
   }
 
-  private createThumbnailImages(paths: string[]): HTMLElement {
-    const thumbnails = document.createElement('div');
-    thumbnails.className = styles['thumbnail-images'];
+  private createThumbnailContainer(paths: string[]): HTMLElement {
+    const container = document.createElement('div');
+    container.className = styles['thumbnail-container'];
+
+    const prevButton = document.createElement('button');
+    prevButton.className = styles['slider-button'];
+    prevButton.textContent = '<';
+    prevButton.onclick = this.showPreviousImage.bind(this);
+
+    const nextButton = document.createElement('button');
+    nextButton.className = styles['slider-button'];
+    nextButton.textContent = '>';
+    nextButton.onclick = this.showNextImage.bind(this);
+
+    container.appendChild(prevButton);
+
+    const thumbnailsWrapper = document.createElement('div');
+    thumbnailsWrapper.className = styles['thumbnails-wrapper'];
+    this.thumbnailsWrapper = thumbnailsWrapper;
     paths.forEach((path) => {
       const img = document.createElement('img');
       img.src = path;
       img.alt = `Thumbnail of ${path}`;
-      thumbnails.appendChild(img);
+      thumbnailsWrapper.appendChild(img);
     });
-    return thumbnails;
+
+    container.appendChild(thumbnailsWrapper);
+    container.appendChild(nextButton);
+
+    return container;
+  }
+
+  private showPreviousImage(): void {
+    if (this.sliderIndex > 0) {
+      this.sliderIndex--;
+      this.updateThumbnails();
+    }
+  }
+
+  private showNextImage(): void {
+    if (this.sliderIndex < this.totalThumbnails - 1) {
+      this.sliderIndex++;
+      this.updateThumbnails();
+    }
+  }
+
+  private updateThumbnails(): void {
+    if (this.thumbnailsWrapper && this.thumbnailsWrapper.firstElementChild) {
+      // Ensure the first child is treated as an HTMLElement
+      const firstChild = this.thumbnailsWrapper.firstElementChild as HTMLElement;
+      const thumbnailWidth = firstChild.offsetWidth + 1;
+      this.thumbnailsWrapper.style.transform = `translateX(${
+        -this.sliderIndex * thumbnailWidth
+      }px)`;
+    }
   }
 
   private createDescriptionColumn(): HTMLElement {
@@ -123,44 +178,5 @@ export class DetailedProductPageUI {
     const { button } = new Button(buttonOptions);
     button.className = styles['add-to-cart'];
     return button;
-  }
-
-  public activateElement(elementKey: keyof DetailedProductPageUI): void {
-    this.addClass(elementKey, 'active');
-  }
-
-  public deactivateElement(elementKey: keyof DetailedProductPageUI): void {
-    this.removeClass(elementKey, 'active');
-  }
-
-  private addClass(elementKey: keyof DetailedProductPageUI, className: string): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.classList.add(className);
-    }
-  }
-
-  private removeClass(elementKey: keyof DetailedProductPageUI, className: string): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.classList.remove(className);
-    }
-  }
-
-  public updateTextContent(elementKey: keyof DetailedProductPageUI, text: string): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.textContent = text;
-    }
-  }
-
-  public updateClassName(
-    elementKey: keyof DetailedProductPageUI,
-    className: keyof typeof styles
-  ): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.className = styles[className];
-    }
   }
 }
