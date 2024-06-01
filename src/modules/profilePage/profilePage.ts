@@ -249,9 +249,7 @@ export class ProfilePage {
     const addressId = this.uiApi.forms[formKey].form.form.getAttribute(
       ProfilePage.addressIdAttribute
     );
-    if (addressId === null) {
-      return undefined;
-    }
+    if (addressId === null) return undefined;
     const actionsArr: AddressAction[] = [
       {
         action: isAdd ? 'addAddress' : 'changeAddress',
