@@ -1,6 +1,7 @@
 import { Button, ButtonOptions } from '@shared';
 import mainImagePath from '@assets/images/main-image.jpg';
 import thumbnail1Path from '@assets/images/thumbnail1.jpg';
+import { Slider } from '@root/shared/utils/slider';
 import * as styles from './styles.module.scss';
 
 export class DetailedProductPageUI {
@@ -20,11 +21,7 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
-  private sliderIndex = 0;
-
-  private totalThumbnails: number;
-
-  private thumbnailsWrapper: HTMLElement | null = null;
+  private slider!: Slider; // Экземпляр слайдера
 
   constructor() {
     this.elem = document.createElement('div');
@@ -42,21 +39,21 @@ export class DetailedProductPageUI {
     this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
 
-    this.thumbnailsContainer = this.createThumbnailContainer([
+    const thumbnailPaths = [
       thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
-    ]);
-    this.totalThumbnails = 4;
+    ];
+
+    this.thumbnailsContainer = this.createThumbnailContainer(thumbnailPaths);
 
     this.productDescription = this.createDescription();
     this.priceContainer = this.createPriceContainer();
     this.addToCartButton = this.createAddToCartButton();
 
     this.assembleUI();
-    this.updateThumbnails();
   }
 
   private assembleUI(): void {
@@ -79,21 +76,8 @@ export class DetailedProductPageUI {
     const container = document.createElement('div');
     container.className = styles['thumbnail-container'];
 
-    const prevButton = document.createElement('button');
-    prevButton.className = styles['slider-button'];
-    prevButton.textContent = '<';
-    prevButton.onclick = this.showPreviousImage.bind(this);
-
-    const nextButton = document.createElement('button');
-    nextButton.className = styles['slider-button'];
-    nextButton.textContent = '>';
-    nextButton.onclick = this.showNextImage.bind(this);
-
-    container.appendChild(prevButton);
-
     const thumbnailsWrapper = document.createElement('div');
     thumbnailsWrapper.className = styles['thumbnails-wrapper'];
-    this.thumbnailsWrapper = thumbnailsWrapper;
     paths.forEach((path) => {
       const img = document.createElement('img');
       img.src = path;
@@ -101,35 +85,23 @@ export class DetailedProductPageUI {
       thumbnailsWrapper.appendChild(img);
     });
 
-    container.appendChild(thumbnailsWrapper);
-    container.appendChild(nextButton);
+    // Создаем экземпляр слайдера
+    // Example: Assuming 2 thumbnails are visible at the same time
+    this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
 
+    // Добавляем кнопки управления слайдером
+    const prevButton = document.createElement('button');
+    prevButton.className = styles['slider-button'];
+    prevButton.textContent = '<';
+    prevButton.onclick = () => this.slider.showPreviousImage();
+
+    const nextButton = document.createElement('button');
+    nextButton.className = styles['slider-button'];
+    nextButton.textContent = '>';
+    nextButton.onclick = () => this.slider.showNextImage();
+
+    container.append(prevButton, thumbnailsWrapper, nextButton);
     return container;
-  }
-
-  private showPreviousImage(): void {
-    if (this.sliderIndex > 0) {
-      this.sliderIndex--;
-      this.updateThumbnails();
-    }
-  }
-
-  private showNextImage(): void {
-    if (this.sliderIndex < this.totalThumbnails - 1) {
-      this.sliderIndex++;
-      this.updateThumbnails();
-    }
-  }
-
-  private updateThumbnails(): void {
-    if (this.thumbnailsWrapper && this.thumbnailsWrapper.firstElementChild) {
-      // Ensure the first child is treated as an HTMLElement
-      const firstChild = this.thumbnailsWrapper.firstElementChild as HTMLElement;
-      const thumbnailWidth = firstChild.offsetWidth + 1;
-      this.thumbnailsWrapper.style.transform = `translateX(${
-        -this.sliderIndex * thumbnailWidth
-      }px)`;
-    }
   }
 
   private createDescriptionColumn(): HTMLElement {
