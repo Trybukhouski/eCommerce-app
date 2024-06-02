@@ -1,2 +1,2 @@
-export { CatalogPageState as CatalogPage } from './catalogPage.state';
+export { CatalogPageActions as CatalogPage } from './catalogPage.actions';
 export * from './components';

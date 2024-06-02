@@ -17,6 +17,14 @@ export class SortWidgetActions extends SortWidgetState {
         this.setSortType(newSortType);
         this.changeStatus();
         this.update(this.isOpened, newSortType);
+        event.target.dispatchEvent(
+          new CustomEvent('sort', {
+            bubbles: true,
+            detail: {
+              sortType: newSortType,
+            },
+          })
+        );
       }
     });
   }
