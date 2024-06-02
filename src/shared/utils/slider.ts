@@ -1,14 +1,18 @@
 export class Slider {
   private sliderIndex = 0;
   private totalThumbnails: number;
-  private visibleThumbnailsCount: number;  // New property to store the number of visible thumbnails
+  private visibleThumbnailsCount: number; // New property to store the number of visible thumbnails
 
   private thumbnailsWrapper: HTMLElement;
 
-  constructor(thumbnailsWrapper: HTMLElement, totalThumbnails: number, visibleThumbnailsCount: number) {
+  constructor(
+    thumbnailsWrapper: HTMLElement,
+    totalThumbnails: number,
+    visibleThumbnailsCount: number
+  ) {
     this.thumbnailsWrapper = thumbnailsWrapper;
     this.totalThumbnails = totalThumbnails;
-    this.visibleThumbnailsCount = visibleThumbnailsCount;  // Initialize with how many thumbnails are visible at once
+    this.visibleThumbnailsCount = visibleThumbnailsCount; // Initialize with how many thumbnails are visible at once
   }
 
   public showPreviousImage(): void {
@@ -29,7 +33,9 @@ export class Slider {
   private updateThumbnails(): void {
     if (this.thumbnailsWrapper.firstElementChild) {
       const thumbnailWidth = (this.thumbnailsWrapper.firstElementChild as HTMLElement).offsetWidth;
-      this.thumbnailsWrapper.style.transform = `translateX(-${this.sliderIndex * thumbnailWidth}px)`;
+      this.thumbnailsWrapper.style.transform = `translateX(-${
+        this.sliderIndex * thumbnailWidth
+      }px)`;
     }
   }
 }
