@@ -7,10 +7,11 @@ export class CatalogPageView extends catalogPageMap {
 
   protected elements = {
     filter: new this.components.Filter().root,
+    sortWidget: new this.components.SortWidget().root,
   };
 
   protected draw(cards: ProductDetailOptions[]): void {
-    const { filter } = this.elements;
+    const { filter, sortWidget } = this.elements;
     this.root.classList.add(styles.root);
 
     const title = document.createElement('h2');
@@ -20,8 +21,14 @@ export class CatalogPageView extends catalogPageMap {
     const container = document.createElement('div');
     container.classList.add(styles.container);
 
+    const controls = document.createElement('div');
+    controls.classList.add(styles.controls);
+    controls.append(sortWidget);
+
     const grid = document.createElement('div');
     grid.classList.add(styles.grid);
+
+    grid.append(controls);
 
     container.append(filter, grid);
 

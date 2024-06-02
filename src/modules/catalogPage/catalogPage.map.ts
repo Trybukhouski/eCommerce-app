@@ -1,10 +1,11 @@
 import { ProductService } from '@services';
-import { Filter, ProductCard } from './components';
+import { Filter, ProductCard, SortWidget } from './components';
 
 export class catalogPageMap {
   protected components = {
     Filter,
     ProductCard,
+    SortWidget,
   };
 
   protected services = {

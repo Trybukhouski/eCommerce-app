@@ -1,0 +1,36 @@
+@import '~@root/style';
+
+.sortWidget {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 2;
+  width: 8rem;
+  background-color: var(--white-100);
+  border-radius: 0.3rem;
+  border: 1px solid var(--grey-100);
+
+  p:not(:first-child) {
+    display: none;
+  }
+
+  &[data-opened='true'] {
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(var(--grey-100));
+    -moz-box-shadow: 0px 4px 10px 1px var(--grey-100);
+    box-shadow: 0px 4px 10px 1px var(--grey-100);
+
+    p {
+      display: block;
+    }
+  }
+
+  p {
+    @include textRegular;
+    padding: 0.5rem;
+  }
+
+  p:hover {
+    cursor: pointer;
+    background-color: var(--grey-100);
+  }
+}
