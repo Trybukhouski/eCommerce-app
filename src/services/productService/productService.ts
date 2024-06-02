@@ -89,4 +89,48 @@ export class ProductService {
       description: product.masterData.current.description?.['en'] || 'No Description',
     }));
   }
+
+  public static async getProductAttributes(): Promise<any> {
+    const url = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/product-projections/attributes`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch product attributes: ${errorText}`);
+    }
+
+    return handleResponse(response);
+  }
+
+  public static async getFilteredProducts(filters: Record<string, string>): Promise<Product[]> {
+    const filterParams = Object.keys(filters)
+      .map((key) => {
+        const value = filters[key];
+        if (value === undefined || value === null) {
+          return '';
+        }
+        // обработка значения перед добавлением в строку параметров
+        return `where=${key}="${encodeURIComponent(value)}"`;
+      })
+      // фильтрация пустых строк
+      .filter((param) => param)
+      .join('&');
+
+    const url = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/product-projections?${filterParams}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch filtered products: ${errorText}`);
+    }
+
+    const data = await handleResponse(response);
+    return data.results;
+  }
 }
