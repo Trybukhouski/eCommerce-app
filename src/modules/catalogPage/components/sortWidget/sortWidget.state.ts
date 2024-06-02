@@ -5,15 +5,15 @@ export class SortWidgetState extends SortWidgetView {
   protected isOpened = false;
 
   private sortConfig: Map<SortTypes, boolean> = new Map([
-    ['Price to low', false],
     ['Price to height', false],
+    ['Price to low', false],
     ['A-Z', false],
     ['Z-A', false],
   ]);
 
   constructor() {
     super();
-    this.setSortType('Price to low');
+    this.setSortType('Price to height');
     this.draw(this.sortConfig, this.isOpened);
   }
 

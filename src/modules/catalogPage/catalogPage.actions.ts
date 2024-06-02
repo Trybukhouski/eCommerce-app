@@ -9,7 +9,7 @@ export class CatalogPageActions extends CatalogPageState {
   private handleClickOnSortWidget(): void {
     this.root.addEventListener('sort', (event) => {
       if (event instanceof CustomEvent) {
-        console.log(event.detail.sortType);
+        this.sortProductCards(event.detail.sortType);
       }
     });
   }

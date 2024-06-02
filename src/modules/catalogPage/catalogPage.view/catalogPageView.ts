@@ -8,10 +8,11 @@ export class CatalogPageView extends catalogPageMap {
   protected elements = {
     filter: new this.components.Filter().root,
     sortWidget: new this.components.SortWidget().root,
+    catalog: document.createElement('div'),
   };
 
-  protected draw(cards: ProductDetailOptions[]): void {
-    const { filter, sortWidget } = this.elements;
+  protected draw(): void {
+    const { filter, sortWidget, catalog } = this.elements;
     this.root.classList.add(styles.root);
 
     const title = document.createElement('h2');
@@ -28,12 +29,16 @@ export class CatalogPageView extends catalogPageMap {
     const grid = document.createElement('div');
     grid.classList.add(styles.grid);
 
-    grid.append(controls);
+    catalog.classList.add(styles.catalog);
 
+    grid.append(controls, catalog);
     container.append(filter, grid);
-
     this.root.append(title, container);
+  }
 
+  protected update(cards: ProductDetailOptions[]): void {
+    const { catalog } = this.elements;
+    catalog.innerHTML = '';
     cards.forEach((card) => {
       const cardEl = new this.components.ProductCard(card).root;
       cardEl.addEventListener('click', () => {
@@ -46,7 +51,7 @@ export class CatalogPageView extends catalogPageMap {
           })
         );
       });
-      grid.append(cardEl);
+      catalog.append(cardEl);
     });
   }
 }

@@ -14,21 +14,24 @@
   grid-template-columns: 25% 1fr;
 }
 
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .title {
   @include title;
   text-align: left;
 }
 
 .controls {
-  position: relative;
   display: flex;
   gap: 1rem;
-  grid-column-start: 1;
-  grid-column-end: 3;
   height: 3rem;
 }
 
-.grid {
+.catalog {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
