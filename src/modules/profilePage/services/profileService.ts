@@ -20,6 +20,11 @@ class ProfileService {
     });
 
     if (!response.ok) {
+      // Добавлено условие для обработки ситуации, когда ресурс не найден (404 статус)
+      if (response.status === 404) {
+        console.warn(`Customer with ID '${id}' was not found.`);
+        return undefined;
+      }
       const errorText = await response.text();
       throw new Error(`Failed to get info about customer: ${errorText}`);
     }

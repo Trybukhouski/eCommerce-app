@@ -154,4 +154,22 @@ export class ProductService {
     const data = await handleResponse(response);
     return data.results;
   }
+
+  public static async searchProducts(query: string): Promise<Product[]> {
+    const encodedQuery = encodeURIComponent(query);
+    const url = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/product-projections/search?text.en=${encodedQuery}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to search products: ${errorText}`);
+    }
+
+    const data = await handleResponse(response);
+    return data.results;
+  }
 }
