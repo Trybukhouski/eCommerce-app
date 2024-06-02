@@ -1,0 +1,18 @@
+@mixin title {
+  font-family: 'Lalezar', system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5rem;
+}
+
+@mixin textRegular {
+  font-family: 'Khula', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+}
+
+@mixin textAccent {
+  @include textRegular();
+  font-weight: 800;
+}

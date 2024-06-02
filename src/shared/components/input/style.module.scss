@@ -1,0 +1,116 @@
+@import '@assets/styles/mixins/inputBoxMixin.scss';
+@import '@assets/styles/fonts.scss';
+
+@mixin hintHeight($margin: 0) {
+  $hint-height-mobile: calc(var(--data-height) * 1.4 + $margin);
+  $hint-height-mobile-wide: calc(var(--data-height) / 1.3 + $margin);
+  $hint-height-screen: calc(var(--data-height) / 2 + $margin);
+
+  height: clamp(
+    $hint-height-screen,
+    calc(100vh - 115vw),
+    clamp($hint-height-mobile-wide, calc(110vh - 170vw), $hint-height-mobile)
+  );
+}
+
+.input {
+  $wrong-input-color: var(--wrong-warning-color);
+  $correct-input-color: var(--correct-warning-color);
+  $neutral-input-color: var(--neutral-input-color);
+  $input-hint-pad-start: 1.2rem;
+  $input-hint-margin-block: 1.0625rem; // 17px
+
+  @include inputBox();
+
+  label {
+    @include label();
+  }
+
+  input {
+    @include regularText();
+  }
+
+  .input__hint {
+    height: 0;
+    overflow: hidden;
+    transition: 0.7s height var(--arched-cubic-bezier);
+
+    ul {
+      box-sizing: border-box;
+      @include hintHeight();
+      padding-inline-start: $input-hint-pad-start;
+      margin-block: $input-hint-margin-block;
+
+      li {
+        position: relative;
+        left: -200%;
+        transition: 0.5s left var(--arched-cubic-bezier);
+
+        @include regularText();
+      }
+    }
+  }
+
+  input {
+    position: relative;
+
+    &:invalid {
+      outline: $wrong-input-color auto 1px;
+    }
+
+    &:invalid + .input__hint ul {
+      li[data-correct='false'] {
+        color: $wrong-input-color;
+      }
+    }
+    & + .input__hint ul {
+      li {
+        color: $neutral-input-color;
+      }
+      li[data-correct='true'] {
+        color: $correct-input-color;
+      }
+    }
+  }
+
+  input:invalid + .input__hint,
+  input:focus + .input__hint {
+    @include hintHeight(calc(2 * $input-hint-margin-block));
+
+    li {
+      left: 0;
+    }
+  }
+
+  input:invalid:not(:focus) {
+    animation: wronginput 0.15s ease-in-out 2;
+  }
+
+  @keyframes wronginput {
+    25% {
+      transform: rotate(0.2deg);
+    }
+    50% {
+      transform: scale(1.005);
+    }
+    75% {
+      transform: rotate(-0.2deg);
+    }
+  }
+}
+
+.checkbox {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  padding: var(--padding-md);
+  gap: 0.5rem;
+
+  label {
+    @include regularText();
+  }
+
+  input {
+    width: 1rem;
+    height: 1rem;
+  }
+}

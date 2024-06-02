@@ -1,0 +1,64 @@
+:root {
+  --font-size: 16px;
+  --content-max-width: 41.5rem; // 664px
+
+  // breakpoints
+
+  --breakpoint-mobile: 440px;
+
+  // border-radius
+
+  --big-border-radius: 0.625rem; // 10px
+  --small-border-radius: 0.3125rem; // 5px
+
+  // colors
+
+  --orange-900: #211000;
+  --orange-500: #ff7b00; // previous: rgb(255, 153, 0)
+  --orange-400: #ff9029; // previous: rgb(231, 139, 0)
+  --orange-300: #fda452;
+  --orange-200: #fcb86f; // previous: rgb(203 182 152)
+  --orange-100: #fad9b5;
+
+  --white-100: white;
+  --white-200: #e6e6e6;
+
+  --grey-500: #7f7f7f;
+  --grey-100: #bfbfbf;
+
+  --blue-500: #131921;
+  --blue-400: #1f2936;
+
+  --black-900: black;
+
+  --wrong-warning-color: rgb(237, 44, 32);
+  --correct-warning-color: rgb(28, 181, 53);
+  --neutral-input-color: var(--grey-500);
+  --information-color: rgb(0, 0, 255);
+
+  //font-sizes
+
+  --font-size-sm: 1rem;
+  --font-size-md: 1.6rem; // 24px
+
+  // paddings
+
+  --padding-xxsm: 0.6875rem; // 11px
+  --padding-xsm: 1rem;
+  --padding-sm: 1.125rem; // 18px
+  --padding-md: 1.25rem; // 20px
+  --padding-lg: 1.375rem; // 22px
+  --padding-xlg: 1.875rem; // 30px
+  --padding-xxlg: 3.125rem; // 50px
+  --padding-xxxlg: 4.375rem; // 70px
+
+  --label-margin-bottom: 0.875rem;
+
+  --arched-cubic-bezier: cubic-bezier(0.06, 0.47, 0.42, 1.11);
+
+  --border-width-m: 0.125rem;
+}
+
+html {
+  font-size: var(--font-size);
+}
