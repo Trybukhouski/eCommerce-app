@@ -21,7 +21,7 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
-  private slider!: Slider; // Экземпляр слайдера
+  private slider!: Slider;
 
   constructor() {
     this.elem = document.createElement('div');
@@ -85,11 +85,8 @@ export class DetailedProductPageUI {
       thumbnailsWrapper.appendChild(img);
     });
 
-    // Создаем экземпляр слайдера
-    // Example: Assuming 2 thumbnails are visible at the same time
-    this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
+   this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
 
-    // Добавляем кнопки управления слайдером
     const prevButton = document.createElement('button');
     prevButton.className = styles['slider-button'];
     prevButton.textContent = '<';

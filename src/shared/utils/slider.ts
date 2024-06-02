@@ -1,7 +1,9 @@
 export class Slider {
   private sliderIndex = 0;
+
   private totalThumbnails: number;
-  private visibleThumbnailsCount: number; // New property to store the number of visible thumbnails
+
+  private visibleThumbnailsCount: number;
 
   private thumbnailsWrapper: HTMLElement;
 
@@ -12,7 +14,7 @@ export class Slider {
   ) {
     this.thumbnailsWrapper = thumbnailsWrapper;
     this.totalThumbnails = totalThumbnails;
-    this.visibleThumbnailsCount = visibleThumbnailsCount; // Initialize with how many thumbnails are visible at once
+    this.visibleThumbnailsCount = visibleThumbnailsCount;
   }
 
   public showPreviousImage(): void {
@@ -23,9 +25,8 @@ export class Slider {
   }
 
   public showNextImage(): void {
-    // Only allow moving to the next image if doing so won't go past the end
     if (this.sliderIndex < this.totalThumbnails - this.visibleThumbnailsCount) {
-      this.sliderIndex++;
+      this.sliderIndex += 1;
       this.updateThumbnails();
     }
   }
