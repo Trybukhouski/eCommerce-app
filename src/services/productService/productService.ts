@@ -133,4 +133,25 @@ export class ProductService {
     const data = await handleResponse(response);
     return data.results;
   }
+
+  public static async getSortedProducts(
+    sortBy: string,
+    sortDirection: 'asc' | 'desc'
+  ): Promise<Product[]> {
+    const sortParam = `sort=${sortBy} ${sortDirection}`;
+    const url = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/product-projections?${sortParam}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch sorted products: ${errorText}`);
+    }
+
+    const data = await handleResponse(response);
+    return data.results;
+  }
 }
