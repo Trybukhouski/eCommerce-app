@@ -2,7 +2,8 @@ import { Button, ButtonOptions } from '@shared';
 import mainImagePath from '@assets/images/main-image.jpg';
 import thumbnail1Path from '@assets/images/thumbnail1.jpg';
 import { Slider } from '@root/shared/utils/slider';
-import * as styles from './styles.module.scss';
+import { Modal } from '@root/shared/utils/modal';
+import * as styles from './style.module.scss';
 
 export class DetailedProductPageUI {
   public elem: HTMLElement;
@@ -21,7 +22,9 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
-  private slider!: Slider;
+  private slider!: Slider; // Экземпляр слайдера
+
+  private modal: Modal; // Экземпляр модального окна
 
   constructor() {
     this.elem = document.createElement('div');
@@ -38,6 +41,7 @@ export class DetailedProductPageUI {
     this.mainImage.className = styles['main-image'];
     this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
+    this.mainImage.addEventListener('click', () => this.openModal()); // Добавляем обработчик событий для открытия модалки
 
     const thumbnailPaths = [
       thumbnail1Path,
@@ -54,6 +58,8 @@ export class DetailedProductPageUI {
     this.addToCartButton = this.createAddToCartButton();
 
     this.assembleUI();
+
+    this.modal = new Modal(); // Инициализируем модальное окно
   }
 
   private assembleUI(): void {
@@ -85,8 +91,11 @@ export class DetailedProductPageUI {
       thumbnailsWrapper.appendChild(img);
     });
 
-   this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
+    // Создаем экземпляр слайдера
+    // Example: Assuming 2 thumbnails are visible at the same time
+    this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
 
+    // Добавляем кнопки управления слайдером
     const prevButton = document.createElement('button');
     prevButton.className = styles['slider-button'];
     prevButton.textContent = '<';
@@ -147,5 +156,28 @@ export class DetailedProductPageUI {
     const { button } = new Button(buttonOptions);
     button.className = styles['add-to-cart'];
     return button;
+  }
+
+  private openModal(): void {
+    const modalContent = document.createElement('div');
+
+    const mainImage = document.createElement('img');
+    mainImage.src = mainImagePath;
+    mainImage.alt = 'Main Product Image';
+    mainImage.className = styles['modal-main-image'];
+
+    const thumbnailsContainer = this.createThumbnailContainer([
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+    ]);
+
+    modalContent.appendChild(mainImage);
+    modalContent.appendChild(thumbnailsContainer);
+
+    this.modal.setContent(modalContent);
+    this.modal.openModal();
   }
 }
