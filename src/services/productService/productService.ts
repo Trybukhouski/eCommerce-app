@@ -1,17 +1,17 @@
 import { clientCredentials } from '@root/config';
-import { handleResponse } from '@shared';
-import { getHeaders } from '@root/shared/utils/apiHelpers';
-import { Product } from '@root/services/interfaces';
+import { handleResponse, getHeaders } from '@shared';
 import placeholderImage from '@assets/images/placeholderImage.jpg';
+import { BackendService, Product } from '../shared';
 
 export class ProductService {
   private static baseUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/products`;
 
   public static async getProductByKey(key: string): Promise<Product> {
+    const token = await BackendService.getToken();
     const url = `${this.baseUrl}/key=${key}`;
     const response = await fetch(url, {
       method: 'GET',
-      headers: getHeaders(),
+      headers: getHeaders(token),
     });
 
     if (!response.ok) {
@@ -23,10 +23,11 @@ export class ProductService {
   }
 
   public static async getProductById(id: string): Promise<Product> {
+    const token = await BackendService.getToken();
     const url = `${this.baseUrl}/${id}`;
     const response = await fetch(url, {
       method: 'GET',
-      headers: getHeaders(),
+      headers: getHeaders(token),
     });
 
     if (!response.ok) {
@@ -64,10 +65,11 @@ export class ProductService {
   }
 
   public static async getProducts(): Promise<Product[]> {
+    const token = await BackendService.getToken();
     const url = `${this.baseUrl}`;
     const response = await fetch(url, {
       method: 'GET',
-      headers: getHeaders(),
+      headers: getHeaders(token),
     });
 
     if (!response.ok) {
