@@ -19,7 +19,7 @@ export class Slider {
 
   public showPreviousImage(): void {
     if (this.sliderIndex > 0) {
-      this.sliderIndex--;
+      this.sliderIndex -= 1;
       this.updateThumbnails();
     }
   }

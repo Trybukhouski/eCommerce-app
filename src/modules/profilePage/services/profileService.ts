@@ -14,20 +14,29 @@ class ProfileService {
       return undefined;
     }
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: getJsonHeaders(),
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: getJsonHeaders(),
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to get info about customer: ${errorText}`);
+      if (!response.ok) {
+        if (response.status === 404) {
+          // console.log('Customer not found, returning undefined.');
+          return undefined;
+        }
+        const errorText = await response.text();
+        throw new Error(`Failed to get info about customer: ${errorText}`);
+      }
+
+      const data: Customer = await handleResponse(response);
+      return data;
+    } catch (error) {
+      // console.error('Error fetching customer:', error);
+      return undefined;
     }
-
-    const data: Customer = await handleResponse(response);
-
-    return data;
   }
 }
 
 export { ProfileService };
+
