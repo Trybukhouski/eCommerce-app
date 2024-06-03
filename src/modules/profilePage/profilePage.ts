@@ -1,8 +1,9 @@
 import { Address, Customer, LocalStorageService } from '@services';
 import { Form } from '@shared';
-import { ProfilePageUI } from './ui';
-import { ProfileService } from './services';
-import { AddressField, CustomerField, SettingsKeys, fillingFieldsSettingsObject } from './config';
+import { ProfilePageUI, FormTypes } from './ui';
+import { ProfileService, handleResponse } from './services';
+import { AddressFields, CustomerFields, SettingsKeys, fillingFieldsSettingsObject } from './config';
+import { AddressManager, ChangedInputsWithValues } from './addressManager';
 
 export class ProfilePage {
   public elem: HTMLElement;
@@ -17,17 +18,20 @@ export class ProfilePage {
 
   private userDataCache?: Customer;
 
+  private addressManager: AddressManager;
+
   constructor() {
     this.uiApi = new ProfilePageUI();
     this.elem = this.uiApi.elem;
+    this.addressManager = new AddressManager(this.uiApi);
 
     this.addEditClickListener();
     this.addLoggedInListener();
   }
 
-  public async displayUserData(update = false): Promise<void> {
+  public async displayUserData(update?: boolean, customer?: Customer): Promise<void> {
     if (!this.userDataCache || update) {
-      const response = await this.serverService.getCustomer();
+      const response = customer || (await this.serverService.getCustomer());
       this.userDataCache = response;
     }
     const data = this.userDataCache;
@@ -69,13 +73,133 @@ export class ProfilePage {
       }
 
       const isDisabled = this.uiApi.forms[formKey].form.fieldsetElement?.disabled;
-      this.uiApi.changeRequired(formKey, !!isDisabled);
-      this.uiApi.disableFieldset(formKey, !isDisabled);
-      this.uiApi.toggleFormEditing(formKey);
-      if (!isDisabled) {
+      if (isDisabled === undefined) {
+        return;
+      }
+
+      this.uiApi.toggleFormEditing(formKey, isDisabled);
+      if (isDisabled) {
+        this.createEditingSession(formKey);
+      } else {
         this.displayUserData();
       }
     });
+  }
+
+  private createEditingSession(formKey: FormTypes): void {
+    const form = this.uiApi.forms[formKey];
+    const formElement = form.form.form;
+    const inputs = form.form.inputArr;
+    const oldValues = inputs.map((i) => this.uiApi.getInputValue(i));
+
+    let submitListener: (e: SubmitEvent) => void;
+    const removeSubmitListener = () => {
+      formElement.removeEventListener('submit', submitListener);
+    };
+    submitListener = (e) => {
+      e.preventDefault();
+      const valuesAndInputs = inputs.map((i) => [i, this.uiApi.getInputValue(i)] as const);
+      const changed = valuesAndInputs.filter((pair, ind) => pair[1] !== oldValues[ind]);
+      if (changed.length === 0) {
+        this.uiApi.toggleFormEditing(formKey, false);
+        removeSubmitListener();
+        return;
+      }
+      this.uiApi.toggleDisableEditButton(formKey, true);
+      this.sendEditRequest(formKey, changed, removeSubmitListener);
+    };
+
+    formElement.addEventListener('submit', submitListener);
+    formElement.firstChild?.addEventListener('click', removeSubmitListener);
+  }
+
+  private async sendEditRequest(
+    formKey: FormTypes,
+    changed: ChangedInputsWithValues,
+    removeSubmitListener: () => void
+  ): Promise<void> {
+    let request: () => void | Promise<Customer>;
+    if (formKey === ProfilePage.formTypes[0]) {
+      const actions = this.createProfileInfoActions(formKey, changed);
+      request = ProfileService.sendActions.bind(null, actions);
+    } else if (formKey === ProfilePage.formTypes[1]) {
+      request = this.createPasswordRequest(changed);
+    } else {
+      request = await this.addressManager.chooseAddOrUpdateAddress(formKey, changed);
+    }
+
+    const data = await handleResponse(
+      request(),
+      'The information has been updated',
+      'Error fetching customer version'
+    );
+    removeSubmitListener();
+    this.uiApi.toggleFormEditing(formKey, false);
+    if (data) {
+      if (formKey === ProfilePage.formTypes[1]) {
+        this.cleanPasswordFields();
+      } else if (data && formKey !== ProfilePage.formTypes[0]) {
+        this.displayUserData(true, data);
+      }
+    }
+  }
+
+  private createPasswordRequest(changed: ChangedInputsWithValues): () => void {
+    const { formTypes } = ProfilePage;
+    const settings = this.fillingFieldsSettingsObject[formTypes[1]].fields;
+    const currentPasswordPair = changed.find(
+      (pair) => Form.getInputElement(pair[0]).name === settings[0]?.inputName
+    );
+    const newPasswordPair = changed.find(
+      (pair) => Form.getInputElement(pair[0]).name === settings[1]?.inputName
+    );
+    if (!currentPasswordPair || !newPasswordPair) {
+      return () => {};
+    }
+    return ProfileService.changePassword.bind(
+      null,
+      `${currentPasswordPair[1]}`,
+      `${newPasswordPair[1]}`
+    );
+  }
+
+  private cleanPasswordFields(): void {
+    const { formTypes } = ProfilePage;
+    const settings = this.fillingFieldsSettingsObject[formTypes[1]].fields;
+    settings.forEach((s) => {
+      const inputElement = this.uiApi.getInputElementByName(formTypes[1], s.inputName);
+      if (!inputElement) return;
+      inputElement.value = '';
+    });
+  }
+
+  private createProfileInfoActions(
+    formKey: typeof ProfilePage.formTypes[0],
+    changed: ChangedInputsWithValues
+  ): {
+    [key: string]: string | boolean;
+    action: string;
+  }[] {
+    const fieldsSettings = this.fillingFieldsSettingsObject[formKey];
+    const actions: {
+      [key: string]: string | boolean;
+      action: string;
+    }[] = [];
+    changed.forEach(([input, value]) => {
+      const inputElement = Form.getInputElement(input);
+      const inputName = inputElement.name;
+      const settings = fieldsSettings.fields.find((f) => f.inputName === inputName);
+      if (!settings) {
+        return;
+      }
+      const correctValue =
+        settings.dataKey === 'dateOfBirth' ? Form.rotateBirthDate(`${value}`) : value;
+      actions.push({
+        action: settings.actionName,
+        [settings.dataKey]: correctValue,
+      });
+    });
+    return actions;
   }
 
   private addBasicUserData(data: Customer): void {
@@ -87,8 +211,8 @@ export class ProfilePage {
     const { shippingAddressIds } = data;
     const { billingAddressIds } = data;
 
-    const lastShippingAddressId = shippingAddressIds[billingAddressIds.length - 1];
-    const lastBillingAddressId = billingAddressIds[billingAddressIds.length - 1];
+    const lastShippingAddressId = shippingAddressIds[0];
+    const lastBillingAddressId = billingAddressIds[0];
 
     ([
       [lastShippingAddressId, formTypes[2]],
@@ -104,6 +228,10 @@ export class ProfilePage {
   }
 
   private writeDataIntoFormFields(data: Customer | Address, formKey: SettingsKeys): void {
+    const { form } = this.uiApi.forms[formKey].form;
+    if (formKey === ProfilePage.formTypes[2] || formKey === ProfilePage.formTypes[3]) {
+      form.setAttribute(this.addressManager.addressIdAttribute, data.id ?? '');
+    }
     const fieldsSettingsForFilling = this.fillingFieldsSettingsObject[formKey];
 
     const { fields } = fieldsSettingsForFilling;
@@ -115,10 +243,9 @@ export class ProfilePage {
   private addInputValue(
     data: Customer | Address,
     formKey: SettingsKeys,
-    field: (CustomerField | AddressField)['fields'][number]
+    field: (CustomerFields | AddressFields)['fields'][number]
   ): void {
-    const input = this.uiApi.getFormInputByName(formKey, field.inputName);
-    const inputElement = input ? Form.getInputElement(input) : undefined;
+    const inputElement = this.uiApi.getInputElementByName(formKey, field.inputName);
 
     const isCheckbox = inputElement instanceof HTMLInputElement && inputElement.type === 'checkbox';
     let value: Customer[keyof Customer];
@@ -128,7 +255,7 @@ export class ProfilePage {
       value = (data as Address)[field.dataKey as keyof Address];
     }
 
-    if (!input || value === undefined || !inputElement) {
+    if (!inputElement || value === undefined || !inputElement) {
       return;
     }
 
