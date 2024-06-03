@@ -1,4 +1,4 @@
-import { Address, Customer, LocalStorageService } from '@services';
+import { Address, Customer, LocalStorageService, NotificationService } from '@services';
 import { Form } from '@shared';
 import { ProfilePageUI, FormTypes } from './ui';
 import { ProfileService, handleResponse } from './services';
@@ -31,7 +31,16 @@ export class ProfilePage {
 
   public async displayUserData(update?: boolean, customer?: Customer): Promise<void> {
     if (!this.userDataCache || update) {
-      const response = customer || (await this.serverService.getCustomer());
+      let response: Customer | undefined;
+      if (customer) {
+        response = customer;
+      } else {
+        const customerPromise = this.serverService.getCustomer().catch((err: Error) => {
+          NotificationService.displayError(err.message);
+          return undefined;
+        });
+        response = await customerPromise.then((result) => result);
+      }
       this.userDataCache = response;
     }
     const data = this.userDataCache;
