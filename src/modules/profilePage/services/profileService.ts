@@ -1,6 +1,11 @@
 import { clientCredentials } from '@root/config';
-import { LocalStorageService, Customer, AuthService } from '@services';
+import { LocalStorageService, Customer, AuthService, Address } from '@services';
 import { getJsonHeaders, handleResponse } from '@shared';
+
+interface AddressAction {
+  action: string;
+  [key: string]: string | boolean | null | Address;
+}
 
 class ProfileService {
   private static customersUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/customers`;
@@ -29,12 +34,7 @@ class ProfileService {
     return data;
   }
 
-  public static async sendActions(
-    actions: {
-      [key: string]: string | boolean | null;
-      action: string;
-    }[]
-  ): Promise<Customer> {
+  public static async sendActions(actions: AddressAction[]): Promise<Customer> {
     const userId = LocalStorageService.getUserId();
     if (userId === null) {
       throw new Error(`Can't find customer's id`);
@@ -107,4 +107,4 @@ class ProfileService {
   }
 }
 
-export { ProfileService };
+export { ProfileService, AddressAction };

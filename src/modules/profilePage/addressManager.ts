@@ -1,17 +1,12 @@
 import { Form, FormInputs } from '@shared';
-import { Customer } from '@services';
+import { Address, Customer } from '@services';
 import { ProfilePageUI } from './ui';
 import { fillingFieldsSettingsObject } from './config';
-import { ProfileService, handleResponse } from './services';
+import { ProfileService, handleResponse, AddressAction } from './services';
 
 type ChangedInputsWithValues = (readonly [FormInputs, string | boolean])[];
 
 type AddressKeys = typeof ProfilePageUI.formTypes[2] | typeof ProfilePageUI.formTypes[3];
-
-interface AddressAction {
-  [key: string]: string | boolean | null;
-  action: string;
-}
 
 class AddressManager {
   public addressIdAttribute = 'data-address-id';
@@ -58,12 +53,12 @@ class AddressManager {
     firstId: string;
     secondId: string;
     isIdMatch: boolean;
-    useAlsoValue: string | boolean;
+    useAlsoValue: boolean;
   }) {
     const { changed, formKey, firstId, secondId, isIdMatch, useAlsoValue, secondKey } = options;
     let actions: AddressAction[] | undefined;
     if ((isIdMatch && useAlsoValue) || (!isIdMatch && !useAlsoValue)) {
-      actions = this.createChangeAddressAction(formKey, changed);
+      actions = this.createChangeAddressAction(formKey, changed, useAlsoValue);
     } else if (!isIdMatch && useAlsoValue) {
       actions = [
         ...(this.createAddAndRemoveAddressAction({
@@ -71,19 +66,19 @@ class AddressManager {
           prevId: secondId,
           nextId: firstId,
         }) ?? []),
-        ...(this.createChangeAddressAction(formKey, changed) ?? []),
+        ...(this.createChangeAddressAction(formKey, changed, useAlsoValue) ?? []),
       ];
     } else if (isIdMatch && !useAlsoValue) {
-      const addAction = this.createChangeAddressAction(formKey, changed, true);
+      const addAction = this.createChangeAddressAction(formKey, changed, useAlsoValue);
       if (addAction) {
         const response = await handleResponse(ProfileService.sendActions(addAction));
-        actions = response
-          ? this.createAddAndRemoveAddressAction({
-              formKey,
-              customer: response,
-              prevId: secondId,
-            })
-          : [];
+        if (addAction.some((a) => a.action === 'changeAddress') && response) {
+          actions = this.createAddAndRemoveAddressAction({
+            formKey,
+            customer: response,
+            prevId: secondId,
+          });
+        }
       }
     }
     return actions;
@@ -132,8 +127,35 @@ class AddressManager {
   private createChangeAddressAction(
     formKey: AddressKeys,
     changed: ChangedInputsWithValues,
+    isMatch = false,
     isAdd = false
   ): AddressAction[] | undefined {
+    const address = this.createAddressObj(formKey);
+    const addressId = this.getAddressId(formKey);
+    if (addressId === null) return undefined;
+    const actionsArr: AddressAction[] = [];
+    const { isOnlyDefaultChange, defaultActions } = this.manageDefault({
+      formKey,
+      changed,
+      isMatch,
+      addressId,
+    });
+    if (isOnlyDefaultChange) {
+      return defaultActions;
+    }
+    actionsArr.push(...defaultActions);
+    actionsArr.push({
+      action: isAdd ? 'addAddress' : 'changeAddress',
+      addressId: `${addressId}`,
+      address,
+    });
+    if (isAdd && actionsArr[0]) {
+      delete actionsArr[0]['addressId'];
+    }
+    return actionsArr;
+  }
+
+  private createAddressObj(formKey: AddressKeys): Address {
     const settings = this.fillingFieldsSettingsObject[formKey].fields;
     const addressKeys: {
       [key: string]: string;
@@ -146,24 +168,38 @@ class AddressManager {
         addressKeys.push({ [s.dataKey]: `${value}` });
       }
     });
-    const address = Object.assign({}, ...addressKeys);
-    const addressId = this.getAddressId(formKey);
-    if (addressId === null) return undefined;
-    const actionsArr: AddressAction[] = [
-      {
-        action: isAdd ? 'addAddress' : 'changeAddress',
-        addressId: `${addressId}`,
-        address,
-      },
-    ];
-    if (isAdd && actionsArr[0]) {
-      delete actionsArr[0]['addressId'];
+    const address = Object.assign({}, ...addressKeys) as Address;
+    return address;
+  }
+
+  private manageDefault(options: {
+    formKey: AddressKeys;
+    changed: ChangedInputsWithValues;
+    isMatch: boolean;
+    addressId: string;
+  }): {
+    isOnlyDefaultChange: boolean;
+    defaultActions: AddressAction[];
+  } {
+    const { formKey, changed, isMatch, addressId } = options;
+    const actionsArr: AddressAction[] = [];
+    const defaultAction1 = this.createDefaultAddressAction(formKey, changed, addressId);
+    const defaultAction2 = this.cloneDefaultAddressAction(formKey, defaultAction1);
+    if (defaultAction1) {
+      actionsArr.push(defaultAction1);
+      if (defaultAction2 && isMatch) {
+        actionsArr.push(defaultAction2);
+      }
     }
-    const defaultAction = this.createDefaultAddressAction(formKey, changed, addressId);
-    if (defaultAction) {
-      actionsArr.push(defaultAction);
-    }
-    return actionsArr;
+
+    const isOnlyDefaultChange =
+      changed.some((pair) => Form.getInputElement(pair[0]).type !== 'checkbox') &&
+      changed.length < 2;
+
+    return {
+      isOnlyDefaultChange,
+      defaultActions: actionsArr,
+    };
   }
 
   private createDefaultAddressAction(
@@ -178,10 +214,28 @@ class AddressManager {
     if (!checkboxInputAndValue) {
       return undefined;
     }
+    const action =
+      formKey === ProfilePageUI.formTypes[2]
+        ? 'setDefaultShippingAddress'
+        : 'setDefaultBillingAddress';
     return {
-      action: 'setDefaultShippingAddress',
+      action,
       addressId: checkboxInputAndValue[1] ? addressId : null,
     };
+  }
+
+  private cloneDefaultAddressAction(
+    formKey: AddressKeys,
+    defaultAction: AddressAction | undefined
+  ): AddressAction | undefined {
+    if (!defaultAction) {
+      return undefined;
+    }
+    const action =
+      formKey === ProfilePageUI.formTypes[3]
+        ? 'setDefaultShippingAddress'
+        : 'setDefaultBillingAddress';
+    return { ...defaultAction, action } as AddressAction;
   }
 }
 

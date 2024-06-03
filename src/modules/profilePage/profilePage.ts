@@ -105,6 +105,7 @@ export class ProfilePage {
         removeSubmitListener();
         return;
       }
+      this.uiApi.toggleDisableEditButton(formKey, true);
       this.sendEditRequest(formKey, changed, removeSubmitListener);
     };
 
@@ -127,21 +128,19 @@ export class ProfilePage {
       request = await this.addressManager.chooseAddOrUpdateAddress(formKey, changed);
     }
 
-    this.uiApi.toggleDisableEditButton(formKey);
     const data = await handleResponse(
       request(),
       'The information has been updated',
       'Error fetching customer version'
     );
+    removeSubmitListener();
+    this.uiApi.toggleFormEditing(formKey, false);
     if (data) {
-      removeSubmitListener();
-      this.uiApi.toggleFormEditing(formKey, false);
       if (formKey === ProfilePage.formTypes[1]) {
         this.cleanPasswordFields();
       } else if (data && formKey !== ProfilePage.formTypes[0]) {
         this.displayUserData(true, data);
       }
-      this.uiApi.toggleDisableEditButton(formKey);
     }
   }
 

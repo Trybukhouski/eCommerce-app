@@ -54,9 +54,7 @@ class ProfilePageUI {
   }
 
   public toggleDisableEditButton(formkey: KeyOfProfileForms, disable?: boolean): void {
-    const button = this.forms[formkey].editButton as HTMLButtonElement;
-    console.log(button);
-    console.log(button.disabled);
+    const button = this.forms[formkey].form.button as HTMLButtonElement;
     button.disabled = disable ?? !button.disabled;
   }
 

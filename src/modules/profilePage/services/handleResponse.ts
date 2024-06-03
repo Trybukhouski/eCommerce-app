@@ -6,6 +6,9 @@ async function handleResponse(
   errorMess?: string
 ): Promise<Customer | undefined> {
   if (!(callback instanceof Promise)) {
+    if (successMess) {
+      NotificationService.displaySuccess(successMess);
+    }
     return undefined;
   }
   return callback
