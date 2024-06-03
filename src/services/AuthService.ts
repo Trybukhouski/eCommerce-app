@@ -1,7 +1,6 @@
 import { clientCredentials } from '@root/config';
-import { handleResponse } from '@shared';
-import { getFormHeaders, getJsonHeaders } from '@root/shared/utils/apiHelpers';
-import { LocalStorageService } from '@root/services/localStorageService';
+import { handleResponse, getFormHeaders, getJsonHeaders } from '@shared';
+import { LocalStorageService } from './localStorageService';
 import {
   LoginResponse,
   RegistrationResponse,
@@ -33,6 +32,14 @@ export class AuthService {
       body,
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to authenticate customer: ${errorText}`);
+    }
+
+    const authResponse = await AuthService.authenticateCustomer(username, password);
+    LocalStorageService.setUserId(authResponse.customer.id);
+
     return handleResponse(response);
   }
 
@@ -40,6 +47,12 @@ export class AuthService {
     email: string,
     password: string
   ): Promise<CustomerSignInResult> {
+    await AuthService.getToken();
+
+    const token = LocalStorageService.getAuthorisedToken();
+    if (!token) {
+      throw new Error('No access token found');
+    }
     const { projectKey } = clientCredentials;
     if (!projectKey) {
       throw new Error('Project key is not defined');
@@ -77,6 +90,7 @@ export class AuthService {
   }
 
   public static async register(userData: UserData): Promise<RegistrationResponse> {
+    await AuthService.getToken();
     const body = JSON.stringify(userData);
 
     const token = LocalStorageService.getAuthorisedToken();
@@ -95,7 +109,10 @@ export class AuthService {
       const errorJson = JSON.parse(errorText);
       throw new Error(errorJson.message || 'Registration failed');
     }
-    return handleResponse(response);
+
+    const handlingResponse: RegistrationResponse = await handleResponse(response);
+    LocalStorageService.setUserId(handlingResponse.customer.id);
+    return handlingResponse;
   }
 
   public static async getCustomerVersion(userId: string): Promise<number> {

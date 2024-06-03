@@ -1,7 +1,7 @@
-import { Address, Customer, LocalStorageService, NotificationService } from '@services';
+import { Address, Customer, LocalStorageService } from '@services';
 import { Form } from '@shared';
 import { ProfilePageUI, FormTypes } from './ui';
-import { ProfileService } from './services';
+import { ProfileService, handleResponse } from './services';
 import { AddressFields, CustomerFields, SettingsKeys, fillingFieldsSettingsObject } from './config';
 import { AddressManager, ChangedInputsWithValues } from './addressManager';
 
@@ -126,9 +126,14 @@ export class ProfilePage {
     } else {
       request = await this.addressManager.chooseAddOrUpdateAddress(formKey, changed);
     }
-    try {
-      const data = await request();
-      NotificationService.displaySuccess('The information has been updated');
+
+    this.uiApi.toggleDisableEditButton(formKey);
+    const data = await handleResponse(
+      request(),
+      'The information has been updated',
+      'Error fetching customer version'
+    );
+    if (data) {
       removeSubmitListener();
       this.uiApi.toggleFormEditing(formKey, false);
       if (formKey === ProfilePage.formTypes[1]) {
@@ -136,10 +141,7 @@ export class ProfilePage {
       } else if (data && formKey !== ProfilePage.formTypes[0]) {
         this.displayUserData(true, data);
       }
-    } catch (error) {
-      NotificationService.displayError(
-        error instanceof Error ? error.message : 'Error fetching customer version'
-      );
+      this.uiApi.toggleDisableEditButton(formKey);
     }
   }
 

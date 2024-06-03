@@ -9,10 +9,10 @@ interface ButtonOptions {
   disabled?: boolean;
   isLink?: boolean;
   href?: string;
-  customColor?: 'blue';
+  customColor?: string;
 }
 
-const defaultButtonOptions: Required<ButtonOptions> = {
+const defaultButtonOptions: Required<Omit<ButtonOptions, 'customColor'>> = {
   className: 'simple',
   text: '',
   type: 'button',
@@ -22,7 +22,6 @@ const defaultButtonOptions: Required<ButtonOptions> = {
   disabled: false,
   isLink: false,
   href: '',
-  customColor: 'blue',
 };
 
 export { ButtonOptions, defaultButtonOptions };

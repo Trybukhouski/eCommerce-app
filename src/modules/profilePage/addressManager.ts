@@ -2,7 +2,7 @@ import { Form, FormInputs } from '@shared';
 import { Customer } from '@services';
 import { ProfilePageUI } from './ui';
 import { fillingFieldsSettingsObject } from './config';
-import { ProfileService } from './services';
+import { ProfileService, handleResponse } from './services';
 
 type ChangedInputsWithValues = (readonly [FormInputs, string | boolean])[];
 
@@ -33,10 +33,34 @@ class AddressManager {
     const [firstId, secondId] = [formKey, secondKey].map((k) => this.getAddressId(k));
     const isIdMatch = firstId === secondId;
     const useAlsoValue = this.uiApi.getInputValueByName(formKey, 'address-match');
-    if (useAlsoValue === undefined || !firstId || !secondId) {
+    if (useAlsoValue === undefined || !firstId || !secondId || typeof useAlsoValue === 'string') {
       return () => {};
     }
+    const actions = await this.getActions({
+      changed,
+      formKey,
+      secondKey,
+      firstId,
+      secondId,
+      isIdMatch,
+      useAlsoValue,
+    });
+    if (!actions || actions.length === 0) {
+      return () => {};
+    }
+    return ProfileService.sendActions.bind(null, actions);
+  }
 
+  private async getActions(options: {
+    changed: ChangedInputsWithValues;
+    formKey: AddressKeys;
+    secondKey: AddressKeys;
+    firstId: string;
+    secondId: string;
+    isIdMatch: boolean;
+    useAlsoValue: string | boolean;
+  }) {
+    const { changed, formKey, firstId, secondId, isIdMatch, useAlsoValue, secondKey } = options;
     let actions: AddressAction[] | undefined;
     if ((isIdMatch && useAlsoValue) || (!isIdMatch && !useAlsoValue)) {
       actions = this.createChangeAddressAction(formKey, changed);
@@ -51,17 +75,18 @@ class AddressManager {
       ];
     } else if (isIdMatch && !useAlsoValue) {
       const addAction = this.createChangeAddressAction(formKey, changed, true);
-      const response = await (addAction ? ProfileService.sendActions(addAction) : undefined);
-      actions = this.createAddAndRemoveAddressAction({
-        formKey,
-        customer: response,
-        prevId: secondId,
-      });
+      if (addAction) {
+        const response = await handleResponse(ProfileService.sendActions(addAction));
+        actions = response
+          ? this.createAddAndRemoveAddressAction({
+              formKey,
+              customer: response,
+              prevId: secondId,
+            })
+          : [];
+      }
     }
-    if (!actions) {
-      return () => {};
-    }
-    return ProfileService.sendActions.bind(null, actions);
+    return actions;
   }
 
   private getAddressId(formKey: AddressKeys): string | null {
