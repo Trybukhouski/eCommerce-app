@@ -1,6 +1,5 @@
 import { Button, ButtonOptions } from '@shared';
 import mainImagePath from '@assets/images/main-image.jpg';
-import thumbnail1Path from '@assets/images/thumbnail1.jpg';
 import { Slider } from '@root/shared/utils/slider';
 import { Modal } from '@root/shared/utils/modal';
 import * as styles from './style.module.scss';
@@ -12,7 +11,7 @@ export class DetailedProductPageUI {
 
   private productDetails: HTMLElement;
 
-  private mainImage: HTMLImageElement;
+  public mainImage: HTMLImageElement;
 
   private thumbnailsContainer: HTMLElement;
 
@@ -22,9 +21,11 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
-  private slider!: Slider; // Экземпляр слайдера
+  private slider!: Slider;
 
-  private modal: Modal; // Экземпляр модального окна
+  private modal: Modal;
+
+  public imagePaths: string[] = [];
 
   constructor() {
     this.elem = document.createElement('div');
@@ -43,17 +44,9 @@ export class DetailedProductPageUI {
     this.mainImage.classList.add('main-image');
     this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
-    this.mainImage.addEventListener('click', () => this.openModal()); // Добавляем обработчик событий для открытия модалки
 
-    const thumbnailPaths = [
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-    ];
-
-    this.thumbnailsContainer = this.createThumbnailContainer(thumbnailPaths);
+    this.thumbnailsContainer = document.createElement('div');
+    this.thumbnailsContainer.className = styles['thumbnail-container'];
 
     this.productDescription = this.createDescription();
     this.priceContainer = this.createPriceContainer();
@@ -61,7 +54,35 @@ export class DetailedProductPageUI {
 
     this.assembleUI();
 
-    this.modal = new Modal(); // Инициализируем модальное окно
+    this.modal = new Modal();
+    this.mainImage.addEventListener('click', () => this.openModal());
+  }
+
+  public updateSlider(images: string[]): void {
+    this.thumbnailsContainer.innerHTML = '';
+    const thumbnailsWrapper = document.createElement('div');
+    thumbnailsWrapper.className = styles['thumbnails-wrapper'];
+
+    images.forEach((imageUrl) => {
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = 'Product Image';
+      thumbnailsWrapper.appendChild(img);
+    });
+
+    const prevButton = document.createElement('button');
+    prevButton.className = styles['slider-button'];
+    prevButton.textContent = '<';
+    prevButton.onclick = () => this.slider.showPreviousImage();
+
+    const nextButton = document.createElement('button');
+    nextButton.className = styles['slider-button'];
+    nextButton.textContent = '>';
+    nextButton.onclick = () => this.slider.showNextImage();
+
+    this.slider = new Slider(thumbnailsWrapper, images.length, 2, prevButton, nextButton);
+
+    this.thumbnailsContainer.append(prevButton, thumbnailsWrapper, nextButton);
   }
 
   private assembleUI(): void {
@@ -78,38 +99,6 @@ export class DetailedProductPageUI {
     column.className = `${styles.column} ${styles['image-column']}`;
     column.append(this.mainImage, this.thumbnailsContainer);
     return column;
-  }
-
-  private createThumbnailContainer(paths: string[]): HTMLElement {
-    const container = document.createElement('div');
-    container.className = styles['thumbnail-container'];
-
-    const thumbnailsWrapper = document.createElement('div');
-    thumbnailsWrapper.className = styles['thumbnails-wrapper'];
-    paths.forEach((path) => {
-      const img = document.createElement('img');
-      img.src = path;
-      img.alt = `Thumbnail of ${path}`;
-      thumbnailsWrapper.appendChild(img);
-    });
-
-    // Создаем экземпляр слайдера
-    // Example: Assuming 2 thumbnails are visible at the same time
-    this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
-
-    // Добавляем кнопки управления слайдером
-    const prevButton = document.createElement('button');
-    prevButton.className = styles['slider-button'];
-    prevButton.textContent = '<';
-    prevButton.onclick = () => this.slider.showPreviousImage();
-
-    const nextButton = document.createElement('button');
-    nextButton.className = styles['slider-button'];
-    nextButton.textContent = '>';
-    nextButton.onclick = () => this.slider.showNextImage();
-
-    container.append(prevButton, thumbnailsWrapper, nextButton);
-    return container;
   }
 
   private createDescriptionColumn(): HTMLElement {
@@ -165,22 +154,45 @@ export class DetailedProductPageUI {
     const modalContent = document.createElement('div');
 
     const mainImage = document.createElement('img');
-    mainImage.src = mainImagePath;
+    mainImage.src = this.mainImage.src;
     mainImage.alt = 'Main Product Image';
     mainImage.className = styles['modal-main-image'];
 
-    const thumbnailsContainer = this.createThumbnailContainer([
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-    ]);
+    const thumbnailsContainer = this.createThumbnailContainer(this.imagePaths);
 
     modalContent.appendChild(mainImage);
     modalContent.appendChild(thumbnailsContainer);
 
     this.modal.setContent(modalContent);
     this.modal.openModal();
+  }
+
+  private createThumbnailContainer(paths: string[]): HTMLElement {
+    const container = document.createElement('div');
+    container.className = styles['thumbnail-container'];
+
+    const thumbnailsWrapper = document.createElement('div');
+    thumbnailsWrapper.className = styles['thumbnails-wrapper'];
+    paths.forEach((path) => {
+      const img = document.createElement('img');
+      img.src = path;
+      img.alt = `Thumbnail of ${path}`;
+      thumbnailsWrapper.appendChild(img);
+    });
+
+    const prevButton = document.createElement('button');
+    prevButton.className = styles['slider-button'];
+    prevButton.textContent = '<';
+    prevButton.onclick = () => this.slider.showPreviousImage();
+
+    const nextButton = document.createElement('button');
+    nextButton.className = styles['slider-button'];
+    nextButton.textContent = '>';
+    nextButton.onclick = () => this.slider.showNextImage();
+
+    this.slider = new Slider(thumbnailsWrapper, paths.length, 2, prevButton, nextButton);
+
+    container.append(prevButton, thumbnailsWrapper, nextButton);
+    return container;
   }
 }

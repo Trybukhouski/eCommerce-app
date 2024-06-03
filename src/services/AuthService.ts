@@ -36,6 +36,7 @@ export class AuthService {
       throw new Error(`Failed to authenticate customer: ${errorText}`);
     }
 
+    LocalStorageService.setAuthorisedToken((response as LoginResponse)['access_token']);
     const authResponse = await AuthService.authenticateCustomer(username, password);
     LocalStorageService.setUserId(authResponse.customer.id);
 
@@ -46,9 +47,7 @@ export class AuthService {
     email: string,
     password: string
   ): Promise<CustomerSignInResult> {
-    await BackendService.getToken();
-
-    const token = LocalStorageService.getAuthorisedToken();
+    const token = await BackendService.getToken();
     if (!token) {
       throw new Error('No access token found');
     }
@@ -62,7 +61,7 @@ export class AuthService {
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: getJsonHeaders(),
+      headers: getJsonHeaders(token),
       body,
     });
 
@@ -75,17 +74,16 @@ export class AuthService {
   }
 
   public static async register(userData: UserData): Promise<RegistrationResponse> {
-    await BackendService.getToken();
     const body = JSON.stringify(userData);
 
-    const token = LocalStorageService.getAuthorisedToken();
+    const token = await BackendService.getToken();
     if (!token) {
       throw new Error('No access token found');
     }
 
     const response = await fetch(this.registerUrl, {
       method: 'POST',
-      headers: getJsonHeaders(),
+      headers: getJsonHeaders(token),
       body,
     });
 
@@ -96,12 +94,13 @@ export class AuthService {
     }
 
     const handlingResponse: RegistrationResponse = await handleResponse(response);
+    LocalStorageService.setAuthorisedToken(token);
     LocalStorageService.setUserId(handlingResponse.customer.id);
     return handlingResponse;
   }
 
   public static async getCustomerVersion(userId: string): Promise<number> {
-    const token = LocalStorageService.getAuthorisedToken();
+    const token = await BackendService.getToken();
     if (!token) {
       throw new Error('No access token found');
     }

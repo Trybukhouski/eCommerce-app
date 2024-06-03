@@ -18,6 +18,8 @@
   max-width: 37.5rem;
   text-align: center;
   position: relative;
+  max-height: 90%;
+  overflow-y: auto;
 }
 
 .closeButton {
@@ -53,14 +55,14 @@
 }
 @media (max-width: 600px) {
   .modal {
-    width: calc(100% - 2rem); /* Вычитаем 2rem от ширины экрана для создания отступов */
-    max-width: 100%; /* Установим максимальную ширину на весь экран */
-    padding: 1rem; /* Уменьшим отступы */
+    width: calc(100% - 2rem);
+    max-width: 100%;
+    padding: 1rem;
   }
 
   .closeButton {
-    top: 0.3125rem; /* Уменьшим отступ от верхнего края */
-    right: 0.3125rem; /* Уменьшим отступ от правого края */
-    font-size: 0.75rem; /* Уменьшим размер крестика */
+    top: 0.3125rem;
+    right: 0.3125rem;
+    font-size: 0.75rem;
   }
 }

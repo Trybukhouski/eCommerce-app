@@ -114,7 +114,7 @@
 
 .product-description p {
   margin: 0.625rem;
-  @include textRegular;
+    font-size: var(font-size-md);
 }
 
 .price {
@@ -152,7 +152,7 @@
   background-color: var(--orange-500);
 }
 
-@media (max-width: 911px) {
+@media (max-width: 56.9rem) {
   .image-column {
     flex: 0 0 35%;
   }

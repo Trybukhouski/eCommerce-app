@@ -47,7 +47,7 @@ export class Modal {
   }
 
   public setContent(content: HTMLElement): void {
-    this.contentContainer.innerHTML = ''; // Clear any existing content
+    this.contentContainer.innerHTML = '';
     this.contentContainer.appendChild(content);
   }
 }
