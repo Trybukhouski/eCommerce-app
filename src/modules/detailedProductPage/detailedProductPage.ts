@@ -1,3 +1,5 @@
+import { ProductService } from '@services';
+import mainImagePath from '@assets/images/main-image.jpg';
 import { DetailedProductPageUI } from './ui';
 
 export class DetailedProductPage {
@@ -5,20 +7,39 @@ export class DetailedProductPage {
 
   private uiApi: DetailedProductPageUI;
 
-  constructor(productId: string) {
-    this.uiApi = new DetailedProductPageUI(productId);
+  constructor() {
+    this.uiApi = new DetailedProductPageUI();
     this.elem = this.uiApi.elem;
-    this.render();
+
+    this.addProductIDsListener();
   }
 
-  public render() {
-    const app = document.getElementById('app');
+  private async addProductIDsListener() {
+    window.addEventListener('hashchange', () => {
+      setTimeout(() => {}, 0);
+      const idMatch = window.location.hash.match(/(?<=id\=).*/);
+      if (idMatch === null) {
+        return;
+      }
+      const id = idMatch[0];
+      this.loadProductImages(id);
+    });
+  }
 
-    if (app) {
-      app.innerHTML = '';
-      app.appendChild(this.uiApi.elem);
-    } else {
-      console.error('Element with id "app" not found');
+  public async loadProductImages(productId: string): Promise<void> {
+    const ui = this.uiApi;
+    try {
+      const images = await ProductService.getProductImagesById(productId);
+      if (images.length === 0) {
+        console.log('No images found for product:', productId);
+        images.push(mainImagePath);
+      }
+      ui.imagePaths = images;
+      ui.updateSlider(images);
+      ui.mainImage.src = images[0] || mainImagePath;
+    } catch (error) {
+      console.error('Failed to load product images:', error);
+      ui.updateSlider([mainImagePath]);
     }
   }
 }
