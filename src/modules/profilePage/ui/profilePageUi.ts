@@ -53,12 +53,49 @@ class ProfilePageUI {
     this.addDecorativeElements();
   }
 
+  public toggleDisableEditButton(formkey: KeyOfProfileForms, disable?: boolean): void {
+    const button = this.forms[formkey].form.button as HTMLButtonElement;
+    button.disabled = disable ?? !button.disabled;
+  }
+
+  public getInputValueByName(
+    formkey: KeyOfProfileForms,
+    name: string
+  ): string | boolean | undefined {
+    const input = this.getFormInputByName(formkey, name);
+    return input ? this.getInputValue(input) : undefined;
+  }
+
+  public getInputElementByName(
+    formkey: KeyOfProfileForms,
+    name: string
+  ): HTMLInputElement | HTMLSelectElement | undefined {
+    const input = this.getFormInputByName(formkey, name);
+    return input ? Form.getInputElement(input) : undefined;
+  }
+
   public getFormInputByName(formkey: KeyOfProfileForms, name: string): FormInputs | undefined {
     const form = this.forms[formkey];
     return form.form.inputArr.find((i) => Form.getInputElement(i).name === name);
   }
 
-  public changeRequired(formkey: KeyOfProfileForms, isRequired: boolean): void {
+  public getInputValue(i: FormInputs): string | boolean {
+    const inputElement = Form.getInputElement(i);
+    if (inputElement.type === 'checkbox' && inputElement instanceof HTMLInputElement) {
+      return inputElement.checked;
+    }
+    return inputElement.value;
+  }
+
+  public toggleFormEditing(formkey: KeyOfProfileForms, isDisabled: boolean): void {
+    const { form } = this.forms[formkey].form;
+    form.classList.toggle(this.editableClass);
+
+    this.changeRequired(formkey, !!isDisabled);
+    this.disableFieldset(formkey, !isDisabled);
+  }
+
+  private changeRequired(formkey: KeyOfProfileForms, isRequired: boolean): void {
     const form = this.forms[formkey];
     form.form.inputArr.forEach((i) => {
       const elem = Form.getInputElement(i);
@@ -68,18 +105,13 @@ class ProfilePageUI {
     });
   }
 
-  public disableFieldset(formkey: KeyOfProfileForms, isDisabled: boolean): void {
+  private disableFieldset(formkey: KeyOfProfileForms, isDisabled: boolean): void {
     const form = this.forms[formkey];
     const fieldset = form.form.fieldsetElement;
     if (!fieldset) {
       return;
     }
     fieldset.disabled = isDisabled;
-  }
-
-  public toggleFormEditing(formkey: KeyOfProfileForms): void {
-    const { form } = this.forms[formkey].form;
-    form.classList.toggle(this.editableClass);
   }
 
   private addDecorativeElements(): void {
@@ -124,4 +156,4 @@ class ProfilePageUI {
   }
 }
 
-export { ProfilePageUI };
+export { ProfilePageUI, KeyOfProfileForms as FormTypes };
