@@ -1,0 +1,41 @@
+@import '~@root/style';
+
+.priceFilterForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.title {
+  @include textAccent;
+}
+
+.form {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+.rangeInput {
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
+
+  &::-webkit-slider-thumb {
+    pointer-events: all;
+    position: relative;
+    z-index: 1;
+  }
+
+  &::-moz-range-thumb {
+    pointer-events: all;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.valueLabel {
+  margin-top: 1.5rem;
+  @include textRegular;
+}
