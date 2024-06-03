@@ -2,11 +2,10 @@ import { DetailedProductPageUI } from './ui';
 
 export class DetailedProductPage {
   public elem: HTMLElement;
-
   private uiApi: DetailedProductPageUI;
 
-  constructor(productId: string) {
-    this.uiApi = new DetailedProductPageUI(productId);
+  constructor() {
+    this.uiApi = new DetailedProductPageUI();
     this.elem = this.uiApi.elem;
     this.render();
   }
