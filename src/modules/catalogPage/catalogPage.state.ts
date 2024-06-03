@@ -6,12 +6,7 @@ import { SortTypes } from './components/sortWidget/intefaces';
 export class CatalogPageState extends CatalogPageView {
   private productsDetailCollection: ProductDetailOptions[] = [];
 
-  constructor() {
-    super();
-    this.create();
-  }
-
-  public sortProductCards(type: SortTypes): void {
+  public sortProductCards(type: SortTypes): ProductDetailOptions[] {
     let sortCollection: ProductDetailOptions[] = [];
 
     switch (type) {
@@ -39,7 +34,7 @@ export class CatalogPageState extends CatalogPageView {
         break;
     }
 
-    this.update(sortCollection);
+    return sortCollection;
   }
 
   private compareTitles(
@@ -65,10 +60,11 @@ export class CatalogPageState extends CatalogPageView {
     return ascending ? getPrice(a) - getPrice(b) : getPrice(b) - getPrice(a);
   }
 
-  private async create(): Promise<void> {
+  protected async create(): Promise<void> {
     await this.getProductsDetailFromServer();
     this.draw();
-    this.sortProductCards('Price to height');
+    const sortCollection = this.sortProductCards('Price to height');
+    this.update(sortCollection, this.getFilterAttributes());
   }
 
   private async getProductsDetailFromServer(): Promise<void> {
@@ -88,6 +84,8 @@ export class CatalogPageState extends CatalogPageView {
         attributes.set(attribute.name, attributeValue);
       });
     });
+
+    attributes.delete('product-description');
     return attributes;
   }
 }
