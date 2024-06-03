@@ -1,20 +1,19 @@
 import { clientCredentials } from '@root/config';
 import { handleResponse, getFormHeaders, getJsonHeaders } from '@shared';
-import { LocalStorageService } from './localStorageService';
 import {
+  LocalStorageService,
+  BackendService,
   LoginResponse,
   RegistrationResponse,
   UserData,
   AddressAction,
   CustomerSignInResult,
-} from './interfaces';
+} from './shared';
 
 export class AuthService {
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
 
   private static registerUrl = `${clientCredentials.apiUrl}/ecommerce2024/customers`;
-
-  private static tokenUrl = `${clientCredentials.authUrl}/oauth/token?grant_type=client_credentials`;
 
   private static authUrl = `${clientCredentials.apiUrl}/{projectKey}/login`;
 
@@ -47,7 +46,7 @@ export class AuthService {
     email: string,
     password: string
   ): Promise<CustomerSignInResult> {
-    await AuthService.getToken();
+    await BackendService.getToken();
 
     const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
@@ -75,22 +74,8 @@ export class AuthService {
     return handleResponse(response);
   }
 
-  public static async getToken(): Promise<void> {
-    const response = await fetch(this.tokenUrl, {
-      method: 'POST',
-      headers: getFormHeaders(),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to get token');
-    }
-
-    const data = await handleResponse(response);
-    LocalStorageService.setAuthorisedToken(data.access_token);
-  }
-
   public static async register(userData: UserData): Promise<RegistrationResponse> {
-    await AuthService.getToken();
+    await BackendService.getToken();
     const body = JSON.stringify(userData);
 
     const token = LocalStorageService.getAuthorisedToken();

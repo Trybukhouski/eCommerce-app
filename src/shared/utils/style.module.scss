@@ -1,0 +1,66 @@
+.modalOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--orange-100);
+  padding: var(--padding-xxlg);
+  border-radius: var(--small-border-radius);
+  max-width: 37.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  color: var(--grey-500);
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-main-image {
+  width: 100%;
+}
+
+.thumbnail-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.625rem;
+  width: 80%;
+  overflow: hidden;
+}
+
+.thumbnails-wrapper {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+@media (max-width: 600px) {
+  .modal {
+    width: calc(100% - 2rem); /* Вычитаем 2rem от ширины экрана для создания отступов */
+    max-width: 100%; /* Установим максимальную ширину на весь экран */
+    padding: 1rem; /* Уменьшим отступы */
+  }
+
+  .closeButton {
+    top: 0.3125rem; /* Уменьшим отступ от верхнего края */
+    right: 0.3125rem; /* Уменьшим отступ от правого края */
+    font-size: 0.75rem; /* Уменьшим размер крестика */
+  }
+}

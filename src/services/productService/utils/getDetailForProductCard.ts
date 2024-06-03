@@ -1,4 +1,4 @@
-import { Product } from '@root/services/interfaces';
+import { Product } from '@services';
 import { ProductDetailOptions } from '@root/services/productService';
 import errorImage from '@assets/images/errorImage.png';
 

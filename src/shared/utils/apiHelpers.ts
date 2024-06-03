@@ -1,20 +1,21 @@
 import { clientCredentials } from '@root/config';
 import { LocalStorageService } from '@services';
 
-export function getHeaders() {
+export function getHeaders(token?: string) {
+  const bearerToken = token || LocalStorageService.getAuthorisedToken();
   return {
-    Authorization: `Bearer ${LocalStorageService.getAuthorisedToken()}`,
+    Authorization: `Bearer ${bearerToken}`,
     'Content-Type': 'application/json',
   };
 }
-export function getJsonHeaders() {
-  const token = LocalStorageService.getAuthorisedToken();
+export function getJsonHeaders(token?: string) {
+  const bearerToken = token || LocalStorageService.getAuthorisedToken();
   if (!token) {
     throw new Error('No access token found');
   }
   return {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${bearerToken}`,
   };
 }
 

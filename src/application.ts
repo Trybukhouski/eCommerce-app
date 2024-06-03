@@ -1,13 +1,13 @@
-import { Router, Routes, PagesDataModifier, pagesData } from '@routes';
+import { pagesData, PagesDataModifier, Router, Routes } from '@routes';
 import { LocalStorageService } from '@services';
 import {
-  MainPageActions as MainPage,
+  CatalogPage,
+  DetailedProductPage,
+  ErrorPage,
   LoginPage,
+  MainPageActions as MainPage,
   ProfilePage,
   RegistrPage,
-  ErrorPage,
-  DetailedProductPage,
-  CatalogPage,
 } from './modules';
 
 export class Application {
@@ -42,8 +42,8 @@ export class Application {
       ['loginPage', new LoginPage().elem],
       ['registrationPage', new RegistrPage().elem],
       ['errorPage', new ErrorPage().create().elements.root],
-      ['aboutPage', new DetailedProductPage().elem],
       ['catalogPage', new CatalogPage().root],
+      ['cardPage', new DetailedProductPage().elem],
     ]);
   }
 

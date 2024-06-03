@@ -1,7 +1,9 @@
 import { Button, ButtonOptions } from '@shared';
 import mainImagePath from '@assets/images/main-image.jpg';
 import thumbnail1Path from '@assets/images/thumbnail1.jpg';
-import * as styles from './styles.module.scss';
+import { Slider } from '@root/shared/utils/slider';
+import { Modal } from '@root/shared/utils/modal';
+import * as styles from './style.module.scss';
 
 export class DetailedProductPageUI {
   public elem: HTMLElement;
@@ -20,33 +22,46 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
+  private slider!: Slider; // Экземпляр слайдера
+
+  private modal: Modal; // Экземпляр модального окна
+
   constructor() {
     this.elem = document.createElement('div');
     this.elem.className = styles['page-container'];
 
     this.productName = document.createElement('h1');
-    this.productName.className = styles['product-name'];
+    this.productName.classList.add(styles['product-name']);
+    this.productName.classList.add('title');
     this.productName.textContent = 'Product Name';
 
     this.productDetails = document.createElement('div');
     this.productDetails.className = styles['product-details'];
 
     this.mainImage = document.createElement('img');
-    this.mainImage.className = styles['main-image'];
+    this.mainImage.classList.add(styles['main-image']);
+    this.mainImage.classList.add('main-image');
     this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
+    this.mainImage.addEventListener('click', () => this.openModal()); // Добавляем обработчик событий для открытия модалки
 
-    this.thumbnailsContainer = this.createThumbnailImages([
+    const thumbnailPaths = [
       thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
       thumbnail1Path,
-    ]);
+      thumbnail1Path,
+    ];
+
+    this.thumbnailsContainer = this.createThumbnailContainer(thumbnailPaths);
+
     this.productDescription = this.createDescription();
     this.priceContainer = this.createPriceContainer();
     this.addToCartButton = this.createAddToCartButton();
 
     this.assembleUI();
+
+    this.modal = new Modal(); // Инициализируем модальное окно
   }
 
   private assembleUI(): void {
@@ -65,16 +80,36 @@ export class DetailedProductPageUI {
     return column;
   }
 
-  private createThumbnailImages(paths: string[]): HTMLElement {
-    const thumbnails = document.createElement('div');
-    thumbnails.className = styles['thumbnail-images'];
+  private createThumbnailContainer(paths: string[]): HTMLElement {
+    const container = document.createElement('div');
+    container.className = styles['thumbnail-container'];
+
+    const thumbnailsWrapper = document.createElement('div');
+    thumbnailsWrapper.className = styles['thumbnails-wrapper'];
     paths.forEach((path) => {
       const img = document.createElement('img');
       img.src = path;
       img.alt = `Thumbnail of ${path}`;
-      thumbnails.appendChild(img);
+      thumbnailsWrapper.appendChild(img);
     });
-    return thumbnails;
+
+    // Создаем экземпляр слайдера
+    // Example: Assuming 2 thumbnails are visible at the same time
+    this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
+
+    // Добавляем кнопки управления слайдером
+    const prevButton = document.createElement('button');
+    prevButton.className = styles['slider-button'];
+    prevButton.textContent = '<';
+    prevButton.onclick = () => this.slider.showPreviousImage();
+
+    const nextButton = document.createElement('button');
+    nextButton.className = styles['slider-button'];
+    nextButton.textContent = '>';
+    nextButton.onclick = () => this.slider.showNextImage();
+
+    container.append(prevButton, thumbnailsWrapper, nextButton);
+    return container;
   }
 
   private createDescriptionColumn(): HTMLElement {
@@ -86,7 +121,8 @@ export class DetailedProductPageUI {
 
   private createDescription(): HTMLElement {
     const description = document.createElement('div');
-    description.className = styles['product-description'];
+    description.classList.add(styles['product-description']);
+    description.classList.add('description');
     description.innerHTML = `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum...</p>
       <p>Price: <span>$1000</span></p>
       <p>Material: <span>Gold</span></p>
@@ -125,42 +161,26 @@ export class DetailedProductPageUI {
     return button;
   }
 
-  public activateElement(elementKey: keyof DetailedProductPageUI): void {
-    this.addClass(elementKey, 'active');
-  }
+  private openModal(): void {
+    const modalContent = document.createElement('div');
 
-  public deactivateElement(elementKey: keyof DetailedProductPageUI): void {
-    this.removeClass(elementKey, 'active');
-  }
+    const mainImage = document.createElement('img');
+    mainImage.src = mainImagePath;
+    mainImage.alt = 'Main Product Image';
+    mainImage.className = styles['modal-main-image'];
 
-  private addClass(elementKey: keyof DetailedProductPageUI, className: string): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.classList.add(className);
-    }
-  }
+    const thumbnailsContainer = this.createThumbnailContainer([
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+      thumbnail1Path,
+    ]);
 
-  private removeClass(elementKey: keyof DetailedProductPageUI, className: string): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.classList.remove(className);
-    }
-  }
+    modalContent.appendChild(mainImage);
+    modalContent.appendChild(thumbnailsContainer);
 
-  public updateTextContent(elementKey: keyof DetailedProductPageUI, text: string): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.textContent = text;
-    }
-  }
-
-  public updateClassName(
-    elementKey: keyof DetailedProductPageUI,
-    className: keyof typeof styles
-  ): void {
-    const element = this[elementKey];
-    if (element instanceof HTMLElement) {
-      element.className = styles[className];
-    }
+    this.modal.setContent(modalContent);
+    this.modal.openModal();
   }
 }
