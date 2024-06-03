@@ -6,7 +6,7 @@ export class BackendService {
 
   private static accessToken?: string;
 
-  static async getToken() {
+  static async getToken(): Promise<string | undefined> {
     if (this.accessToken) {
       return this.accessToken;
     }
@@ -21,8 +21,10 @@ export class BackendService {
     }
 
     const data = await handleResponse(response);
-    if (typeof data.access_token === 'string') {
-      return data.access_token;
+    const accessToken = data.access_token;
+    if (typeof accessToken === 'string') {
+      this.accessToken = accessToken;
+      return accessToken;
     }
     return undefined;
   }
