@@ -78,4 +78,16 @@ export class CatalogPageState extends CatalogPageView {
       this.productsDetailCollection.push(productDetail);
     });
   }
+
+  public getFilterAttributes(): Map<string, Set<string>> {
+    const attributes: Map<string, Set<string>> = new Map();
+    this.productsDetailCollection.forEach((product) => {
+      product.attributes.forEach((attribute) => {
+        const attributeValue = attributes.get(attribute.name) || new Set();
+        attributeValue.add(attribute.value);
+        attributes.set(attribute.name, attributeValue);
+      });
+    });
+    return attributes;
+  }
 }
