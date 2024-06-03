@@ -5,10 +5,11 @@ import * as styles from './styles.module.scss';
 export class FilterView {
   public root = document.createElement('div');
 
+  public isActive = false;
+
   private elements = {
     form: document.createElement('form'),
     filterButton: new Button({ text: 'Filter' }).button,
-    resetButton: new Button({ text: 'Reset' }).button,
   };
 
   constructor() {
@@ -16,7 +17,7 @@ export class FilterView {
   }
 
   private draw(): void {
-    const { form, filterButton, resetButton } = this.elements;
+    const { form, filterButton } = this.elements;
     this.root.classList.add(styles.filter);
 
     const title = document.createElement('h3');
@@ -24,7 +25,7 @@ export class FilterView {
     title.classList.add(styles.title);
 
     form.classList.add(styles.form);
-    form.append(filterButton, resetButton);
+    form.append(filterButton);
 
     filterButton.type = 'submit';
     form.addEventListener('submit', (event) => {
@@ -68,11 +69,16 @@ export class FilterView {
 
   protected handleSubmit(): void {
     const formData = new FormData(this.elements.form);
+    this.isActive = false;
+
     const filterConditions: Map<string, Set<string>> = new Map();
     formData.forEach((value, name) => {
       const filterValue = filterConditions.get(name) || new Set();
       filterValue.add(value.toString());
       filterConditions.set(name, filterValue);
+      if (value.toString() !== '') {
+        this.isActive = true;
+      }
     });
 
     const filterConditionsObject = Object.fromEntries(

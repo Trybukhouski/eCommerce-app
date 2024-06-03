@@ -21,7 +21,7 @@ export class SortWidgetState extends SortWidgetView {
     return Array.from(this.sortConfig.keys());
   }
 
-  protected setSortType(type: SortTypes): void {
+  public setSortType(type: SortTypes): void {
     this.sortConfig.forEach((_, key) => {
       this.sortConfig.set(key, false);
     });
