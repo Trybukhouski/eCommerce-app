@@ -60,7 +60,7 @@ export class ProductService {
     }
   }
 
-  private static getPlaceholderImage(): string {
+  public static getPlaceholderImage(): string {
     return placeholderImage;
   }
 

@@ -1,8 +1,8 @@
 import { Button, ButtonOptions } from '@shared';
 import mainImagePath from '@assets/images/main-image.jpg';
-import thumbnail1Path from '@assets/images/thumbnail1.jpg';
 import { Slider } from '@root/shared/utils/slider';
 import { Modal } from '@root/shared/utils/modal';
+import { ProductService } from '@services';
 import * as styles from './style.module.scss';
 
 export class DetailedProductPageUI {
@@ -22,11 +22,13 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
-  private slider!: Slider; // Экземпляр слайдера
+  private slider!: Slider;
 
-  private modal: Modal; // Экземпляр модального окна
+  private modal: Modal;
 
-  constructor() {
+  private imagePaths: string[] = [];
+
+  constructor(productId: string) {
     this.elem = document.createElement('div');
     this.elem.className = styles['page-container'];
 
@@ -43,25 +45,47 @@ export class DetailedProductPageUI {
     this.mainImage.classList.add('main-image');
     this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
-    this.mainImage.addEventListener('click', () => this.openModal()); // Добавляем обработчик событий для открытия модалки
 
-    const thumbnailPaths = [
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-    ];
-
-    this.thumbnailsContainer = this.createThumbnailContainer(thumbnailPaths);
+    this.thumbnailsContainer = document.createElement('div');
+    this.thumbnailsContainer.className = styles['thumbnail-container'];
 
     this.productDescription = this.createDescription();
     this.priceContainer = this.createPriceContainer();
     this.addToCartButton = this.createAddToCartButton();
 
+    this.loadProductImages(productId);
+
     this.assembleUI();
 
-    this.modal = new Modal(); // Инициализируем модальное окно
+    this.modal = new Modal();
+    this.mainImage.addEventListener('click', () => this.openModal());
+  }
+
+  private async loadProductImages(productId: string): Promise<void> {
+    try {
+      const images = await ProductService.getProductImagesById(productId);
+      if (images.length === 0) {
+        console.log('No images found for product:', productId);
+        images.push(mainImagePath);
+      }
+      this.imagePaths = images;
+      this.updateSlider(images);
+      this.mainImage.src = images[0] || mainImagePath;
+    } catch (error) {
+      console.error('Failed to load product images:', error);
+      this.updateSlider([mainImagePath]);
+    }
+  }
+
+  private updateSlider(images: string[]): void {
+    this.thumbnailsContainer.innerHTML = '';
+    images.forEach((imageUrl) => {
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = 'Product Image';
+      this.thumbnailsContainer.appendChild(img);
+    });
+    this.slider = new Slider(this.thumbnailsContainer, images.length, 2);
   }
 
   private assembleUI(): void {
@@ -93,8 +117,6 @@ export class DetailedProductPageUI {
       thumbnailsWrapper.appendChild(img);
     });
 
-    // Создаем экземпляр слайдера
-    // Example: Assuming 2 thumbnails are visible at the same time
     this.slider = new Slider(thumbnailsWrapper, paths.length, 2);
 
     // Добавляем кнопки управления слайдером
@@ -165,17 +187,11 @@ export class DetailedProductPageUI {
     const modalContent = document.createElement('div');
 
     const mainImage = document.createElement('img');
-    mainImage.src = mainImagePath;
+    mainImage.src = this.mainImage.src;
     mainImage.alt = 'Main Product Image';
     mainImage.className = styles['modal-main-image'];
 
-    const thumbnailsContainer = this.createThumbnailContainer([
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-      thumbnail1Path,
-    ]);
+    const thumbnailsContainer = this.createThumbnailContainer(this.imagePaths);
 
     modalContent.appendChild(mainImage);
     modalContent.appendChild(thumbnailsContainer);
