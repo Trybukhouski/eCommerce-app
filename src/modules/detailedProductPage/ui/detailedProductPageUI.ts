@@ -2,7 +2,6 @@ import { Button, ButtonOptions } from '@shared';
 import mainImagePath from '@assets/images/main-image.jpg';
 import { Slider } from '@root/shared/utils/slider';
 import { Modal } from '@root/shared/utils/modal';
-import { ProductService } from '@services';
 import * as styles from './style.module.scss';
 
 export class DetailedProductPageUI {
@@ -12,7 +11,7 @@ export class DetailedProductPageUI {
 
   private productDetails: HTMLElement;
 
-  private mainImage: HTMLImageElement;
+  public mainImage: HTMLImageElement;
 
   private thumbnailsContainer: HTMLElement;
 
@@ -26,9 +25,9 @@ export class DetailedProductPageUI {
 
   private modal: Modal;
 
-  private imagePaths: string[] = [];
+  public imagePaths: string[] = [];
 
-  constructor(productId: string) {
+  constructor() {
     this.elem = document.createElement('div');
     this.elem.className = styles['page-container'];
 
@@ -53,31 +52,13 @@ export class DetailedProductPageUI {
     this.priceContainer = this.createPriceContainer();
     this.addToCartButton = this.createAddToCartButton();
 
-    this.loadProductImages(productId);
-
     this.assembleUI();
 
     this.modal = new Modal();
     this.mainImage.addEventListener('click', () => this.openModal());
   }
 
-  private async loadProductImages(productId: string): Promise<void> {
-    try {
-      const images = await ProductService.getProductImagesById(productId);
-      if (images.length === 0) {
-        console.log('No images found for product:', productId);
-        images.push(mainImagePath);
-      }
-      this.imagePaths = images;
-      this.updateSlider(images);
-      this.mainImage.src = images[0] || mainImagePath;
-    } catch (error) {
-      console.error('Failed to load product images:', error);
-      this.updateSlider([mainImagePath]);
-    }
-  }
-
-  private updateSlider(images: string[]): void {
+  public updateSlider(images: string[]): void {
     this.thumbnailsContainer.innerHTML = '';
     images.forEach((imageUrl) => {
       const img = document.createElement('img');
