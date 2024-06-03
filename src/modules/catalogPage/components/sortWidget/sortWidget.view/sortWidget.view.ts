@@ -14,7 +14,7 @@ export class SortWidgetView {
     });
   }
 
-  protected update(isOpened?: boolean, type?: SortTypes) {
+  public update(isOpened?: boolean, type?: SortTypes) {
     if (type) {
       Array.from(this.root.children).forEach((child) => {
         if (child.innerHTML === type) {

@@ -3,9 +3,9 @@ import { Filter, ProductCard, SortWidget } from './components';
 
 export class catalogPageMap {
   protected components = {
-    Filter,
+    filter: new Filter(),
     ProductCard,
-    SortWidget,
+    sortWidget: new SortWidget(),
   };
 
   protected services = {

@@ -7,4 +7,5 @@ export interface ProductDetailOptions {
   urls: {
     mainImage: string;
   };
+  attributes: { name: string; value: string }[];
 }

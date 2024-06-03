@@ -27,7 +27,7 @@
 
 .controls {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   gap: 1rem;
   height: 3rem;
 }
@@ -53,10 +53,32 @@
   .root {
     width: calc(100% - 7.5rem);
   }
+  .container {
+    grid-template-columns: 35% 1fr;
+  }
 }
 
 @media screen and (max-width: $tablet) {
   .root {
     width: calc(100% - 5rem);
+  }
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .catalog {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 32rem) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .catalog {
+    display: flex;
+    flex-direction: column;
   }
 }
