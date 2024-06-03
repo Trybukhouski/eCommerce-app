@@ -1,9 +1,12 @@
 @import '~@root/style';
 
 .root {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-auto-flow: row;
+  justify-items: center;
   align-items: center;
+  grid-template-rows: repeat(2, min-content) 1fr repeat(2, min-content);
+
   gap: 1rem;
   border: 1px solid var(--grey-100);
   border-radius: 0.3rem;
@@ -18,7 +21,7 @@
   align-items: center;
   overflow: hidden;
   width: 100%;
-  height: 19rem;
+  aspect-ratio: 1 / 1;
   border-radius: 0.3rem;
 }
 

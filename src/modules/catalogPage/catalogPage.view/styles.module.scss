@@ -22,11 +22,12 @@
 
 .title {
   @include title;
-  text-align: left;
+  text-align: center;
 }
 
 .controls {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   height: 3rem;
 }
@@ -34,7 +35,12 @@
 .catalog {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-self: center;
   gap: 1rem;
+
+  @media (max-width: $tablet) {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media screen and (max-width: $desktopLarge) {
