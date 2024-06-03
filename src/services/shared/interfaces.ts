@@ -107,6 +107,7 @@ export interface MasterVariant {
   sku: string;
   images: Image[];
   prices: Price[];
+  attributes: { name: string; value: string }[];
 }
 
 export interface Image {
