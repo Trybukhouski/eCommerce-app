@@ -4,6 +4,7 @@ import { DetailedProductPageUI } from './ui';
 
 export class DetailedProductPage {
   public elem: HTMLElement;
+
   private uiApi: DetailedProductPageUI;
 
   constructor() {
@@ -29,6 +30,7 @@ export class DetailedProductPage {
     const ui = this.uiApi;
     try {
       const images = await ProductService.getProductImagesById(productId);
+      console.log('Loaded images:', images);
       if (images.length === 0) {
         console.log('No images found for product:', productId);
         images.push(mainImagePath);

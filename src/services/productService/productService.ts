@@ -42,6 +42,7 @@ export class ProductService {
     try {
       const product = await this.getProductById(id);
       const images = product.masterData.current.masterVariant.images.map((img) => img.url);
+      console.log('Images from service:', images);
       return images.length > 0 ? images : [this.getPlaceholderImage()];
     } catch (error) {
       // console.error('Error fetching product images by ID:', error);
