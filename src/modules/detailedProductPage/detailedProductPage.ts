@@ -17,7 +17,7 @@ export class DetailedProductPage {
   private async addProductIDsListener() {
     window.addEventListener('hashchange', () => {
       setTimeout(() => {}, 0);
-      const idMatch = window.location.hash.match(/(?<=id\=).*/);
+      const idMatch = window.location.hash.match(/(?<=id=).*/);
       if (idMatch === null) {
         return;
       }
@@ -30,16 +30,16 @@ export class DetailedProductPage {
     const ui = this.uiApi;
     try {
       const images = await ProductService.getProductImagesById(productId);
-      console.log('Loaded images:', images);
+      // console.log('Loaded images:', images);
       if (images.length === 0) {
-        console.log('No images found for product:', productId);
+        // console.log('No images found for product:', productId);
         images.push(mainImagePath);
       }
       ui.imagePaths = images;
       ui.updateSlider(images);
       ui.mainImage.src = images[0] || mainImagePath;
     } catch (error) {
-      console.error('Failed to load product images:', error);
+      // console.error('Failed to load product images:', error);
       ui.updateSlider([mainImagePath]);
     }
   }
