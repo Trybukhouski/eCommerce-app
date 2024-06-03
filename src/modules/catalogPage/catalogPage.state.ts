@@ -6,40 +6,50 @@ import { SortTypes } from './components/sortWidget/intefaces';
 export class CatalogPageState extends CatalogPageView {
   private productsDetailCollection: ProductDetailOptions[] = [];
 
-  constructor() {
-    super();
-    this.create();
+  private filteringProductsDetailCollection: ProductDetailOptions[] = [];
+
+  get currentProductsDetailCollection(): ProductDetailOptions[] {
+    return this.filteringProductsDetailCollection.length > 0 || this.components.filter.isActive
+      ? this.filteringProductsDetailCollection
+      : this.productsDetailCollection;
   }
 
   public sortProductCards(type: SortTypes): void {
-    let sortCollection: ProductDetailOptions[] = [];
-
     switch (type) {
       case 'A-Z':
-        sortCollection = this.productsDetailCollection.sort((a, b) =>
-          this.compareTitles(a, b, true)
-        );
+        this.currentProductsDetailCollection.sort((a, b) => this.compareTitles(a, b, true));
         break;
       case 'Z-A':
-        sortCollection = this.productsDetailCollection.sort((a, b) =>
-          this.compareTitles(a, b, false)
-        );
+        this.currentProductsDetailCollection.sort((a, b) => this.compareTitles(a, b, false));
         break;
       case 'Price to low':
-        sortCollection = this.productsDetailCollection.sort((a, b) =>
-          this.comparePrices(a, b, false)
-        );
+        this.currentProductsDetailCollection.sort((a, b) => this.comparePrices(a, b, false));
         break;
       case 'Price to height':
-        sortCollection = this.productsDetailCollection.sort((a, b) =>
-          this.comparePrices(a, b, true)
-        );
+        this.currentProductsDetailCollection.sort((a, b) => this.comparePrices(a, b, true));
         break;
       default:
         break;
     }
+  }
 
-    this.update(sortCollection);
+  protected filterProductCards(filterConditions: { [key: string]: string[] }): void {
+    this.filteringProductsDetailCollection = [];
+
+    this.productsDetailCollection.forEach((product) => {
+      const matchesAllConditions = Object.keys(filterConditions).every((key) => {
+        return product.attributes.some(
+          (attribute) => attribute.name === key && filterConditions[key]?.includes(attribute.value)
+        );
+      });
+      if (matchesAllConditions) {
+        this.filteringProductsDetailCollection.push(product);
+      }
+    });
+
+    this.sortProductCards('Price to height');
+    this.components.sortWidget.setSortType('Price to height');
+    this.components.sortWidget.update(undefined, 'Price to height');
   }
 
   private compareTitles(
@@ -65,10 +75,12 @@ export class CatalogPageState extends CatalogPageView {
     return ascending ? getPrice(a) - getPrice(b) : getPrice(b) - getPrice(a);
   }
 
-  private async create(): Promise<void> {
+  protected async create(): Promise<void> {
     await this.getProductsDetailFromServer();
     this.draw();
+    this.filteringProductsDetailCollection = this.productsDetailCollection;
     this.sortProductCards('Price to height');
+    this.update(this.currentProductsDetailCollection, this.getFilterAttributes());
   }
 
   private async getProductsDetailFromServer(): Promise<void> {
@@ -77,5 +89,19 @@ export class CatalogPageState extends CatalogPageView {
       const productDetail = getDetailForProductCard(productData);
       this.productsDetailCollection.push(productDetail);
     });
+  }
+
+  public getFilterAttributes(): Map<string, Set<string>> {
+    const attributes: Map<string, Set<string>> = new Map();
+    this.productsDetailCollection.forEach((product) => {
+      product.attributes.forEach((attribute) => {
+        const attributeValue = attributes.get(attribute.name) || new Set();
+        attributeValue.add(attribute.value);
+        attributes.set(attribute.name, attributeValue);
+      });
+    });
+
+    attributes.delete('product-description');
+    return attributes;
   }
 }

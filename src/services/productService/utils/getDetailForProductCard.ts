@@ -17,5 +17,6 @@ export function getDetailForProductCard(product: Product, locale = 'en-GB'): Pro
     urls: {
       mainImage: responseDetail.masterVariant.images[0]?.url || errorImage,
     },
+    attributes: responseDetail.masterVariant.attributes,
   };
 }

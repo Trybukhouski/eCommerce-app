@@ -6,8 +6,8 @@ export class CatalogPageView extends catalogPageMap {
   public root = document.createElement('section');
 
   protected elements = {
-    filter: new this.components.Filter().root,
-    sortWidget: new this.components.SortWidget().root,
+    filter: this.components.filter.root,
+    sortWidget: this.components.sortWidget.root,
     catalog: document.createElement('div'),
   };
 
@@ -36,7 +36,13 @@ export class CatalogPageView extends catalogPageMap {
     this.root.append(title, container);
   }
 
-  protected update(cards: ProductDetailOptions[]): void {
+  protected update(
+    cards: ProductDetailOptions[],
+    filterAttributes?: Map<string, Set<string>>
+  ): void {
+    if (filterAttributes) {
+      this.components.filter.update(filterAttributes);
+    }
     const { catalog } = this.elements;
     catalog.innerHTML = '';
     cards.forEach((card) => {
