@@ -25,14 +25,16 @@ export class DetailedProductPageUI {
     this.elem.className = styles['page-container'];
 
     this.productName = document.createElement('h1');
-    this.productName.className = styles['product-name'];
+    this.productName.classList.add(styles['product-name']);
+    this.productName.classList.add('title');
     this.productName.textContent = 'Product Name';
 
     this.productDetails = document.createElement('div');
     this.productDetails.className = styles['product-details'];
 
     this.mainImage = document.createElement('img');
-    this.mainImage.className = styles['main-image'];
+    this.mainImage.classList.add(styles['main-image']);
+    this.mainImage.classList.add('main-image');
     this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
 
@@ -86,7 +88,8 @@ export class DetailedProductPageUI {
 
   private createDescription(): HTMLElement {
     const description = document.createElement('div');
-    description.className = styles['product-description'];
+    description.classList.add(styles['product-description']);
+    description.classList.add('description');
     description.innerHTML = `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum...</p>
       <p>Price: <span>$1000</span></p>
       <p>Material: <span>Gold</span></p>

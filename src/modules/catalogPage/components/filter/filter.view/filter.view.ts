@@ -9,5 +9,11 @@ export class FilterView {
 
   private create(): void {
     this.root.classList.add(styles.filter);
+
+    const title = document.createElement('h3');
+    title.innerHTML = 'Filter';
+    title.classList.add(styles.title);
+
+    this.root.append(title);
   }
 }

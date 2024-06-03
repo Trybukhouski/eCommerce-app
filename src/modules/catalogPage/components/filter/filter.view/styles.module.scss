@@ -1,5 +1,14 @@
+@import '~@root/style';
+
 .filter {
-  height: 500px;
+  padding: 1rem;
   border-radius: 0.3rem;
-  background-color: var(--grey-500);
+  background-color: var(--white-200);
+  height: fit-content;
+}
+
+.title {
+  @include title;
+  font-size: 1.5rem;
+  text-align: start;
 }

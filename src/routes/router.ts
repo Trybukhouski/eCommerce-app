@@ -52,6 +52,10 @@ export class Router implements RouterModel {
     return hash;
   }
 
+  public getHashParams(): string | undefined {
+    return window.location.hash.slice(1).split('?')[1];
+  }
+
   public addSubscriber(subscriber: Subscriber) {
     this.subscribers.push(subscriber);
   }
