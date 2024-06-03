@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { ProductService } from '@services';
 import mainImagePath from '@assets/images/main-image.jpg';
 import { DetailedProductPageUI } from './ui';
