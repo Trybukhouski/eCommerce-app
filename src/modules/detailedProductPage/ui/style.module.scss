@@ -59,6 +59,7 @@
 .main-image {
   width: 100%;
   height: auto;
+  cursor: pointer;
 }
 
 .thumbnail-container {
@@ -114,7 +115,7 @@
 
 .product-description p {
   margin: 0.625rem;
-    font-size: var(font-size-md);
+  font-size: var(font-size-md);
 }
 
 .price {
