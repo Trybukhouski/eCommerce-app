@@ -1,5 +1,4 @@
-import { Button } from '@shared';
-
+import { PriceFilter } from '../../priceFilter/priceFilter';
 import * as styles from './styles.module.scss';
 
 export class FilterView {
@@ -9,7 +8,7 @@ export class FilterView {
 
   private elements = {
     form: document.createElement('form'),
-    filterButton: new Button({ text: 'Filter' }).button,
+    priceFilter: new PriceFilter(0, 12000).root,
   };
 
   constructor() {
@@ -17,7 +16,7 @@ export class FilterView {
   }
 
   private draw(): void {
-    const { form, filterButton } = this.elements;
+    const { form } = this.elements;
     this.root.classList.add(styles.filter);
 
     const title = document.createElement('h3');
@@ -25,15 +24,13 @@ export class FilterView {
     title.classList.add(styles.title);
 
     form.classList.add(styles.form);
-    form.append(filterButton);
 
-    filterButton.type = 'submit';
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      this.handleSubmit();
+      this.handleFilterChange();
     });
 
-    this.root.append(title, form);
+    this.root.append(title, this.elements.priceFilter, form);
   }
 
   public update(attributesData: Map<string, Set<string>>): void {
@@ -59,15 +56,23 @@ export class FilterView {
           checkboxInput.name = name;
           checkboxInput.id = `${name}-${value}`;
 
-          filterItemCheckboxGroup.appendChild(checkboxLabel);
+          checkboxInput.addEventListener('change', () => this.handleFilterChange());
+
+          const wrapperDiv = document.createElement('div');
+          wrapperDiv.appendChild(checkboxLabel);
+
+          filterItemCheckboxGroup.appendChild(wrapperDiv);
         });
 
-        this.elements.form.prepend(filterItemLabel, filterItemCheckboxGroup);
+        const wrapperDiv = document.createElement('div');
+        wrapperDiv.append(filterItemLabel, filterItemCheckboxGroup);
+
+        this.elements.form.prepend(wrapperDiv);
       }
     });
   }
 
-  protected handleSubmit(): void {
+  private handleFilterChange(): void {
     const formData = new FormData(this.elements.form);
     this.isActive = false;
 

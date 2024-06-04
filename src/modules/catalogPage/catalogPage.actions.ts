@@ -6,6 +6,7 @@ export class CatalogPageActions extends CatalogPageState {
     this.create();
     this.handleClickOnSortWidget();
     this.handleFilterActions();
+    this.handlePriceFilterActions();
   }
 
   private handleClickOnSortWidget(): void {
@@ -21,6 +22,21 @@ export class CatalogPageActions extends CatalogPageState {
     this.root.addEventListener('filter', (event) => {
       if (event instanceof CustomEvent) {
         this.filterProductCards(event.detail.filterConditions);
+        this.sortProductCards('Price to height');
+        this.components.sortWidget.setSortType('Price to height');
+        this.components.sortWidget.update(undefined, 'Price to height');
+        this.update(this.currentProductsDetailCollection);
+      }
+    });
+  }
+
+  private handlePriceFilterActions(): void {
+    this.root.addEventListener('pricefilter', (event) => {
+      if (event instanceof CustomEvent) {
+        this.filterProductCardsByPrice(event.detail.range);
+        this.sortProductCards('Price to height');
+        this.components.sortWidget.setSortType('Price to height');
+        this.components.sortWidget.update(undefined, 'Price to height');
         this.update(this.currentProductsDetailCollection);
       }
     });
