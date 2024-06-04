@@ -8,10 +8,13 @@ export class CatalogPageState extends CatalogPageView {
 
   private filteringProductsDetailCollection: ProductDetailOptions[] = [];
 
+  private filteringByPriceProductsDetailCollection: ProductDetailOptions[] = this
+    .productsDetailCollection;
+
+  private commonProducts: ProductDetailOptions[] = this.productsDetailCollection;
+
   get currentProductsDetailCollection(): ProductDetailOptions[] {
-    return this.filteringProductsDetailCollection.length > 0 || this.components.filter.isActive
-      ? this.filteringProductsDetailCollection
-      : this.productsDetailCollection;
+    return this.commonProducts;
   }
 
   public sortProductCards(type: SortTypes): void {
@@ -33,6 +36,20 @@ export class CatalogPageState extends CatalogPageView {
     }
   }
 
+  public getFilterAttributes(): Map<string, Set<string>> {
+    const attributes: Map<string, Set<string>> = new Map();
+    this.productsDetailCollection.forEach((product) => {
+      product.attributes.forEach((attribute) => {
+        const attributeValue = attributes.get(attribute.name) || new Set();
+        attributeValue.add(attribute.value);
+        attributes.set(attribute.name, attributeValue);
+      });
+    });
+
+    attributes.delete('product-description');
+    return attributes;
+  }
+
   protected filterProductCards(filterConditions: { [key: string]: string[] }): void {
     this.filteringProductsDetailCollection = [];
 
@@ -46,10 +63,33 @@ export class CatalogPageState extends CatalogPageView {
         this.filteringProductsDetailCollection.push(product);
       }
     });
+    this.getCommonProductsById();
+  }
 
-    this.sortProductCards('Price to height');
-    this.components.sortWidget.setSortType('Price to height');
-    this.components.sortWidget.update(undefined, 'Price to height');
+  protected filterProductCardsByPrice(range: { minPrice: number; maxPrice: number }): void {
+    this.filteringByPriceProductsDetailCollection = [];
+    this.productsDetailCollection.forEach((product) => {
+      const currentPrice = product.priceInfo.discontPrice
+        ? product.priceInfo.discontPrice
+        : product.priceInfo.regularPrice;
+
+      if (currentPrice >= range.minPrice && currentPrice <= range.maxPrice) {
+        this.filteringByPriceProductsDetailCollection.push(product);
+      }
+    });
+    this.getCommonProductsById();
+  }
+
+  private getCommonProductsById(): void {
+    this.commonProducts = [];
+    this.filteringByPriceProductsDetailCollection.forEach((item1) => {
+      const commonProduct = this.filteringProductsDetailCollection.find(
+        (item2) => item2.id === item1.id
+      );
+      if (commonProduct) {
+        this.commonProducts.push(commonProduct);
+      }
+    });
   }
 
   private compareTitles(
@@ -89,19 +129,5 @@ export class CatalogPageState extends CatalogPageView {
       const productDetail = getDetailForProductCard(productData);
       this.productsDetailCollection.push(productDetail);
     });
-  }
-
-  public getFilterAttributes(): Map<string, Set<string>> {
-    const attributes: Map<string, Set<string>> = new Map();
-    this.productsDetailCollection.forEach((product) => {
-      product.attributes.forEach((attribute) => {
-        const attributeValue = attributes.get(attribute.name) || new Set();
-        attributeValue.add(attribute.value);
-        attributes.set(attribute.name, attributeValue);
-      });
-    });
-
-    attributes.delete('product-description');
-    return attributes;
   }
 }

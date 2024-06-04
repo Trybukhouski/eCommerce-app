@@ -73,8 +73,10 @@ export class PriceFilter {
       new CustomEvent('pricefilter', {
         bubbles: true,
         detail: {
-          minPrice: minValue,
-          maxPrice: maxValue,
+          range: {
+            minPrice: minValue,
+            maxPrice: maxValue,
+          },
         },
       })
     );
