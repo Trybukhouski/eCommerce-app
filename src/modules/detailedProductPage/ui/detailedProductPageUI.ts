@@ -1,5 +1,4 @@
 import { Button, ButtonOptions } from '@shared';
-import mainImagePath from '@assets/images/main-image.jpg';
 import { Slider } from '@root/shared/utils/slider';
 import { Modal } from '@root/shared/utils/modal';
 import * as styles from './style.module.scss';
@@ -21,8 +20,6 @@ export class DetailedProductPageUI {
 
   private addToCartButton: HTMLElement;
 
-  private slider!: Slider;
-
   private modal: Modal;
 
   public imagePaths: string[] = [];
@@ -42,7 +39,6 @@ export class DetailedProductPageUI {
     this.mainImage = document.createElement('img');
     this.mainImage.classList.add(styles['main-image']);
     this.mainImage.classList.add('main-image');
-    this.mainImage.src = mainImagePath;
     this.mainImage.alt = 'Main Product Image';
 
     this.thumbnailsContainer = document.createElement('div');
@@ -73,16 +69,33 @@ export class DetailedProductPageUI {
     const prevButton = document.createElement('button');
     prevButton.className = styles['slider-button'];
     prevButton.textContent = '<';
-    prevButton.onclick = () => this.slider.showPreviousImage();
 
     const nextButton = document.createElement('button');
     nextButton.className = styles['slider-button'];
     nextButton.textContent = '>';
-    nextButton.onclick = () => this.slider.showNextImage();
 
-    this.slider = new Slider(thumbnailsWrapper, images.length, 2, prevButton, nextButton);
+    // eslint-disable-next-line no-new
+    new Slider(
+      thumbnailsWrapper,
+      images.length,
+      1,
+      prevButton,
+      nextButton,
+      this.updateMainImage.bind(this)
+    );
 
     this.thumbnailsContainer.append(prevButton, thumbnailsWrapper, nextButton);
+
+    if (images.length > 0) {
+      this.updateMainImage(images[0]);
+    }
+  }
+
+  private updateMainImage(imageUrl: string | undefined): void {
+    if (imageUrl) {
+      this.mainImage.src = imageUrl;
+      this.modal.setMainImage(imageUrl);
+    }
   }
 
   private assembleUI(): void {
@@ -153,14 +166,8 @@ export class DetailedProductPageUI {
   private openModal(): void {
     const modalContent = document.createElement('div');
 
-    const mainImage = document.createElement('img');
-    mainImage.src = this.mainImage.src;
-    mainImage.alt = 'Main Product Image';
-    mainImage.className = styles['modal-main-image'];
-
     const thumbnailsContainer = this.createThumbnailContainer(this.imagePaths);
 
-    modalContent.appendChild(mainImage);
     modalContent.appendChild(thumbnailsContainer);
 
     this.modal.setContent(modalContent);
@@ -183,14 +190,20 @@ export class DetailedProductPageUI {
     const prevButton = document.createElement('button');
     prevButton.className = styles['slider-button'];
     prevButton.textContent = '<';
-    prevButton.onclick = () => this.slider.showPreviousImage();
 
     const nextButton = document.createElement('button');
     nextButton.className = styles['slider-button'];
     nextButton.textContent = '>';
-    nextButton.onclick = () => this.slider.showNextImage();
 
-    this.slider = new Slider(thumbnailsWrapper, paths.length, 2, prevButton, nextButton);
+    // eslint-disable-next-line no-new
+    new Slider(
+      thumbnailsWrapper,
+      paths.length,
+      1,
+      prevButton,
+      nextButton,
+      this.updateMainImage.bind(this)
+    );
 
     container.append(prevButton, thumbnailsWrapper, nextButton);
     return container;

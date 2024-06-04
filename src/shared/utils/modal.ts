@@ -9,6 +9,8 @@ export class Modal {
 
   private contentContainer: HTMLElement;
 
+  private mainImage: HTMLImageElement;
+
   constructor() {
     this.modalOverlay = document.createElement('div');
     this.modalOverlay.className = styles.modalOverlay;
@@ -23,6 +25,9 @@ export class Modal {
     this.contentContainer = document.createElement('div');
     this.contentContainer.className = styles.contentContainer;
 
+    this.mainImage = document.createElement('img');
+    this.mainImage.className = styles['modal-main-image'];
+
     this.closeButton.addEventListener('click', () => this.closeModal());
     this.modalOverlay.addEventListener('click', (event) => {
       if (event.target === this.modalOverlay) {
@@ -31,6 +36,7 @@ export class Modal {
     });
 
     this.modal.appendChild(this.closeButton);
+    this.modal.appendChild(this.mainImage);
     this.modal.appendChild(this.contentContainer);
     this.modalOverlay.appendChild(this.modal);
     document.body.appendChild(this.modalOverlay);
@@ -49,5 +55,9 @@ export class Modal {
   public setContent(content: HTMLElement): void {
     this.contentContainer.innerHTML = '';
     this.contentContainer.appendChild(content);
+  }
+
+  public setMainImage(src: string): void {
+    this.mainImage.src = src;
   }
 }
