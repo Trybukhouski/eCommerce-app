@@ -1,5 +1,4 @@
-import { Routes } from '@routes/index';
-import { LinkModel } from '@modules/mainPage/components/nav';
+import { Routes, LinkModel } from '@routes';
 import { NavMap } from '../nav.map';
 import * as styles from './styles.module.scss';
 
@@ -33,7 +32,7 @@ class NavView extends NavMap {
       link.innerHTML = `${linkObject.name[0]?.toUpperCase()}${linkObject.name
         .slice(1)
         .toLowerCase()}`;
-      link.setAttribute('data-name', linkObject.hash);
+      link.setAttribute('data-name', linkObject.hash as Routes);
       link.setAttribute('data-current', 'false');
       link.classList.add(styles.link);
       switch (linkObject.type) {

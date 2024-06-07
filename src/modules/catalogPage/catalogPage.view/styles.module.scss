@@ -1,0 +1,84 @@
+@import '~@root/style';
+
+.root {
+  width: var(--contentDesktopLarge);
+  margin: 1.875rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 25% 1fr;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  @include title;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  justify-content: start;
+  gap: 1rem;
+  height: 3rem;
+}
+
+.catalog {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-self: center;
+  gap: 1rem;
+
+  @media (max-width: $tablet) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: $desktopLarge) {
+  .root {
+    width: calc(100% - 12.5rem);
+  }
+}
+
+@media screen and (max-width: $desktop) {
+  .root {
+    width: calc(100% - 7.5rem);
+  }
+  .container {
+    grid-template-columns: 35% 1fr;
+  }
+}
+
+@media screen and (max-width: $tablet) {
+  .root {
+    width: calc(100% - 5rem);
+  }
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .catalog {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 32rem) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .catalog {
+    display: flex;
+    flex-direction: column;
+  }
+}

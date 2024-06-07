@@ -6,7 +6,7 @@ import {
   AddressAction,
   UserData,
 } from '@services';
-import { Input } from '@shared';
+import { Input, Form } from '@shared';
 import { registrPageUI } from './ui';
 
 interface CreateActionsObjectsOptions extends Address {
@@ -121,9 +121,8 @@ class RegistrPage {
     }
     this.uiApi.toggleButtonDisabled();
     try {
-      await AuthService.getToken();
       const response = await AuthService.register(userData);
-      await this.setAddresses(response);
+      await this.setAddressesAndBirthday(response, userData.birthDate);
       NotificationService.displaySuccess('Account created successfully!');
       this.elem.dispatchEvent(
         new CustomEvent('logined', {
@@ -171,12 +170,10 @@ class RegistrPage {
     ] as [string | undefined, AddressAction, AddressAction];
   }
 
-  private async setAddresses(response: RegistrationResponse) {
+  private async setAddressesAndBirthday(response: RegistrationResponse, birthDate?: string) {
     const customerId = response.customer.id;
     const { addresses } = response.customer;
-    if (!addresses || !customerId) {
-      return;
-    }
+    if (!addresses || !customerId) return;
 
     if (addresses.length === 1) {
       const billsAddress: CreateActionsObjectsOptions = {};
@@ -192,9 +189,7 @@ class RegistrPage {
       const actions: AddressAction[] = [];
 
       const [isDefault, addAddressIdAction, setDefaultAddressAction] = this.createActionsObjects(a);
-      if (!isDefault) {
-        return;
-      }
+      if (!isDefault) return;
 
       actions.push(addAddressIdAction);
       if (isDefault === 'true') {
@@ -202,9 +197,12 @@ class RegistrPage {
       }
       actionsArr.push(...actions);
     });
+    if (birthDate) {
+      actionsArr.push({ action: 'setDateOfBirth', dateOfBirth: Form.rotateBirthDate(birthDate) });
+    }
 
     try {
-      AuthService.sendAddressActions(customerId, actionsArr);
+      await AuthService.sendAddressAndBirthdayActions(customerId, actionsArr);
     } catch (error) {
       NotificationService.displayError(
         error instanceof Error ? error.message : 'Error fetching customer version'

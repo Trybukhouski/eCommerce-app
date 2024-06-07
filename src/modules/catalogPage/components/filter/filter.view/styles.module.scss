@@ -1,0 +1,41 @@
+@import '~@root/style';
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.3rem;
+  background-color: var(--white-200);
+  height: fit-content;
+}
+
+.title {
+  @include title;
+  font-size: 1.5rem;
+  text-align: start;
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filterItemLabel {
+  @include textAccent;
+  text-transform: capitalize;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.checkboxLabel {
+  @include textRegular;
+  display: flex;
+  gap: 0.5rem;
+}

@@ -1,13 +1,21 @@
 import { clientCredentials } from '@root/config';
-import { handleResponse } from '@shared';
-import { LoginResponse, RegistrationResponse, UserData, AddressAction } from './interfaces';
+import { handleResponse, getFormHeaders, getJsonHeaders } from '@shared';
+import {
+  LocalStorageService,
+  BackendService,
+  LoginResponse,
+  RegistrationResponse,
+  UserData,
+  AddressAction,
+  CustomerSignInResult,
+} from './shared';
 
 export class AuthService {
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
 
   private static registerUrl = `${clientCredentials.apiUrl}/ecommerce2024/customers`;
 
-  private static tokenUrl = `${clientCredentials.authUrl}/oauth/token?grant_type=client_credentials`;
+  private static authUrl = `${clientCredentials.apiUrl}/{projectKey}/login`;
 
   public static async login(username: string, password: string): Promise<LoginResponse> {
     const url = `${this.baseUrl}/token`;
@@ -19,51 +27,63 @@ export class AuthService {
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${btoa(
-          `${clientCredentials.clientId}:${clientCredentials.clientSecret}`
-        )}`,
-      },
+      headers: getFormHeaders(),
       body,
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to authenticate customer: ${errorText}`);
+    }
+
+    LocalStorageService.setAuthorisedToken((response as LoginResponse)['access_token']);
+    const authResponse = await AuthService.authenticateCustomer(username, password);
+    LocalStorageService.setUserId(authResponse.customer.id);
 
     return handleResponse(response);
   }
 
-  public static async getToken(): Promise<void> {
-    const response = await fetch(this.tokenUrl, {
+  public static async authenticateCustomer(
+    email: string,
+    password: string
+  ): Promise<CustomerSignInResult> {
+    const token = await BackendService.getToken();
+    if (!token) {
+      throw new Error('No access token found');
+    }
+    const { projectKey } = clientCredentials;
+    if (!projectKey) {
+      throw new Error('Project key is not defined');
+    }
+
+    const url = this.authUrl.replace('{projectKey}', projectKey);
+    const body = JSON.stringify({ email, password });
+
+    const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${btoa(
-          `${clientCredentials.clientId}:${clientCredentials.clientSecret}`
-        )}`,
-      },
+      headers: getJsonHeaders(token),
+      body,
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get token');
+      const errorText = await response.text();
+      throw new Error(`Failed to authenticate customer: ${errorText}`);
     }
 
-    const data = await handleResponse(response);
-    localStorage.setItem('accessToken', data.access_token);
+    return handleResponse(response);
   }
 
   public static async register(userData: UserData): Promise<RegistrationResponse> {
     const body = JSON.stringify(userData);
 
-    const token = localStorage.getItem('accessToken');
+    const token = await BackendService.getToken();
     if (!token) {
       throw new Error('No access token found');
     }
 
     const response = await fetch(this.registerUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getJsonHeaders(token),
       body,
     });
 
@@ -72,11 +92,15 @@ export class AuthService {
       const errorJson = JSON.parse(errorText);
       throw new Error(errorJson.message || 'Registration failed');
     }
-    return handleResponse(response);
+
+    const handlingResponse: RegistrationResponse = await handleResponse(response);
+    LocalStorageService.setAuthorisedToken(token);
+    LocalStorageService.setUserId(handlingResponse.customer.id);
+    return handlingResponse;
   }
 
   public static async getCustomerVersion(userId: string): Promise<number> {
-    const token = localStorage.getItem('accessToken');
+    const token = await BackendService.getToken();
     if (!token) {
       throw new Error('No access token found');
     }
@@ -84,10 +108,7 @@ export class AuthService {
     const url = `${this.registerUrl}/${userId}`;
     const response = await fetch(url, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getJsonHeaders(),
     });
 
     if (!response.ok) {
@@ -99,7 +120,7 @@ export class AuthService {
     return data.version;
   }
 
-  public static async sendAddressActions(
+  public static async sendAddressAndBirthdayActions(
     userId: string,
     actions: AddressAction[]
   ): Promise<RegistrationResponse> {
@@ -110,7 +131,7 @@ export class AuthService {
     };
     const body = JSON.stringify(request);
 
-    const token = localStorage.getItem('accessToken');
+    const token = LocalStorageService.getAuthorisedToken();
     if (!token) {
       throw new Error('No access token found');
     }
@@ -118,10 +139,7 @@ export class AuthService {
     const url = `${this.registerUrl}/${userId}`;
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getJsonHeaders(),
       body,
     });
 

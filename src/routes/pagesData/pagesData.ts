@@ -26,6 +26,16 @@ export const pagesData: PagesDataModel = {
       redirectionPage: 'error',
     },
   },
+  card: {
+    name: 'card',
+    hash: 'card',
+    status: 'available',
+    current: false,
+    type: 'shop',
+    ifBlocked: {
+      redirectionPage: 'error',
+    },
+  },
   about: {
     name: 'about',
     hash: 'about',

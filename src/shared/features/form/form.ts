@@ -12,6 +12,29 @@ class Form {
 
   public button: HTMLButtonElement;
 
+  public fieldsetElement?: HTMLFieldSetElement;
+
+  private checkValidityFunction = () => {
+    const isValid = !this.inputArr.some((i) => {
+      if (i instanceof Input) {
+        const fieldset = i.input.closest('fieldset');
+        const isFieldsetHidden = fieldset?.classList.contains('hidden');
+        if (isFieldsetHidden === true) {
+          return false;
+        }
+        if (i.input.required === true && !isFieldsetHidden) {
+          return i.input.validity.valid === false || i.input.value.length === 0;
+        }
+        if (i.input.required === false) {
+          return i.input.validity.valid === false && i.input.value.length !== 0;
+        }
+        return false;
+      }
+      return false;
+    });
+    this.button.disabled = !isValid;
+  };
+
   constructor(options: FormOptions) {
     const configs = { ...defaultFormOptions, ...options };
     const form = document.createElement('form');
@@ -20,6 +43,7 @@ class Form {
     if (configs.hasFieldset) {
       const fieldset = document.createElement('fieldset');
       form.append(fieldset);
+      this.fieldsetElement = fieldset;
       this.container = fieldset;
     }
 
@@ -60,27 +84,26 @@ class Form {
     });
   }
 
-  private validityListener(): void {
-    this.form.addEventListener('input', () => {
-      const isValid = !this.inputArr.some((i) => {
-        if (i instanceof Input) {
-          const fieldset = i.input.closest('fieldset');
-          const isFieldsetHidden = fieldset?.classList.contains('hidden');
-          if (isFieldsetHidden === true) {
-            return false;
-          }
-          if (i.input.required === true && !isFieldsetHidden) {
-            return i.input.validity.valid === false || i.input.value.length === 0;
-          }
-          if (i.input.required === false) {
-            return i.input.validity.valid === false && i.input.value.length !== 0;
-          }
-          return false;
-        }
-        return false;
-      });
-      this.button.disabled = !isValid;
-    });
+  public validityListener(state?: 'on' | 'off'): void {
+    if (state === 'off') {
+      this.form.removeEventListener('input', this.checkValidityFunction);
+    } else {
+      this.form.addEventListener('input', this.checkValidityFunction);
+    }
+  }
+
+  public static rotateBirthDate(date: string): string {
+    return date
+      .split(/[.-]/)
+      .map((_, ind, arr) => arr[arr.length - ind - 1])
+      .join('-');
+  }
+
+  public static getInputElement(input: FormInputs) {
+    if (input instanceof Input) {
+      return input.input;
+    }
+    return input.select;
   }
 }
 

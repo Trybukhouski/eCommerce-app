@@ -1,6 +1,6 @@
 @import '@assets/styles/fonts.scss';
 
-.simple-button {
+.simple {
   $disabled-button-bg-color: var(--orange-200);
   $hover-button-bg-color: var(--orange-500);
   $normal-button-bg-color: var(--orange-400);
@@ -24,6 +24,10 @@
   transition: 0.3s background-color;
   cursor: pointer;
 
+  &[data-customColor='blue'] {
+    background-color: var(--blue-500);
+  }
+
   &:hover {
     background-color: $hover-button-bg-color;
   }
@@ -32,4 +36,29 @@
     background-color: $disabled-button-bg-color;
     cursor: auto;
   }
+}
+
+.edit-icon {
+  $hover-transition-time: 0.3s;
+  cursor: pointer;
+  display: flex;
+  border: none;
+  border-radius: 0.3rem;
+  svg {
+    width: 2rem;
+    height: 2rem;
+    transition: color $hover-transition-time;
+  }
+
+  transition: background-color $hover-transition-time;
+  background-color: transparent;
+  color: var(--black-900);
+
+  &:hover {
+    background-color: var(--black-900);
+    color: var(--white-100);
+  }
+
+  fill: transparent;
+  stroke: currentColor;
 }

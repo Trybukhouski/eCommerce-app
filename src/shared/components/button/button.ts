@@ -11,7 +11,7 @@ class Button {
     const button = document.createElement('button');
     this.button = button;
     button.textContent = configs.text;
-    button.classList.add(style['simple-button']);
+    this.setClassName(configs.className);
 
     if (configs.disabled) {
       button.disabled = true;
@@ -27,6 +27,14 @@ class Button {
     if (configs.icon.sprite) {
       this.addIcon(configs.icon.sprite, configs.icon.towhere);
     }
+
+    if (configs.customColor) {
+      this.button.setAttribute('data-customColor', configs.customColor);
+    }
+  }
+
+  private setClassName(className: typeof defaultButtonOptions['className']) {
+    this.button.classList.add(style[className]);
   }
 
   private addIcon(sprite: BrowserSpriteSymbol, where: Location): void {
