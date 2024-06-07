@@ -8,6 +8,8 @@ import {
   MainPageActions as MainPage,
   ProfilePage,
   RegistrPage,
+  BasketPage,
+  AboutUsPage,
 } from './modules';
 
 export class Application {
@@ -44,6 +46,8 @@ export class Application {
       ['errorPage', new ErrorPage().create().elements.root],
       ['catalogPage', new CatalogPage().root],
       ['cardPage', new DetailedProductPage().elem],
+      ['basketPage', new BasketPage().elem],
+      ['aboutPage', new AboutUsPage().elem],
     ]);
   }
 

@@ -7,4 +7,5 @@ export type Routes =
   | 'login'
   | 'profile'
   | 'signOut'
-  | 'error';
+  | 'error'
+  | 'basket';
