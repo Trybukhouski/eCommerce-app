@@ -20,6 +20,10 @@ class Button {
     if (configs.isLink) {
       button.classList.add('link');
       button.setAttribute('data-href', configs.href);
+
+      if (configs.href !== '') {
+        this.addLinkListener();
+      }
     }
 
     button.type = configs.type;
@@ -31,6 +35,15 @@ class Button {
     if (configs.customColor) {
       this.button.setAttribute('data-customColor', configs.customColor);
     }
+  }
+
+  private addLinkListener(): void {
+    this.button.addEventListener('click', () => {
+      const hash = this.button.getAttribute('data-href');
+      if (hash) {
+        window.location.hash = hash;
+      }
+    });
   }
 
   private setClassName(className: typeof defaultButtonOptions['className']) {
