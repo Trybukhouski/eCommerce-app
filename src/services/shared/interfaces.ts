@@ -151,3 +151,54 @@ export interface LoginCustomer {
 export interface CustomerSignInResult {
   customer: LoginCustomer;
 }
+
+interface WhosModify {
+  clientId: string;
+  isPlatformClient: boolean;
+  customer: {
+    id: string;
+    typeId: string;
+  };
+}
+
+export interface Cart {
+  cartState: string;
+  createdAt: string;
+  createdBy: WhosModify;
+  customLineItems: [];
+  customerId: string;
+  deleteDaysAfterLastModification: number;
+  directDiscounts: [];
+  discountCodes: [];
+  id: string;
+  inventoryMode: string;
+  itemShippingAddresses: [];
+  lastMessageSequenceNumber: number;
+  lastModifiedAt: string;
+  lastModifiedBy: WhosModify;
+  lineItems: [];
+  origin: string;
+  refusedGifts: [];
+  shipping: [];
+  shippingMode: string;
+  taxCalculationMode: string;
+  taxMode: string;
+  taxRoundingMode: string;
+  totalPrice: {
+    type: string;
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+  type: string;
+  version: number;
+  versionModifiedAt: string;
+}
+
+export interface Carts {
+  count: number;
+  limit: number;
+  offset: number;
+  results: Cart[];
+  total: number;
+}

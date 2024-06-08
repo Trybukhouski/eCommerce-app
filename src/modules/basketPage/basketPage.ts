@@ -1,10 +1,14 @@
-import { CartService } from './services';
+import { Cart, CartService } from '@services';
+import { CartPageUI } from './ui';
 
 class BasketPage {
   public elem: HTMLElement;
 
+  private uiApi: CartPageUI;
+
   constructor() {
-    this.elem = document.createElement('div');
+    this.uiApi = new CartPageUI();
+    this.elem = this.uiApi.root;
 
     this.addHashChangeListener();
   }
@@ -14,17 +18,33 @@ class BasketPage {
       setTimeout(() => {}, 0);
       const idMatch = window.location.hash.match(/basket/);
       if (idMatch === null) {
-        return;
+        this.uiApi.hideContent();
+      } else {
+        this.loadPage();
       }
-      this.loadPage();
     };
     window.addEventListener('hashchange', func);
     document.addEventListener('DOMContentLoaded', func);
   }
 
-  private loadPage(): Promise<unknown> {
-    const response: Promise<unknown> = CartService.checkIsCartExist();
-    return response;
+  private async loadPage(): Promise<void> {
+    let cart: Cart | undefined;
+    const carts = await CartService.getCarts();
+    if (carts?.count === 0) {
+      cart = await CartService.createCart();
+    } else {
+      cart = carts?.results[0];
+    }
+
+    if (cart === undefined) {
+      return;
+    }
+
+    if (cart.lineItems.length === 0) {
+      this.uiApi.showEmptyMessage();
+    } else {
+      this.uiApi.showBasket();
+    }
   }
 }
 
