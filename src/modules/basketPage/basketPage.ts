@@ -1,4 +1,4 @@
-import { Cart, CartService } from '@services';
+import { CartService } from '@services';
 import { CartPageUI } from './ui';
 
 class BasketPage {
@@ -28,13 +28,7 @@ class BasketPage {
   }
 
   private async loadPage(): Promise<void> {
-    let cart: Cart | undefined;
-    const carts = await CartService.getCarts();
-    if (carts?.count === 0) {
-      cart = await CartService.createCart();
-    } else {
-      cart = carts?.results[0];
-    }
+    const cart = await CartService.getCart();
 
     if (cart === undefined) {
       return;
