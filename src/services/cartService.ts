@@ -5,17 +5,10 @@ import { BackendService, LocalStorageService, Cart, Carts } from './shared';
 class CartService extends BackendService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
 
-  private static cartCache?: Cart;
-
   public static async getCart(): Promise<Cart | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
     if (authToken === null) {
       return undefined;
-    }
-
-    const cache = CartService.cartCache;
-    if (cache) {
-      return cache;
     }
 
     let cart: Cart | undefined;
@@ -29,7 +22,6 @@ class CartService extends BackendService {
     } else {
       cart = carts.results[0];
     }
-    CartService.cartCache = cart;
     return cart;
   }
 
