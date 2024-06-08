@@ -1,21 +1,30 @@
 import { clientCredentials } from '@root/config';
-import { BackendService, LocalStorageService } from '@services';
+import { BackendService } from '@services';
 import { getHeaders /* handleResponse */ } from '@shared';
 
 class CartService extends BackendService {
-  private static cartUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/carts`;
+  private static cartUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
 
   private static cartIdUrl = `${this.cartUrl}/customer-id={customerId}`;
 
   private static errMessCartNotExist = 'An active cart for the customer does not exist';
 
-  public static async getCartById(): Promise<void> {
-    const userId = LocalStorageService.getUserId();
-    if (userId === null) {
-      return;
-    }
+  public static async checkIsCartExist(): Promise<Response | undefined> {
+    const url = this.cartUrl;
+    const response = fetch(url, {
+      method: 'HEAD',
+      headers: getHeaders(),
+    });
 
-    const url = this.cartIdUrl.replace(/{customerId}/, userId);
+    return response;
+
+    // console.log((await response).body);
+
+    // return handleResponse(response);
+  }
+
+  public static async getCartById(): Promise<void> {
+    const url = this.cartIdUrl;
     const response = fetch(url, {
       method: 'GET',
       headers: getHeaders(),

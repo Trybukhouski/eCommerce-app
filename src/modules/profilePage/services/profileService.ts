@@ -1,6 +1,6 @@
 import { clientCredentials } from '@root/config';
 import { LocalStorageService, Customer, AuthService, Address } from '@services';
-import { getJsonHeaders, handleResponse } from '@shared';
+import { getHeaders, getJsonHeaders, handleResponse } from '@shared';
 
 interface AddressAction {
   action: string;
@@ -8,20 +8,23 @@ interface AddressAction {
 }
 
 class ProfileService {
+  public static getCustomerIdErrorMess = `Can't find customer's id`;
+
   private static customersUrl = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/customers`;
 
-  public static async getCustomer(): Promise<Customer | undefined> {
-    const id = LocalStorageService.getUserId();
-    const url = `${this.customersUrl}/${id}`;
+  private static customerMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me`;
 
-    const token = LocalStorageService.getAuthorisedToken();
-    if (!token) {
+  private static customerID?: string;
+
+  public static async getCustomer(): Promise<Customer | undefined> {
+    const authToken = LocalStorageService.getAuthorisedToken();
+    if (authToken === null) {
       return undefined;
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(this.customerMeEndpoint, {
       method: 'GET',
-      headers: getJsonHeaders(),
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -31,14 +34,13 @@ class ProfileService {
 
     const data: Customer = await handleResponse(response);
 
+    this.customerID = data.id;
+
     return data;
   }
 
   public static async sendActions(actions: AddressAction[]): Promise<Customer> {
-    const userId = LocalStorageService.getUserId();
-    if (userId === null) {
-      throw new Error(`Can't find customer's id`);
-    }
+    const userId = await ProfileService.getCustomerID();
     const currentVersion = await AuthService.getCustomerVersion(userId);
     const request = {
       version: currentVersion,
@@ -71,7 +73,7 @@ class ProfileService {
     currentPassword: string,
     newPassword: string
   ): Promise<Customer | undefined> {
-    const userId = LocalStorageService.getUserId();
+    const userId = await ProfileService.getCustomerID();
     const url = `${ProfileService.customersUrl}/password`;
 
     const token = LocalStorageService.getAuthorisedToken();
@@ -104,6 +106,26 @@ class ProfileService {
     AuthService.login(data.email, newPassword);
 
     return data;
+  }
+
+  public static async getCustomerID(): Promise<string> {
+    if (this.customerID !== undefined) {
+      return this.customerID;
+    }
+
+    const customer: Promise<Customer | undefined> = this.getCustomer();
+    const id = await customer.then(() => {
+      if (this.customerID === undefined) {
+        throw new Error(this.getCustomerIdErrorMess);
+      }
+      return this.customerID;
+    });
+
+    return id;
+  }
+
+  public static deleteCustomerID(): void {
+    ProfileService.customerID = undefined;
   }
 }
 

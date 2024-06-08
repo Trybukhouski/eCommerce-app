@@ -1,4 +1,4 @@
-import { Address, Customer, LocalStorageService, NotificationService } from '@services';
+import { Address, Customer, NotificationService } from '@services';
 import { Form } from '@shared';
 import { ProfilePageUI, FormTypes } from './ui';
 import { ProfileService, handleResponse } from './services';
@@ -9,8 +9,6 @@ export class ProfilePage {
   public elem: HTMLElement;
 
   private uiApi: ProfilePageUI;
-
-  private serverService = ProfileService;
 
   static readonly formTypes = ProfilePageUI.formTypes;
 
@@ -26,7 +24,7 @@ export class ProfilePage {
     this.addressManager = new AddressManager(this.uiApi);
 
     this.addEditClickListener();
-    this.addLoggedInListener();
+    this.addLoadPageListeners();
   }
 
   public async displayUserData(update?: boolean, customer?: Customer): Promise<void> {
@@ -35,11 +33,11 @@ export class ProfilePage {
       if (customer) {
         response = customer;
       } else {
-        const customerPromise = this.serverService.getCustomer().catch((err: Error) => {
+        const customerPromise = ProfileService.getCustomer().catch((err: Error) => {
           NotificationService.displayError(err.message);
           return undefined;
         });
-        response = await customerPromise.then((result) => result);
+        response = await customerPromise;
       }
       this.userDataCache = response;
     }
@@ -50,21 +48,32 @@ export class ProfilePage {
     this.addBasicUserData(data);
   }
 
-  private addLoggedInListener(): void {
-    const id = LocalStorageService.getUserId();
-    if (id) {
-      this.displayUserData(true);
-    }
-    document.addEventListener('logined', (e: Event) => {
-      if (!(e instanceof CustomEvent)) {
+  private addLoadPageListeners(): void {
+    const func = () => {
+      setTimeout(() => {}, 0);
+      const idMatch = window.location.hash.match(/profile/);
+      if (idMatch === null) {
         return;
       }
-      const { detail } = e;
-      const isLoggedIn = detail.logined;
-      if (isLoggedIn) {
-        this.displayUserData(true);
+      this.displayUserData(true);
+    };
+    window.addEventListener('hashchange', func);
+    document.addEventListener('DOMContentLoaded', func);
+    document.addEventListener('logined', (event) => {
+      if (!(event instanceof CustomEvent)) return;
+      const isLoggedIn = event.detail.logined;
+      if (typeof isLoggedIn !== 'boolean') return;
+      if (isLoggedIn === false) {
+        this.deleteUserInfo();
       }
     });
+  }
+
+  private deleteUserInfo(): void {
+    ProfileService.deleteCustomerID();
+    this.userDataCache = undefined;
+    this.uiApi.clearPageFields();
+    this.addressManager.clearAddressIds();
   }
 
   private addEditClickListener(): void {

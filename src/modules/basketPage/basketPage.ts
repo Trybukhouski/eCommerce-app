@@ -23,7 +23,7 @@ class BasketPage {
   }
 
   private loadPage(): Promise<unknown> {
-    const response: Promise<unknown> = CartService.getCartById();
+    const response: Promise<unknown> = CartService.checkIsCartExist();
     return response;
   }
 }

@@ -62,7 +62,6 @@ class LoginPage {
       const data = await AuthService.login(this.emailInput.value, this.passwordInput.value);
       // console.log('Response data:', data);
       if (data.access_token) {
-        localStorage.setItem('accessToken', data.access_token);
         NotificationService.displaySuccess('Logged in successfully!');
         this.elem.dispatchEvent(
           new CustomEvent('logined', {

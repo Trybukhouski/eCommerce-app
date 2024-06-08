@@ -53,6 +53,20 @@ class ProfilePageUI {
     this.addDecorativeElements();
   }
 
+  public clearPageFields(): void {
+    profilePageOptionsKeys.forEach((key) => {
+      const { form } = this.forms[key];
+      form.inputArr.forEach((i) => {
+        const elem = Form.getInputElement(i);
+        if (elem instanceof HTMLInputElement && elem.type === 'checkbox') {
+          elem.checked = false;
+        } else {
+          elem.value = '';
+        }
+      });
+    });
+  }
+
   public toggleDisableEditButton(formkey: KeyOfProfileForms, disable?: boolean): void {
     const button = this.forms[formkey].form.button as HTMLButtonElement;
     button.disabled = disable ?? !button.disabled;
