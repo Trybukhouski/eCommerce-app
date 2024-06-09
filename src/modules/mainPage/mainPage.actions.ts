@@ -31,6 +31,9 @@ export class MainPageActions extends MainPageView {
   private updateParamsOfCatalogURL(): void {
     this.elements.root.addEventListener('clickOnCard', (event) => {
       if (event instanceof CustomEvent) {
+        if (event.detail.target && (event.detail.target as HTMLElement).closest('button')) {
+          return;
+        }
         const { router } = this.services;
         router.setHash('card', { id: event.detail.id });
       }

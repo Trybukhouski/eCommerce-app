@@ -1,4 +1,5 @@
 import { ProductDetailOptions } from '@services';
+import { AddToCartButton } from '@shared';
 import { catalogPageMap } from '../catalogPage.map';
 import * as styles from './styles.module.scss';
 
@@ -46,17 +47,20 @@ export class CatalogPageView extends catalogPageMap {
     const { catalog } = this.elements;
     catalog.innerHTML = '';
     cards.forEach((card) => {
-      const cardEl = new this.components.ProductCard(card).root;
-      cardEl.addEventListener('click', () => {
+      const component = new this.components.ProductCard(card);
+      const cardEl = component.root;
+      cardEl.addEventListener('click', (event) => {
         cardEl.dispatchEvent(
           new CustomEvent('clickOnCard', {
             bubbles: true,
             detail: {
               id: cardEl.getAttribute('id'),
+              target: event.target,
             },
           })
         );
       });
+      cardEl.append(new AddToCartButton({}, component).button);
       catalog.append(cardEl);
     });
   }
