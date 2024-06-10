@@ -37,6 +37,7 @@ class BasketPage {
     if (cart.lineItems.length === 0) {
       this.uiApi.showEmptyMessage();
     } else {
+      this.uiApi.createCards(cart);
       this.uiApi.showBasket();
     }
   }

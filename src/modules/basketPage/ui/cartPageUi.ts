@@ -1,4 +1,6 @@
+import { Cart } from '@services';
 import { Button } from '@shared';
+import { BusketCard } from './card';
 
 class CartPageUI {
   public root: HTMLElement;
@@ -10,6 +12,11 @@ class CartPageUI {
       emptyMessage: HTMLElement;
       goToCatalogButton: HTMLButtonElement;
     };
+  };
+
+  public productSection?: {
+    container: HTMLElement;
+    cards: BusketCard[];
   };
 
   constructor() {
@@ -28,7 +35,10 @@ class CartPageUI {
     this.root.append(this.emptyGroup.container);
   }
 
-  public hideContent(): void {}
+  public hideContent(): void {
+    this.productSection?.container.remove();
+    this.productSection = undefined;
+  }
 
   public showEmptyMessage(): void {
     const emptyDiv = this.emptyGroup.container;
@@ -57,6 +67,20 @@ class CartPageUI {
     emptyGroupContainer.append(header, emptyMessage, goToCatalogButton);
 
     return { emptyGroupContainer, header, emptyMessage, goToCatalogButton };
+  }
+
+  public createCards(cart: Cart) {
+    const items = cart.lineItems;
+    const cardMap = items.map((i) => new BusketCard(i));
+    this.root.append(...cardMap.map((i) => i.card));
+
+    this.productSection = {
+      container: document.createElement('section'),
+      cards: cardMap,
+    };
+
+    this.productSection.container.append(...this.productSection.cards.map((i) => i.card));
+    this.root.append(this.productSection.container);
   }
 }
 
