@@ -1,6 +1,6 @@
 import { Cart } from '@services';
 import { Button } from '@shared';
-import { BusketCard } from './card';
+import { BusketCard } from './components';
 
 class CartPageUI {
   public root: HTMLElement;
@@ -50,7 +50,12 @@ class CartPageUI {
     emptyDiv.style.display = 'none';
   }
 
-  private init() {
+  private init(): {
+    emptyGroupContainer: HTMLDivElement;
+    header: HTMLHeadingElement;
+    emptyMessage: HTMLParagraphElement;
+    goToCatalogButton: HTMLButtonElement;
+  } {
     const header = document.createElement('h2');
     header.textContent = 'Basket';
 
@@ -69,7 +74,7 @@ class CartPageUI {
     return { emptyGroupContainer, header, emptyMessage, goToCatalogButton };
   }
 
-  public createCards(cart: Cart) {
+  public createCards(cart: Cart): void {
     const items = cart.lineItems;
     const cardMap = items.map((i) => new BusketCard(i));
     this.root.append(...cardMap.map((i) => i.card));
