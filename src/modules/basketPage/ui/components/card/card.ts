@@ -84,17 +84,6 @@ class BusketCard {
     this.appendElements();
 
     this.addClasses();
-
-    this.toggleDisabledButtons();
-    this.toggleDisabledButtons();
-  }
-
-  public toggleDisabledButtons(): void {
-    const { elements } = this.quantityModifiers;
-    const isQuantityEqualOne = this.quantityModifiers.quantity === 1;
-    const isDisabled = elements.increase.disabled;
-    elements.increase.disabled = !isDisabled;
-    elements.reduce.disabled = isQuantityEqualOne ? true : !isDisabled;
   }
 
   public getQuantityAfterClick(targetButton: Element): number | undefined {
@@ -244,7 +233,6 @@ class BusketCard {
       [this.quantityModifiers.container, 'quantity'],
       [this.quantityModifiers.elements.increase, 'increase'],
       [this.quantityModifiers.elements.reduce, 'reduce'],
-      [this.totalPrice.container, 'total'],
     ] as const).forEach(([element, className]) => {
       element.classList.add(className);
     });
