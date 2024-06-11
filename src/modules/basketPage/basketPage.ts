@@ -29,6 +29,7 @@ class BasketPage {
       const card = allCards.find((c) => c.quantityModifiers.container === container);
       const quantity = card?.getQuantityAfterClick(button);
       if (!card || !quantity) return;
+      card.toggleDisabledButtons();
       this.handleQuantityResponse(card, quantity);
     });
   }
@@ -73,6 +74,9 @@ class BasketPage {
       })
       .catch((err) => {
         NotificationService.displayError(err.message);
+      })
+      .finally(() => {
+        card.toggleDisabledButtons();
       });
   }
 

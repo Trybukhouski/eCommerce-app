@@ -37,6 +37,8 @@ class CartPageUI {
     this.root.append(this.header, this.emptyGroup.container);
 
     this.addClasses();
+
+    this.showBasket();
   }
 
   public hideContent(): void {
