@@ -1,14 +1,16 @@
 import { Cart } from '@services';
 import { Button } from '@shared';
 import { BusketCard } from './components';
+import * as style from './style.module.scss';
 
 class CartPageUI {
   public root: HTMLElement;
 
+  public header: HTMLHeadingElement;
+
   readonly emptyGroup: {
     container: HTMLElement;
     elements: {
-      header: HTMLHeadingElement;
       emptyMessage: HTMLElement;
       goToCatalogButton: HTMLButtonElement;
     };
@@ -26,13 +28,15 @@ class CartPageUI {
     this.emptyGroup = {
       container: emptyGroupContainer,
       elements: {
-        header,
         emptyMessage,
         goToCatalogButton,
       },
     };
+    this.header = header;
 
-    this.root.append(this.emptyGroup.container);
+    this.root.append(this.header, this.emptyGroup.container);
+
+    this.addClasses();
   }
 
   public hideContent(): void {
@@ -69,7 +73,7 @@ class CartPageUI {
     }).button;
 
     const emptyGroupContainer = document.createElement('div');
-    emptyGroupContainer.append(header, emptyMessage, goToCatalogButton);
+    emptyGroupContainer.append(emptyMessage, goToCatalogButton);
 
     return { emptyGroupContainer, header, emptyMessage, goToCatalogButton };
   }
@@ -86,6 +90,12 @@ class CartPageUI {
 
     this.productSection.container.append(...this.productSection.cards.map((i) => i.card));
     this.root.append(this.productSection.container);
+    this.productSection.container.classList.add(style['products']);
+  }
+
+  private addClasses(): void {
+    this.root.classList.add(style['basket']);
+    this.emptyGroup.container.classList.add(style['empty']);
   }
 }
 
