@@ -81,46 +81,4 @@
       color: var(--orange-500);
     }
   }
-
-  :global(.quantity) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    @include textAccent();
-
-    p {
-      line-height: 1.2rem;
-      padding-top: 0.3rem;
-    }
-
-    button {
-      $accent-color: var(--orange-500);
-
-      @include textAccent();
-      font-size: 1.2rem;
-      line-height: 1.2rem;
-      height: min-content;
-      aspect-ratio: 1 / 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.1rem;
-      color: $accent-color;
-
-      &:global(.reduce)::after {
-        content: 'ᐁ';
-        transform: translateY(0.2rem);
-      }
-      &:global(.increase)::after {
-        content: 'ᐃ';
-        transform: translateY(0.1rem);
-      }
-
-      &:hover {
-        background-color: $accent-color;
-        color: var(--white-100);
-      }
-    }
-  }
 }
