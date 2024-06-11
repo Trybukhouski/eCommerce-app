@@ -1,4 +1,5 @@
 import { LineItem } from '@services';
+import { Button } from '@shared';
 import * as style from './card.module.scss';
 
 interface PriceElements {
@@ -14,6 +15,8 @@ interface PriceElements {
 
 class BusketCard {
   public data: LineItem;
+
+  public id: string;
 
   public card: HTMLElement;
 
@@ -34,8 +37,28 @@ class BusketCard {
     elements: PriceElements;
   };
 
+  public quantityModifiers: {
+    container: HTMLElement;
+    elements: {
+      increase: HTMLButtonElement;
+      reduce: HTMLButtonElement;
+      count: HTMLElement;
+    };
+    quantity: number;
+  };
+
+  public totalPrice: {
+    container: HTMLElement;
+    elements: {
+      span: HTMLElement;
+      price: HTMLElement;
+    };
+    value: number;
+  };
+
   constructor(lineItem: LineItem) {
     this.data = lineItem;
+    this.id = lineItem.id;
     this.card = document.createElement('section');
 
     this.name = document.createElement('h3');
@@ -54,15 +77,51 @@ class BusketCard {
     this.attributes.container.append(...this.attributes.elements);
 
     this.prices = this.addPrices();
+    this.totalPrice = this.addTotalPrice();
 
+    this.quantityModifiers = this.addQuantityModifiers();
+
+    this.appendElements();
+
+    this.addClasses();
+  }
+
+  public getQuantityAfterClick(targetButton: Element): number | undefined {
+    const elems = this.quantityModifiers.elements;
+    const { quantity } = this.quantityModifiers;
+    if (targetButton === elems.increase) {
+      return quantity + 1;
+    }
+    if (targetButton === elems.reduce) {
+      return quantity - 1;
+    }
+    return undefined;
+  }
+
+  public modifyQuantity(quantity: number): void {
+    this.quantityModifiers.quantity = quantity;
+    this.quantityModifiers.elements.count.textContent = `${quantity}`;
+  }
+
+  public updateTotalPrice(centAmount: number): void {
+    const newPrice = this.formatPrice(centAmount);
+    this.totalPrice.elements.price.textContent = newPrice;
+    this.totalPrice.value = centAmount;
+  }
+
+  private formatPrice(n: number): string {
+    return `${Math.trunc(n / 100)}${(n % 1).toPrecision(3).replace(/0/, '')}`;
+  }
+
+  private appendElements(): void {
     this.card.append(
       this.name,
       this.img.container,
       this.attributes.container,
-      this.prices.container
+      this.prices.container,
+      this.quantityModifiers.container,
+      this.totalPrice.container
     );
-
-    this.addClasses();
   }
 
   private createAttributes(): HTMLDivElement[] {
@@ -81,17 +140,15 @@ class BusketCard {
   }
 
   private addPrices(): typeof this.prices {
-    const formatPrice = (n: number) =>
-      `${Math.trunc(n / 100)}${(n % 1).toPrecision(3).replace(/0/, '')}`;
     const container = document.createElement('div');
-    const prices: [number, number] = [
+    const prices: [number, number?] = [
       this.data.price.value.centAmount,
-      this.data.totalPrice.centAmount,
+      this.data.price.discounted?.value.centAmount,
     ];
     const pricesElems = prices.map(
       (p): HTMLElement => {
         const priceElem = document.createElement('p');
-        priceElem.textContent = formatPrice(p);
+        priceElem.textContent = this.formatPrice(p ?? prices[0]);
         return priceElem;
       }
     ) as [HTMLElement, HTMLElement];
@@ -107,7 +164,7 @@ class BusketCard {
     };
     container.append(pricesElems[0]);
 
-    if (prices[0] === prices[1]) {
+    if (prices[0] === prices[1] || prices[1] === undefined) {
       return obj;
     }
 
@@ -120,6 +177,52 @@ class BusketCard {
     return obj;
   }
 
+  private addTotalPrice(): typeof this.totalPrice {
+    const value = this.data.totalPrice.centAmount;
+    const priceText = this.formatPrice(value);
+    const price = document.createElement('span');
+    price.textContent = priceText;
+    const span = document.createElement('span');
+    span.textContent = 'Total Price:';
+
+    const container = document.createElement('div');
+    container.append(span, price);
+
+    return {
+      container,
+      elements: {
+        span,
+        price,
+      },
+      value,
+    };
+  }
+
+  private addQuantityModifiers(): typeof this.quantityModifiers {
+    const { quantity } = this.data;
+    const container = document.createElement('div');
+    const increase = new Button({
+      className: 'edit-icon',
+    }).button;
+    const reduce = new Button({
+      className: 'edit-icon',
+    }).button;
+    const count = document.createElement('p');
+    count.textContent = `${quantity}`;
+
+    container.append(increase, count, reduce);
+
+    return {
+      container,
+      elements: {
+        increase,
+        reduce,
+        count,
+      },
+      quantity,
+    };
+  }
+
   private addClasses(): void {
     ([
       [this.card, style['basket-card']],
@@ -127,6 +230,9 @@ class BusketCard {
       [this.attributes.container, 'attributes'],
       [this.prices.container, 'prices'],
       [this.name, 'name'],
+      [this.quantityModifiers.container, 'quantity'],
+      [this.quantityModifiers.elements.increase, 'increase'],
+      [this.quantityModifiers.elements.reduce, 'reduce'],
     ] as const).forEach(([element, className]) => {
       element.classList.add(className);
     });

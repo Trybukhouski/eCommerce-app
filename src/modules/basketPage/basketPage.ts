@@ -1,5 +1,5 @@
-import { CartService } from '@services';
-import { CartPageUI } from './ui';
+import { CartService, NotificationService } from '@services';
+import { BusketCard, CartPageUI } from './ui';
 
 class BasketPage {
   public elem: HTMLElement;
@@ -11,6 +11,26 @@ class BasketPage {
     this.elem = this.uiApi.root;
 
     this.addHashChangeListener();
+    this.addQuantityListener();
+  }
+
+  private addQuantityListener(): void {
+    this.uiApi.root.addEventListener('click', (event) => {
+      if (!event.target) return;
+
+      const button = (event.target as HTMLElement).closest('.quantity button');
+      const container = (event.target as HTMLElement).closest('.quantity');
+      const allCards = this.uiApi.productSection?.cards;
+
+      if (!allCards || !button || !container) {
+        return;
+      }
+
+      const card = allCards.find((c) => c.quantityModifiers.container === container);
+      const quantity = card?.getQuantityAfterClick(button);
+      if (!card || !quantity) return;
+      this.handleQuantityResponse(card, quantity);
+    });
   }
 
   private addHashChangeListener(): void {
@@ -25,6 +45,35 @@ class BasketPage {
     };
     window.addEventListener('hashchange', func);
     document.addEventListener('DOMContentLoaded', func);
+  }
+
+  private async handleQuantityResponse(card: BusketCard, quantity: number): Promise<void> {
+    const promise = CartService.manageProduct({
+      actions: [
+        {
+          action: 'changeQuantity',
+          options: {
+            lineItemId: card.id,
+            quantity,
+          },
+        },
+      ],
+    });
+
+    promise
+      .then((cart) => {
+        const lineItem = cart?.lineItems.find((i) => i.id === card.id);
+
+        if (!cart || !lineItem) {
+          return;
+        }
+
+        card.updateTotalPrice(lineItem.totalPrice.centAmount);
+        card.modifyQuantity(lineItem.quantity);
+      })
+      .catch((err) => {
+        NotificationService.displayError(err.message);
+      });
   }
 
   private async loadPage(): Promise<void> {
