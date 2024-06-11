@@ -83,6 +83,7 @@ class CartPageUI {
   public createCards(cart: Cart): void {
     const items = cart.lineItems;
     const cardMap = items.map((i) => new BusketCard(i));
+    this.root.append(...cardMap.map((i) => i.card));
 
     this.productSection = {
       container: document.createElement('section'),
