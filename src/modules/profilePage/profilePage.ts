@@ -50,7 +50,6 @@ export class ProfilePage {
 
   private addLoadPageListeners(): void {
     const func = () => {
-      setTimeout(() => {}, 0);
       const idMatch = window.location.hash.match(/profile/);
       if (idMatch === null) {
         return;

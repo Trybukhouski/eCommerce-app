@@ -15,9 +15,8 @@ class BasketPage {
 
   private addHashChangeListener(): void {
     const func = () => {
-      setTimeout(() => {}, 0);
-      const idMatch = window.location.hash.match(/basket/);
-      if (idMatch === null) {
+      const idMatch = window.location.hash.includes('basket');
+      if (!idMatch) {
         this.uiApi.hideContent();
       } else {
         this.loadPage();
