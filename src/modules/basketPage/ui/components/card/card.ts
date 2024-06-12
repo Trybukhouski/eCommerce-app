@@ -56,6 +56,8 @@ class BusketCard {
     value: number;
   };
 
+  public deleteButton: HTMLButtonElement;
+
   constructor(lineItem: LineItem) {
     this.data = lineItem;
     this.id = lineItem.id;
@@ -81,6 +83,10 @@ class BusketCard {
 
     this.quantityModifiers = this.addQuantityModifiers();
 
+    this.deleteButton = new Button({
+      text: '×',
+    }).button;
+
     this.appendElements();
 
     this.addClasses();
@@ -93,6 +99,7 @@ class BusketCard {
     const { elements } = this.quantityModifiers;
     const isQuantityEqualOne = this.quantityModifiers.quantity === 1;
     const isDisabled = elements.increase.disabled;
+    this.deleteButton.disabled = !isDisabled;
     elements.increase.disabled = !isDisabled;
     elements.reduce.disabled = isQuantityEqualOne ? true : !isDisabled;
   }
@@ -131,7 +138,8 @@ class BusketCard {
       this.attributes.container,
       this.prices.container,
       this.quantityModifiers.container,
-      this.totalPrice.container
+      this.totalPrice.container,
+      this.deleteButton
     );
   }
 
@@ -245,6 +253,7 @@ class BusketCard {
       [this.quantityModifiers.elements.increase, 'increase'],
       [this.quantityModifiers.elements.reduce, 'reduce'],
       [this.totalPrice.container, 'total'],
+      [this.deleteButton, 'delete'],
     ] as const).forEach(([element, className]) => {
       element.classList.add(className);
     });

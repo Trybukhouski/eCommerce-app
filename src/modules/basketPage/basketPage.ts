@@ -12,6 +12,7 @@ class BasketPage {
 
     this.addHashChangeListener();
     this.addQuantityListener();
+    this.addDeleteListener();
   }
 
   private addQuantityListener(): void {
@@ -31,6 +32,24 @@ class BasketPage {
       if (!card || !quantity) return;
       card.toggleDisabledButtons();
       this.handleQuantityResponse(card, quantity);
+    });
+  }
+
+  private addDeleteListener(): void {
+    this.uiApi.root.addEventListener('click', (event) => {
+      if (!event.target) return;
+
+      const button = (event.target as HTMLElement).closest('button');
+      const allCards = this.uiApi.productSection?.cards;
+
+      if (!allCards || !button) {
+        return;
+      }
+
+      const card = allCards.find((c) => c.deleteButton === button);
+      if (!card) return;
+      card.toggleDisabledButtons();
+      this.handleDeleteResponse(card);
     });
   }
 
@@ -79,7 +98,30 @@ class BasketPage {
       });
   }
 
+  private async handleDeleteResponse(card: BusketCard): Promise<void> {
+    const promise = CartService.manageProduct({
+      actions: [
+        {
+          action: 'remove',
+          options: {
+            lineItemId: card.id,
+          },
+        },
+      ],
+    });
+
+    promise
+      .then(() => {
+        this.uiApi.removeCard(card);
+      })
+      .catch((err) => {
+        NotificationService.displayError(err.message);
+        card.toggleDisabledButtons();
+      });
+  }
+
   private async loadPage(): Promise<void> {
+    this.uiApi.showBasket();
     const cart = await CartService.getCart();
 
     if (cart === undefined) {
@@ -90,7 +132,6 @@ class BasketPage {
       this.uiApi.showEmptyMessage();
     } else {
       this.uiApi.createCards(cart);
-      this.uiApi.showBasket();
     }
   }
 }

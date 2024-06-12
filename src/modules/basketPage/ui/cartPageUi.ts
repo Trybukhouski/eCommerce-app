@@ -41,6 +41,19 @@ class CartPageUI {
     this.showBasket();
   }
 
+  public removeCard(card: BusketCard): void {
+    const index = this.productSection?.cards.findIndex((c) => c === card);
+    if (index === -1 || index === undefined || !this.productSection) {
+      return;
+    }
+    card.card.remove();
+    this.productSection.cards.splice(index, 1);
+
+    if (this.productSection.cards.length === 0) {
+      this.showEmptyMessage();
+    }
+  }
+
   public hideContent(): void {
     this.productSection?.container.remove();
     this.productSection = undefined;
