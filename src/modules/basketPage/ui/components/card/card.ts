@@ -61,6 +61,7 @@ class BusketCard {
   constructor(lineItem: LineItem) {
     this.data = lineItem;
     this.id = lineItem.id;
+    this.id = lineItem.id;
     this.card = document.createElement('section');
 
     this.name = document.createElement('h3');

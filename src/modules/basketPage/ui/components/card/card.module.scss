@@ -6,6 +6,8 @@
   $image-width: clamp(8rem, 100vw - $breakpoint, 10rem);
   $accent-color: var(--orange-500);
   $font-size: 1.4rem;
+  $accent-color: var(--orange-500);
+  $font-size: 1.4rem;
 
   display: grid;
   grid-template-columns: $image-width 1fr 1fr;
