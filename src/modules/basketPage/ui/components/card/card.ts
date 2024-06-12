@@ -84,7 +84,7 @@ class BusketCard {
     this.quantityModifiers = this.addQuantityModifiers();
 
     this.deleteButton = new Button({
-      text: '×',
+      className: 'edit-icon',
     }).button;
 
     this.appendElements();
