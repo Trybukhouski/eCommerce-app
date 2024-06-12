@@ -19,6 +19,7 @@ module.exports = {
     "class-methods-use-this": "off",
     "import/prefer-default-export": "off",
     "dot-notation": "off",
+    "prefer-destructuring": ["error", {"object": true, "array": false}]
   },
   overrides: [
     {

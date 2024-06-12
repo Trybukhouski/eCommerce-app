@@ -8,7 +8,6 @@ export function getHeaders(token?: string) {
   }
   return {
     Authorization: `Bearer ${bearerToken}`,
-    'Content-Type': 'application/json',
   };
 }
 export function getJsonHeaders(token?: string) {

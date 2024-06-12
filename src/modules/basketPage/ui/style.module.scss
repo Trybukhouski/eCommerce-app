@@ -1,0 +1,47 @@
+@import '@assets/styles/fonts.scss';
+
+.basket {
+  $gap-lg: 1.8125rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $gap-lg;
+  width: calc(100% - 7.5rem);
+  @include regularText();
+  margin: 1.875rem auto;
+  min-height: calc(100vh - 2 * $gap-lg);
+
+  :nth-child(3) {
+    justify-content: start;
+  }
+
+  &:has(.empty[style='display: none;']) {
+    justify-content: start;
+  }
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    gap: $gap-lg;
+  }
+
+  h2 {
+    @include title();
+    margin: 0;
+  }
+
+  .products {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    width: 100%;
+  }
+}

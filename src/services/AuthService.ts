@@ -36,11 +36,15 @@ export class AuthService {
       throw new Error(`Failed to authenticate customer: ${errorText}`);
     }
 
-    LocalStorageService.setAuthorisedToken((response as LoginResponse)['access_token']);
-    const authResponse = await AuthService.authenticateCustomer(username, password);
-    LocalStorageService.setUserId(authResponse.customer.id);
+    const data = await handleResponse(response);
 
-    return handleResponse(response);
+    if (data.access_token) {
+      LocalStorageService.setAuthorisedToken(data.access_token);
+    }
+
+    await AuthService.authenticateCustomer(username, password);
+
+    return data;
   }
 
   public static async authenticateCustomer(
@@ -95,7 +99,6 @@ export class AuthService {
 
     const handlingResponse: RegistrationResponse = await handleResponse(response);
     LocalStorageService.setAuthorisedToken(token);
-    LocalStorageService.setUserId(handlingResponse.customer.id);
     return handlingResponse;
   }
 

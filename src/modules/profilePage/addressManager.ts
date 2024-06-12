@@ -46,6 +46,12 @@ class AddressManager {
     return ProfileService.sendActions.bind(null, actions);
   }
 
+  public clearAddressIds(): void {
+    [ProfilePageUI.formTypes[2], ProfilePageUI.formTypes[3]].forEach((key) => {
+      this.uiApi.forms[key].form.form.removeAttribute(this.addressIdAttribute);
+    });
+  }
+
   private async getActions(options: {
     changed: ChangedInputsWithValues;
     formKey: AddressKeys;

@@ -151,3 +151,88 @@ export interface LoginCustomer {
 export interface CustomerSignInResult {
   customer: LoginCustomer;
 }
+
+interface WhosModify {
+  clientId: string;
+  isPlatformClient: boolean;
+  customer: {
+    id: string;
+    typeId: string;
+  };
+}
+
+export interface LineItem {
+  addedAt: string;
+  discountedPricePerQuantity: [];
+  id: string;
+  lastModifiedAt: string;
+  lineItemMode: string;
+  name: {
+    'en-GB': string;
+  };
+  perMethodTaxRate: [];
+  price: Price;
+  priceMode: string;
+  productId: string;
+  productKey: string;
+  productSlug: {
+    'en-GB': string;
+  };
+  productType: {
+    typeId: string;
+    id: string;
+    version: number;
+  };
+  quantity: number;
+  state: object[];
+  taxedPricePortions: [];
+  totalPrice: {
+    type: string;
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+  variant: MasterVariant;
+}
+
+export interface Cart {
+  cartState: string;
+  createdAt: string;
+  createdBy: WhosModify;
+  customLineItems: [];
+  customerId: string;
+  deleteDaysAfterLastModification: number;
+  directDiscounts: [];
+  discountCodes: [];
+  id: string;
+  inventoryMode: string;
+  itemShippingAddresses: [];
+  lastMessageSequenceNumber: number;
+  lastModifiedAt: string;
+  lastModifiedBy: WhosModify;
+  lineItems: LineItem[];
+  origin: string;
+  refusedGifts: [];
+  shipping: [];
+  shippingMode: string;
+  taxCalculationMode: string;
+  taxMode: string;
+  taxRoundingMode: string;
+  totalPrice: {
+    type: string;
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+  type: string;
+  version: number;
+  versionModifiedAt: string;
+}
+
+export interface Carts {
+  count: number;
+  limit: number;
+  offset: number;
+  results: Cart[];
+  total: number;
+}

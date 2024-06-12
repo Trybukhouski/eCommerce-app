@@ -1,0 +1,84 @@
+@import '@assets/styles/fonts.scss';
+
+.basket-card {
+  $shadow: 0px 4px 10px 1px var(--grey-100);
+  $breakpoint: var(--contentTablet);
+  $image-width: clamp(8rem, 100vw - $breakpoint, 10rem);
+
+  display: grid;
+  grid-template-columns: $image-width 1fr 1fr;
+  grid-template-rows: min-content 1fr 1.5fr;
+  grid-auto-flow: column;
+  gap: 0.3rem 1rem;
+  justify-items: center;
+  padding: var(--padding-xsm);
+  border-radius: var(--big-border-radius);
+  @include regularText();
+
+  box-shadow: $shadow;
+
+  :global(.name) {
+    @include small-title();
+    grid-column: 1 / 5;
+    justify-self: start;
+  }
+
+  :global(.image) {
+    grid-row: 2 / 4;
+    width: $image-width;
+    height: $image-width;
+    aspect-ratio: 1 / 1;
+    box-shadow: $shadow;
+    border-radius: var(--big-border-radius);
+
+    img {
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  :global(.attributes) {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-items: stretch;
+    width: 10rem;
+
+    div {
+      display: grid;
+      justify-items: end;
+      align-items: center;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 1rem;
+    }
+
+    h4::after {
+      content: ':';
+    }
+  }
+
+  :global(.prices) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    > *::before {
+      content: '$';
+    }
+
+    p {
+      @include textAccent();
+    }
+
+    p:nth-child(1) {
+      text-decoration: line-through;
+      color: var(--grey-100);
+    }
+
+    p:only-of-type,
+    p:nth-child(2) {
+      text-decoration: none;
+      color: var(--orange-500);
+    }
+  }
+}
