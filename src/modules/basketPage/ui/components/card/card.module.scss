@@ -4,6 +4,8 @@
   $shadow: 0px 4px 10px 1px var(--grey-100);
   $breakpoint: var(--contentTablet);
   $image-width: clamp(8rem, 100vw - $breakpoint, 10rem);
+  $accent-color: var(--orange-500);
+  $font-size: 1.4rem;
 
   display: grid;
   grid-template-columns: $image-width 1fr 1fr;
@@ -79,6 +81,74 @@
     p:nth-child(2) {
       text-decoration: none;
       color: var(--orange-500);
+    }
+  }
+
+  :global(.quantity) {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.8rem;
+
+    @include textAccent();
+
+    p {
+      line-height: $font-size;
+      font-size: $font-size;
+      transform: translateY(0.15em);
+    }
+
+    button {
+      @include textAccent();
+      font-size: $font-size;
+      line-height: $font-size;
+      height: $font-size;
+      width: $font-size;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $accent-color;
+
+      &:global(.reduce)::after {
+        content: 'ᐊ';
+        transform: translateY(0.15em);
+      }
+      &:global(.increase)::after {
+        content: 'ᐅ';
+        transform: translateY(0.15em);
+      }
+
+      &:hover {
+        background-color: $accent-color;
+        color: var(--white-100);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+    }
+  }
+
+  :global(.total) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+
+    @include title();
+    font-size: $font-size;
+
+    > :first-child() {
+      font-weight: 400;
+    }
+
+    > :nth-child(2) {
+      color: $accent-color;
+
+      &::before {
+        content: '$';
+      }
     }
   }
 }

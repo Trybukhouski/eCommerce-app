@@ -4,8 +4,10 @@ import { BackendService, LocalStorageService, Cart, Carts } from '../shared';
 import {
   AddProductToCartAction,
   RemoveProductFromCartAction,
+  ChangeProductQuantityAction,
   AddProductToCartOptions,
   RemoveProductFromCartOptions,
+  ChangeProductQuantityOptions,
   SentCartActionOptions,
   ManageProductOptions,
   Action,
@@ -46,6 +48,8 @@ class CartService extends BackendService {
             return CartService.addLineItemToCart(i.options);
           case 'remove':
             return CartService.removeLineItemFromCart(i.options);
+          case 'changeQuantity':
+            return CartService.changeLineItemQuantity(i.options);
           default:
             return undefined;
         }
@@ -155,6 +159,20 @@ class CartService extends BackendService {
     const action: RemoveProductFromCartAction = {
       action: 'removeLineItem',
       lineItemId,
+    };
+
+    return action;
+  }
+
+  private static changeLineItemQuantity(
+    options: ChangeProductQuantityOptions
+  ): ChangeProductQuantityAction {
+    const { lineItemId, quantity } = options;
+
+    const action: ChangeProductQuantityAction = {
+      action: 'changeLineItemQuantity',
+      lineItemId,
+      quantity,
     };
 
     return action;

@@ -13,10 +13,6 @@
   margin: 1.875rem auto;
   min-height: calc(100vh - 2 * $gap-lg);
 
-  :nth-child(3) {
-    justify-content: start;
-  }
-
   &:has(.empty[style='display: none;']) {
     justify-content: start;
   }
