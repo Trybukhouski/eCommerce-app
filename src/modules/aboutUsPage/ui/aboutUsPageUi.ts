@@ -1,11 +1,17 @@
 import { TeamMember } from '@root/modules/aboutUsPage/interfaces';
 import footerImage from '@assets/images/rss-logo.jpg';
+import mentorPhoto from '@assets/images/pasha.jpg';
+import { Modal } from '@root/shared/utils/modal';
 import * as style from './style.module.scss';
 
 class AboutUsPageUI {
   public elem: HTMLElement;
 
+  private modal: Modal;
+
   constructor(teamMembers: TeamMember[]) {
+    this.modal = new Modal();
+
     const section = this.createSectionWithHeader('Final Task Team');
 
     const descriptionDiv = this.createDescriptionDiv();
@@ -81,11 +87,18 @@ class AboutUsPageUI {
     hiddenText.innerHTML = `
         Introducing the dynamic trio behind our stellar project: Arina Talanova from Kurgan, Ruslan Trybukhouski (our fearless team lead) from Minsk, Dmitry Nikolayev from Houston. Detailed information about each team member is presented below.
         Thanks to the magic of different time zones, our project never slept! As one coder signed off, another jumped in, making sure our code was always evolving.
-        Let's not forget Pasha, our mentor. Despite his desperate attempts to teach us the ways of OOP, he eventually gave up, got married, and broke free to Cuba. But even from afar, he kept an eye on our progress, cheering us on.
+        Let's not forget <a href="#" class="${style.mentorLink}">Pasha</a>, our mentor. Despite his desperate attempts to teach us the ways of OOP, he eventually gave up, got married, and broke free to Cuba. But even from afar, he kept an eye on our progress, cheering us on.
         Together, this eclectic mix of talent and time zones created a seamless workflow, ensuring that our project was always in motion. We laughed, we coded, and we made magic happen!
     `;
 
     hiddenTextDiv.appendChild(hiddenText);
+
+    const mentorLink = hiddenTextDiv.querySelector(`.${style.mentorLink}`) as HTMLElement;
+    mentorLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openMentorModal();
+    });
+
     return hiddenTextDiv;
   }
 
@@ -167,6 +180,18 @@ class AboutUsPageUI {
     footer.appendChild(footerLink);
 
     return footer;
+  }
+
+  private openMentorModal(): void {
+    const modalContent = document.createElement('div');
+    const mentorImg = document.createElement('img');
+    mentorImg.src = mentorPhoto;
+    mentorImg.alt = 'Pasha, our mentor';
+    mentorImg.className = style.mentorImage;
+    modalContent.appendChild(mentorImg);
+
+    this.modal.setContent(modalContent);
+    this.modal.openModal();
   }
 }
 

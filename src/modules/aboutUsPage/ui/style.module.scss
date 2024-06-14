@@ -181,3 +181,17 @@ body {
   margin-bottom: 80px;
   }
 
+.mentorLink {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mentorLink:hover {
+  text-decoration: underline;
+}
+
+.mentorImage {
+  max-width: 100%;
+  height: auto;
+}
