@@ -22,15 +22,15 @@ body {
   font-family: 'Permanent Marker', cursive;
   font-size: 2rem;
   color: var(--orange-500);
-  white-space: pre-wrap; /* Сохранение переносов строки */
+  white-space: pre-wrap;
 }
 
 .hiddenText {
   font-family: 'Permanent Marker', cursive;
   color: var(--orange-500);
   font-size: 1.7rem;
-  display: none; /* Скрытие текста */
-  white-space: pre-wrap; /* Сохранение переносов строки */
+  display: none;
+  white-space: pre-wrap;
   margin-bottom: 0;
 }
 .showMoreLink,
@@ -40,8 +40,9 @@ body {
   color: var(--information-color);
   text-decoration: none;
   font-family: 'Permanent Marker', cursive;
-  position: absolute;
-  right: 10rem;
+  position: relative;
+  float: right;
+  top: 0;
 }
 
 .showMoreLink:hover,
@@ -49,13 +50,14 @@ body {
   text-decoration: underline;
 }
 
+
 .cardsContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   gap: 2.5rem;
   width: 100%;
-  margin-bottom: 100px;
+  margin-bottom: 6.25rem;
 }
 
 .memberContainer {
@@ -168,21 +170,20 @@ body {
 @media (max-width: 380px) {
   .title {
     font-size: 2rem;
-    margin-bottom: 70px;
   }
   .cardsContainer {
-    margin-bottom: 150px;
+    margin-bottom: 9.375rem;
   }
   .memberContainer {
     margin: 2rem;
   }
 }
 .descriptionDiv {
-  margin-bottom: 80px;
+  margin-bottom: 5rem;
   }
 
 .mentorLink {
-  color: #007bff;
+  color: var(--information-color);
   text-decoration: none;
   cursor: pointer;
 }

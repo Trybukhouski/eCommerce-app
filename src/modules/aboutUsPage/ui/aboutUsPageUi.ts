@@ -59,6 +59,8 @@ class AboutUsPageUI {
     const showLessLink = this.createToggleLink('Show Less', style.showLessLink);
     const showMoreLink = this.createToggleLink('Show More', style.showMoreLink);
 
+    showLessLink.style.display = 'none';
+
     showMoreLink.addEventListener('click', (e) => {
       e.preventDefault();
       hiddenTextDiv.style.display = 'block';
@@ -87,7 +89,7 @@ class AboutUsPageUI {
     hiddenText.innerHTML = `
         Introducing the dynamic trio behind our stellar project: Arina Talanova from Kurgan, Ruslan Trybukhouski (our fearless team lead) from Minsk, Dmitry Nikolayev from Houston. Detailed information about each team member is presented below.
         Thanks to the magic of different time zones, our project never slept! As one coder signed off, another jumped in, making sure our code was always evolving.
-        Let's not forget <a href="#" class="${style.mentorLink}">Pasha</a>, our mentor. Despite his desperate attempts to teach us the ways of OOP, he eventually gave up, got married, and broke free to Cuba. But even from afar, he kept an eye on our progress, cheering us on.
+        Let's not forget <a href="#" class="${style.mentorLink}">Pasha</a> , our mentor. Despite his desperate attempts to teach us the ways of OOP, he eventually gave up, got married, and broke free to Cuba. But even from afar, he kept an eye on our progress, cheering us on.
         Together, this eclectic mix of talent and time zones created a seamless workflow, ensuring that our project was always in motion. We laughed, we coded, and we made magic happen!
     `;
 
@@ -107,6 +109,7 @@ class AboutUsPageUI {
     link.href = '#';
     link.textContent = text;
     link.className = className;
+    link.style.position = 'relative';
     return link;
   }
 
@@ -133,7 +136,7 @@ class AboutUsPageUI {
   createInfoDiv(member: TeamMember): HTMLElement {
     const infoDiv = document.createElement('div');
     const nameTitle = document.createElement('h2');
-    nameTitle.textContent = `${member.name} - ${member.role}`;
+    nameTitle.textContent = `${member.name} : ${member.role}`;
     const bio = document.createElement('p');
     bio.textContent = member.bio;
     const contribution = document.createElement('p');
