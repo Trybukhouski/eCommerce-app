@@ -8,7 +8,7 @@ const teamMembers: TeamMember[] = [
     name: "Ruslan Trybukhouski",
     role: "Team Lead",
     contribution: "Our tech wizard and fearless leader, tackled the toughest parts of the project with ease, including but not limited to routing and the catalog page with tricky filtering. We suspect Ruslan worked 24/7 and never slept, otherwise how could he complete his complex and intricate tasks and on top of that, do the design in Figma for the project?",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non risus maximus, cursus justo ut, porta erat. Nunc accumsan ante vitae felis fermentum, vel rutrum nisi cursus. Proin hendrerit, massa tincidunt pellentesque blandit, nunc ex dictum ipsum, nec elementum.",
+    bio: "Born in Minsk, Belarus. Ready to explore and discover, I ventured into the vast world of geography, graduating university with honors and proudly earning my red diploma. Realizing that traveling the world required significant funds, I turned to the geography of entrepreneurship, running several online stores. Noticing how web developers were always so chill and content, I got curious about what they were up to and caught the bug. Now, I'm ready to sell my stores and join the new owner as their web developer, bringing my adventurous spirit to frontend development. Who needs a globe when you have a browser window, right?",
     github: "https://github.com/trybukhouski",
     photo: man2
   },
