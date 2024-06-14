@@ -21,7 +21,7 @@
 
   :global(.name) {
     @include small-title();
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
     justify-self: start;
   }
 
@@ -99,11 +99,12 @@
     }
 
     button {
+      $button-size: calc($font-size + 0.2em);
+
       @include textAccent();
       font-size: $font-size;
-      line-height: $font-size;
-      height: $font-size;
-      width: $font-size;
+      height: $button-size;
+      width: $button-size;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -149,6 +150,28 @@
       &::before {
         content: '$';
       }
+    }
+  }
+
+  :global(.delete) {
+    $delete-color: var(--wrong-warning-color);
+
+    &::after {
+      content: '×';
+      text-shadow: rgb(237 44 32 / 56%) 0 0 0.25em;
+    }
+
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    height: 2rem;
+    aspect-ratio: 1 / 1;
+    color: $delete-color;
+
+    &:hover {
+      color: var(--white-100);
+      background-color: $delete-color;
     }
   }
 }
