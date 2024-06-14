@@ -8,6 +8,9 @@ class AboutUsPageUI {
   constructor(teamMembers: TeamMember[]) {
     const section = this.createSectionWithHeader('Final Task Team');
 
+    const descriptionDiv = this.createDescriptionDiv();
+    section.appendChild(descriptionDiv);
+
     const cardsContainer = document.createElement('div');
     cardsContainer.className = style.cardsContainer;
     teamMembers.forEach((member) => this.addMemberCard(member, cardsContainer));
@@ -33,6 +36,65 @@ class AboutUsPageUI {
     header.style.textAlign = 'center';
     header.className = style.title;
     return header;
+  }
+
+  createDescriptionDiv(): HTMLElement {
+    const descriptionDiv = document.createElement('div');
+    descriptionDiv.className = style.descriptionDiv;
+
+    const handWrittenText = document.createElement('p');
+    handWrittenText.textContent = `Meet Our Dev Dream Team and the Secrets to Our Non-Stop Success and read everything attentively if you want to know the secret of our success!`;
+    handWrittenText.classList.add(style.handwrittenText);
+
+    const hiddenTextDiv = this.createHiddenTextDiv();
+    descriptionDiv.appendChild(handWrittenText);
+    descriptionDiv.appendChild(hiddenTextDiv);
+
+    const showLessLink = this.createToggleLink('Show Less', style.showLessLink);
+    const showMoreLink = this.createToggleLink('Show More', style.showMoreLink);
+
+    showMoreLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      hiddenTextDiv.style.display = 'block';
+      showMoreLink.style.display = 'none';
+      showLessLink.style.display = 'inline';
+    });
+
+    showLessLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      hiddenTextDiv.style.display = 'none';
+      showLessLink.style.display = 'none';
+      showMoreLink.style.display = 'inline';
+    });
+
+    descriptionDiv.appendChild(showLessLink);
+    descriptionDiv.appendChild(showMoreLink);
+
+    return descriptionDiv;
+  }
+
+  createHiddenTextDiv(): HTMLElement {
+    const hiddenTextDiv = document.createElement('div');
+    hiddenTextDiv.className = style.hiddenText;
+
+    const hiddenText = document.createElement('p');
+    hiddenText.innerHTML = `
+        Introducing the dynamic trio behind our stellar project: Arina Talanova from Kurgan, Ruslan Trybukhouski (our fearless team lead) from Minsk, Dmitry Nikolayev from Houston. Detailed information about each team member is presented below.
+        Thanks to the magic of different time zones, our project never slept! As one coder signed off, another jumped in, making sure our code was always evolving.
+        Let's not forget Pasha, our mentor. Despite his desperate attempts to teach us the ways of OOP, he eventually gave up, got married, and broke free to Cuba. But even from afar, he kept an eye on our progress, cheering us on.
+        Together, this eclectic mix of talent and time zones created a seamless workflow, ensuring that our project was always in motion. We laughed, we coded, and we made magic happen!
+    `;
+
+    hiddenTextDiv.appendChild(hiddenText);
+    return hiddenTextDiv;
+  }
+
+  createToggleLink(text: string, className: string): HTMLAnchorElement {
+    const link = document.createElement('a');
+    link.href = '#';
+    link.textContent = text;
+    link.className = className;
+    return link;
   }
 
   addMemberCard(member: TeamMember, container: HTMLElement): void {

@@ -18,6 +18,36 @@ body {
   box-sizing: border-box;
   position: relative;
 }
+.handwrittenText {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 2rem;
+  color: var(--orange-500);
+  white-space: pre-wrap; /* Сохранение переносов строки */
+}
+
+.hiddenText {
+  font-family: 'Permanent Marker', cursive;
+  color: var(--orange-500);
+  font-size: 1.7rem;
+  display: none; /* Скрытие текста */
+  white-space: pre-wrap; /* Сохранение переносов строки */
+  margin-bottom: 0;
+}
+.showMoreLink,
+.showLessLink {
+  display: inline-block;
+  cursor: pointer;
+  color: var(--information-color);
+  text-decoration: none;
+  font-family: 'Permanent Marker', cursive;
+  position: absolute;
+  right: 10rem;
+}
+
+.showMoreLink:hover,
+.showLessLink:hover {
+  text-decoration: underline;
+}
 
 .cardsContainer {
   display: flex;
@@ -147,3 +177,7 @@ body {
     margin: 2rem;
   }
 }
+.descriptionDiv {
+  margin-bottom: 80px;
+  }
+
