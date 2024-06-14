@@ -144,8 +144,13 @@ class CartPageUI {
   }
 
   private addClasses(): void {
-    this.root.classList.add(style['basket']);
-    this.emptyGroup.container.classList.add(style['empty']);
+    ([
+      [this.root, style['basket']],
+      [this.emptyGroup.container, style['empty']],
+      [this.totalCartCost.container, 'total-cart-cost'],
+    ] as const).forEach(([element, className]) => {
+      element.classList.add(className);
+    });
   }
 }
 

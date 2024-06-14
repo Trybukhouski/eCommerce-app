@@ -40,4 +40,19 @@
     gap: 1.4rem;
     width: 100%;
   }
+
+  :global(.total-cart-cost) {
+    @include title();
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+
+    :nth-child(2) {
+      color: var(--orange-500);
+    }
+
+    :nth-child(2)::before {
+      content: '$';
+    }
+  }
 }
