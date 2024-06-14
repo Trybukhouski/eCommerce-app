@@ -1,7 +1,7 @@
 import man1 from '@assets/images/man1.png';
 import girl from '@assets/images/girl.png';
 import man2 from '@assets/images/man2.png';
-import { TeamMember } from '../src/modules/aboutUsPage/interfaces';
+import { TeamMember } from '@root/modules/aboutUsPage/interfaces';
 
 const teamMembers: TeamMember[] = [
   {

@@ -180,7 +180,7 @@ body {
 }
 .descriptionDiv {
   margin-bottom: 5rem;
-  }
+}
 
 .mentorLink {
   color: var(--information-color);
@@ -193,6 +193,21 @@ body {
 }
 
 .mentorImage {
+  max-width: 100%;
+  height: auto;
+}
+
+.stationLink {
+  color: var(--information-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.stationLink:hover {
+  text-decoration: underline;
+}
+
+.stationImage {
   max-width: 100%;
   height: auto;
 }

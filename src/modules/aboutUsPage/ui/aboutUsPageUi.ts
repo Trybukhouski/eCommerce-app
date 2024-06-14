@@ -1,6 +1,9 @@
 import { TeamMember } from '@root/modules/aboutUsPage/interfaces';
 import footerImage from '@assets/images/rss-logo.jpg';
 import mentorPhoto from '@assets/images/pasha.jpg';
+import minskStation from '@assets/images/minsk-railway-station.jpg';
+import kurganStation from '@assets/images/kurgan-railway-station.jpg';
+import houstonStation from '@assets/images/houston-railway-station.jpg';
 import { Modal } from '@root/shared/utils/modal';
 import * as style from './style.module.scss';
 
@@ -87,9 +90,9 @@ class AboutUsPageUI {
 
     const hiddenText = document.createElement('p');
     hiddenText.innerHTML = `
-        Introducing the dynamic trio behind our stellar project: Arina Talanova from Kurgan, Ruslan Trybukhouski (our fearless team lead) from Minsk, Dmitry Nikolayev from Houston. Detailed information about each team member is presented below.
+        Introducing the dynamic trio behind our stellar project: Arina Talanova from <a href="#" class="${style.stationLink}" data-station="kurgan">Kurgan</a>, Ruslan Trybukhouski (our fearless team lead) from <a href="#" class="${style.stationLink}" data-station="minsk">Minsk</a>, Dmitry Nikolayev from <a href="#" class="${style.stationLink}" data-station="houston">Houston</a>. Detailed information about each team member is presented below.
         Thanks to the magic of different time zones, our project never slept! As one coder signed off, another jumped in, making sure our code was always evolving.
-        Let's not forget <a href="#" class="${style.mentorLink}">Pasha</a> , our mentor. Despite his desperate attempts to teach us the ways of OOP, he eventually gave up, got married, and broke free to Cuba. But even from afar, he kept an eye on our progress, cheering us on.
+        Let's not forget <a href="#" class="${style.mentorLink}">Pasha</a>, our mentor. Despite his desperate attempts to teach us the ways of OOP, he eventually gave up, got married, and broke free to Cuba. But even from afar, he kept an eye on our progress, cheering us on.
         Together, this eclectic mix of talent and time zones created a seamless workflow, ensuring that our project was always in motion. We laughed, we coded, and we made magic happen!
     `;
 
@@ -99,6 +102,16 @@ class AboutUsPageUI {
     mentorLink.addEventListener('click', (e) => {
       e.preventDefault();
       this.openMentorModal();
+    });
+
+    const stationLinks = hiddenTextDiv.querySelectorAll(`.${style.stationLink}`);
+    stationLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        // eslint-disable-next-line prefer-destructuring
+        const station = (e.target as HTMLElement).dataset['station'];
+        this.openStationModal(station);
+      });
     });
 
     return hiddenTextDiv;
@@ -195,6 +208,36 @@ class AboutUsPageUI {
 
     this.modal.setContent(modalContent);
     this.modal.openModal();
+  }
+
+  private openStationModal(station: string | undefined): void {
+    if (!station) return;
+
+    let stationPhoto;
+    // eslint-disable-next-line default-case
+    switch (station) {
+      case 'kurgan':
+        stationPhoto = kurganStation;
+        break;
+      case 'minsk':
+        stationPhoto = minskStation;
+        break;
+      case 'houston':
+        stationPhoto = houstonStation;
+        break;
+    }
+
+    if (stationPhoto) {
+      const modalContent = document.createElement('div');
+      const stationImg = document.createElement('img');
+      stationImg.src = stationPhoto;
+      stationImg.alt = `${station.charAt(0).toUpperCase() + station.slice(1)} Station`;
+      stationImg.className = style.stationImage;
+      modalContent.appendChild(stationImg);
+
+      this.modal.setContent(modalContent);
+      this.modal.openModal();
+    }
   }
 }
 
