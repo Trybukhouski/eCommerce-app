@@ -1,5 +1,6 @@
 import { Cart } from '@services';
 import { Button } from '@shared';
+import trashCanIcon from '@assets/sprites/trash/trash-basket-svgrepo-com.svg';
 import { BusketCard } from './components';
 import * as style from './style.module.scss';
 
@@ -28,6 +29,8 @@ class CartPageUI {
     value: number;
   };
 
+  public clearAllButton: HTMLButtonElement;
+
   constructor() {
     this.root = document.createElement('section');
 
@@ -42,11 +45,28 @@ class CartPageUI {
     this.header = header;
     this.totalCartCost = this.addTotalCartCost();
 
-    this.root.append(this.header, this.emptyGroup.container);
+    this.clearAllButton = new Button({
+      text: 'Clear All',
+      icon: {
+        sprite: trashCanIcon,
+        towhere: 'end',
+      },
+    }).button;
+
+    this.root.append(this.header, this.clearAllButton, this.emptyGroup.container);
 
     this.addClasses();
 
     this.showBasket();
+  }
+
+  public clearAllCards(): void {
+    this.productSection?.cards.forEach((card) => {
+      card.card.remove();
+    });
+
+    this.productSection = undefined;
+    this.showEmptyMessage();
   }
 
   public createCards(cart: Cart): void {
@@ -148,6 +168,7 @@ class CartPageUI {
       [this.root, style['basket']],
       [this.emptyGroup.container, style['empty']],
       [this.totalCartCost.container, 'total-cart-cost'],
+      [this.clearAllButton, 'clear-all'],
     ] as const).forEach(([element, className]) => {
       element.classList.add(className);
     });

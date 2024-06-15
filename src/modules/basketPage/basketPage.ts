@@ -1,4 +1,4 @@
-import { CartService, NotificationService } from '@services';
+import { CartService, NotificationService, ManageProductOptions } from '@services';
 import { BusketCard, CartPageUI } from './ui';
 
 class BasketPage {
@@ -13,6 +13,45 @@ class BasketPage {
     this.addHashChangeListener();
     this.addQuantityListener();
     this.addDeleteListener();
+    this.addDeleteAllListener();
+  }
+
+  private addDeleteAllListener(): void {
+    type ManageAction = ManageProductOptions['actions'][number];
+
+    this.uiApi.clearAllButton.addEventListener('click', (event) => {
+      const cards = this.uiApi.productSection?.cards;
+      if (!event.target || !cards || cards.length === 0) {
+        return;
+      }
+
+      const ids = cards.map((c) => c.id);
+      const actions = ids.map(
+        (id): ManageAction => {
+          return {
+            action: 'remove',
+            options: {
+              lineItemId: id,
+            },
+          };
+        }
+      );
+
+      const promise = CartService.manageProduct({ actions });
+
+      promise
+        .then((cart) => {
+          if (!cart) {
+            return;
+          }
+
+          this.uiApi.clearAllCards();
+          this.uiApi.updateTotalCost(cart);
+        })
+        .catch((err) => {
+          NotificationService.displayError(err.message);
+        });
+    });
   }
 
   private addQuantityListener(): void {
@@ -39,7 +78,7 @@ class BasketPage {
     this.uiApi.root.addEventListener('click', (event) => {
       if (!event.target) return;
 
-      const button = (event.target as HTMLElement).closest('button');
+      const button = (event.target as HTMLElement).closest('button.delete');
       const allCards = this.uiApi.productSection?.cards;
 
       if (!allCards || !button) {
