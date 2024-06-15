@@ -52,7 +52,7 @@ class AboutUsPageUI {
     descriptionDiv.className = style.descriptionDiv;
 
     const handWrittenText = document.createElement('p');
-    handWrittenText.textContent = `Meet Our Dev Dream Team and the Secrets to Our Non-Stop Success and read everything attentively if you want to know the secret of our success!`;
+    handWrittenText.textContent = `Meet Our Dev Dream Team and the Secrets to Our Non-Stop Success and read everything carefully if you want to know the secret of our success!`;
     handWrittenText.classList.add(style.handwrittenText);
 
     const hiddenTextDiv = this.createHiddenTextDiv();
