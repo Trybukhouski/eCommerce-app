@@ -17,6 +17,8 @@ class CartPageUI {
     };
   };
 
+  public productsGroupContainer: HTMLElement;
+
   public productSection?: {
     container: HTMLElement;
     cards: BusketCard[];
@@ -35,6 +37,7 @@ class CartPageUI {
     this.root = document.createElement('section');
 
     const { emptyGroupContainer, header, emptyMessage, goToCatalogButton } = this.init();
+    this.productsGroupContainer = document.createElement('section');
     this.emptyGroup = {
       container: emptyGroupContainer,
       elements: {
@@ -53,11 +56,20 @@ class CartPageUI {
       },
     }).button;
 
-    this.root.append(this.header, this.clearAllButton, this.emptyGroup.container);
+    this.root.append(this.header, this.emptyGroup.container, this.productsGroupContainer);
+    this.productsGroupContainer.append(this.clearAllButton);
 
     this.addClasses();
 
-    this.showBasket();
+    this.hideEmptyMessage();
+  }
+
+  public hideRoot(): void {
+    this.root.style.display = 'none';
+  }
+
+  public showRoot(): void {
+    this.root.style.display = '';
   }
 
   public clearAllCards(): void {
@@ -79,11 +91,10 @@ class CartPageUI {
     };
 
     this.productSection.container.append(...this.productSection.cards.map((i) => i.card));
-    this.root.append(this.productSection.container);
     this.productSection.container.classList.add(style['products']);
 
     this.updateTotalCost(cart);
-    this.root.append(this.totalCartCost.container);
+    this.productsGroupContainer.append(this.productSection.container, this.totalCartCost.container);
   }
 
   public updateTotalCost(cart: Cart): void {
@@ -108,19 +119,11 @@ class CartPageUI {
   public showEmptyMessage(): void {
     const emptyDiv = this.emptyGroup.container;
     emptyDiv.style.display = '';
-    this.hideContent();
   }
 
-  public showBasket(): void {
+  public hideEmptyMessage(): void {
     const emptyDiv = this.emptyGroup.container;
     emptyDiv.style.display = 'none';
-  }
-
-  public hideContent(): void {
-    this.productSection?.container.remove();
-    this.productSection = undefined;
-
-    this.totalCartCost.container.remove();
   }
 
   private static formatPrice(n: number): string {
@@ -169,6 +172,7 @@ class CartPageUI {
       [this.emptyGroup.container, style['empty']],
       [this.totalCartCost.container, 'total-cart-cost'],
       [this.clearAllButton, 'clear-all'],
+      [this.productsGroupContainer, 'products-group'],
     ] as const).forEach(([element, className]) => {
       element.classList.add(className);
     });

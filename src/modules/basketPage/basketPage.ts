@@ -95,9 +95,7 @@ class BasketPage {
   private addHashChangeListener(): void {
     const func = () => {
       const idMatch = window.location.hash.includes('basket');
-      if (!idMatch) {
-        this.uiApi.hideContent();
-      } else {
+      if (idMatch) {
         this.loadPage();
       }
     };
@@ -166,7 +164,7 @@ class BasketPage {
   }
 
   private async loadPage(): Promise<void> {
-    this.uiApi.showBasket();
+    this.uiApi.hideRoot();
     const cart = await CartService.getCart();
 
     if (cart === undefined) {
@@ -176,8 +174,10 @@ class BasketPage {
     if (cart.lineItems.length === 0) {
       this.uiApi.showEmptyMessage();
     } else {
+      this.uiApi.hideEmptyMessage();
       this.uiApi.createCards(cart);
     }
+    this.uiApi.showRoot();
   }
 }
 

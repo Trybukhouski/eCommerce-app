@@ -6,7 +6,6 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: $gap-lg;
   width: calc(100% - 7.5rem);
@@ -17,6 +16,18 @@
 
   &:has(.empty[style='display: none;']) {
     justify-content: start;
+
+    :global(.products-group) {
+      display: '';
+    }
+  }
+
+  &:has(.empty:not([style='display: none;'])) {
+    justify-content: center;
+
+    :global(.products-group) {
+      display: none;
+    }
   }
 
   .empty {
