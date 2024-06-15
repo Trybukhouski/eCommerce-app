@@ -89,6 +89,7 @@ class BasketPage {
 
         card.updateTotalPrice(lineItem.totalPrice.centAmount);
         card.modifyQuantity(lineItem.quantity);
+        this.uiApi.updateTotalCost(cart);
       })
       .catch((err) => {
         NotificationService.displayError(err.message);
@@ -111,8 +112,13 @@ class BasketPage {
     });
 
     promise
-      .then(() => {
+      .then((cart) => {
+        if (!cart) {
+          return;
+        }
+
         this.uiApi.removeCard(card);
+        this.uiApi.updateTotalCost(cart);
       })
       .then(() =>
         this.elem.dispatchEvent(new CustomEvent('changeCardsInBasket', { bubbles: true }))

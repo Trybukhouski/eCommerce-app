@@ -21,6 +21,13 @@ class CartPageUI {
     cards: BusketCard[];
   };
 
+  public totalCartCost: {
+    container: HTMLElement;
+    text: HTMLElement;
+    cost: HTMLElement;
+    value: number;
+  };
+
   constructor() {
     this.root = document.createElement('section');
 
@@ -33,12 +40,36 @@ class CartPageUI {
       },
     };
     this.header = header;
+    this.totalCartCost = this.addTotalCartCost();
 
     this.root.append(this.header, this.emptyGroup.container);
 
     this.addClasses();
 
     this.showBasket();
+  }
+
+  public createCards(cart: Cart): void {
+    const items = cart.lineItems;
+    const cardMap = items.map((i) => new BusketCard(i));
+
+    this.productSection = {
+      container: document.createElement('section'),
+      cards: cardMap,
+    };
+
+    this.productSection.container.append(...this.productSection.cards.map((i) => i.card));
+    this.root.append(this.productSection.container);
+    this.productSection.container.classList.add(style['products']);
+
+    this.updateTotalCost(cart);
+    this.root.append(this.totalCartCost.container);
+  }
+
+  public updateTotalCost(cart: Cart): void {
+    const totalValue = cart.totalPrice.centAmount;
+    this.totalCartCost.value = totalValue;
+    this.totalCartCost.cost.textContent = CartPageUI.formatPrice(totalValue);
   }
 
   public removeCard(card: BusketCard): void {
@@ -54,19 +85,26 @@ class CartPageUI {
     }
   }
 
-  public hideContent(): void {
-    this.productSection?.container.remove();
-    this.productSection = undefined;
-  }
-
   public showEmptyMessage(): void {
     const emptyDiv = this.emptyGroup.container;
     emptyDiv.style.display = '';
+    this.hideContent();
   }
 
   public showBasket(): void {
     const emptyDiv = this.emptyGroup.container;
     emptyDiv.style.display = 'none';
+  }
+
+  public hideContent(): void {
+    this.productSection?.container.remove();
+    this.productSection = undefined;
+
+    this.totalCartCost.container.remove();
+  }
+
+  private static formatPrice(n: number): string {
+    return BusketCard.formatPrice(n);
   }
 
   private init(): {
@@ -93,23 +131,26 @@ class CartPageUI {
     return { emptyGroupContainer, header, emptyMessage, goToCatalogButton };
   }
 
-  public createCards(cart: Cart): void {
-    const items = cart.lineItems;
-    const cardMap = items.map((i) => new BusketCard(i));
-
-    this.productSection = {
-      container: document.createElement('section'),
-      cards: cardMap,
+  private addTotalCartCost(): typeof this.totalCartCost {
+    const totalCartCost: typeof this.totalCartCost = {
+      container: document.createElement('div'),
+      text: document.createElement('span'),
+      cost: document.createElement('span'),
+      value: 0,
     };
-
-    this.productSection.container.append(...this.productSection.cards.map((i) => i.card));
-    this.root.append(this.productSection.container);
-    this.productSection.container.classList.add(style['products']);
+    totalCartCost.text.textContent = 'Total Cost: ';
+    totalCartCost.container.append(totalCartCost.text, totalCartCost.cost);
+    return totalCartCost;
   }
 
   private addClasses(): void {
-    this.root.classList.add(style['basket']);
-    this.emptyGroup.container.classList.add(style['empty']);
+    ([
+      [this.root, style['basket']],
+      [this.emptyGroup.container, style['empty']],
+      [this.totalCartCost.container, 'total-cart-cost'],
+    ] as const).forEach(([element, className]) => {
+      element.classList.add(className);
+    });
   }
 }
 
