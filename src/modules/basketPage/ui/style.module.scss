@@ -1,4 +1,5 @@
 @import '@assets/styles/fonts.scss';
+@import '@assets/styles/breakpoints.module.scss';
 
 .basket {
   $gap-lg: 1.8125rem;
@@ -12,6 +13,7 @@
   @include regularText();
   margin: 1.875rem auto;
   min-height: calc(100vh - 2 * $gap-lg);
+  max-width: $contentDesktopLarge;
 
   &:has(.empty[style='display: none;']) {
     justify-content: start;
@@ -39,5 +41,20 @@
     flex-direction: column;
     gap: 1.4rem;
     width: 100%;
+  }
+
+  :global(.total-cart-cost) {
+    @include title();
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+
+    :nth-child(2) {
+      color: var(--orange-500);
+    }
+
+    :nth-child(2)::before {
+      content: '$';
+    }
   }
 }

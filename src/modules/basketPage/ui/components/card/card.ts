@@ -123,12 +123,12 @@ class BusketCard {
   }
 
   public updateTotalPrice(centAmount: number): void {
-    const newPrice = this.formatPrice(centAmount);
+    const newPrice = BusketCard.formatPrice(centAmount);
     this.totalPrice.elements.price.textContent = newPrice;
     this.totalPrice.value = centAmount;
   }
 
-  private formatPrice(n: number): string {
+  public static formatPrice(n: number): string {
     return `${Math.trunc(n / 100)}${(n % 1).toPrecision(3).replace(/0/, '')}`;
   }
 
@@ -168,7 +168,7 @@ class BusketCard {
     const pricesElems = prices.map(
       (p): HTMLElement => {
         const priceElem = document.createElement('p');
-        priceElem.textContent = this.formatPrice(p ?? prices[0]);
+        priceElem.textContent = BusketCard.formatPrice(p ?? prices[0]);
         return priceElem;
       }
     ) as [HTMLElement, HTMLElement];
@@ -199,7 +199,7 @@ class BusketCard {
 
   private addTotalPrice(): typeof this.totalPrice {
     const value = this.data.totalPrice.centAmount;
-    const priceText = this.formatPrice(value);
+    const priceText = BusketCard.formatPrice(value);
     const price = document.createElement('span');
     price.textContent = priceText;
     const span = document.createElement('span');
