@@ -54,6 +54,7 @@ class CartPageUI {
         sprite: trashCanIcon,
         towhere: 'end',
       },
+      className: 'edit-icon',
     }).button;
 
     this.root.append(this.header, this.emptyGroup.container, this.productsGroupContainer);

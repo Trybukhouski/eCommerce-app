@@ -97,6 +97,8 @@ class BasketPage {
       const idMatch = window.location.hash.includes('basket');
       if (idMatch) {
         this.loadPage();
+      } else {
+        this.uiApi.clearAllCards();
       }
     };
     window.addEventListener('hashchange', func);
@@ -171,9 +173,7 @@ class BasketPage {
       return;
     }
 
-    if (cart.lineItems.length === 0) {
-      this.uiApi.showEmptyMessage();
-    } else {
+    if (cart.lineItems.length !== 0) {
       this.uiApi.hideEmptyMessage();
       this.uiApi.createCards(cart);
     }
