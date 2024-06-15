@@ -114,6 +114,9 @@ class BasketPage {
       .then(() => {
         this.uiApi.removeCard(card);
       })
+      .then(() =>
+        this.elem.dispatchEvent(new CustomEvent('changeCardsInBasket', { bubbles: true }))
+      )
       .catch((err) => {
         NotificationService.displayError(err.message);
         card.toggleDisabledButtons();

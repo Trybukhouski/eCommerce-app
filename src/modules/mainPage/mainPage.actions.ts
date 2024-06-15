@@ -5,7 +5,21 @@ export class MainPageActions extends MainPageView {
     super.create();
     this.updateHashAccordingClickInNavLink();
     this.updateParamsOfCatalogURL();
+    this.updateCartWidget();
     return this;
+  }
+
+  private updateCartWidget(): void {
+    this.elements.root.addEventListener('changeCardsInBasket', async () => {
+      const { header } = this.components;
+      const { nav } = header.components;
+      const { cartWidget } = nav.components;
+      try {
+        await cartWidget.updateTotalItemsInCart();
+      } catch (error) {
+        throw new Error('Error updating total items in cart');
+      }
+    });
   }
 
   private updateHashAccordingClickInNavLink(): void {
