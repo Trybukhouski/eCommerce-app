@@ -41,6 +41,8 @@ class BasketPage {
       return;
     }
 
+    this.uiApi.toggleAllDisabledButtons();
+
     const ids = cards.map((c) => c.id);
     const actions = ids.map(
       (id): ManageAction => {
@@ -66,7 +68,8 @@ class BasketPage {
       })
       .catch((err) => {
         NotificationService.displayError(err.message);
-      });
+      })
+      .finally(() => this.uiApi.toggleAllDisabledButtons());
   }
 
   private addQuantityListener(): void {
@@ -84,7 +87,7 @@ class BasketPage {
       const card = allCards.find((c) => c.quantityModifiers.container === container);
       const quantity = card?.getQuantityAfterClick(button);
       if (!card || !quantity) return;
-      card.toggleDisabledButtons();
+      this.uiApi.toggleAllDisabledButtons();
       this.handleQuantityResponse(card, quantity);
     });
   }
@@ -102,7 +105,7 @@ class BasketPage {
 
       const card = allCards.find((c) => c.deleteButton === button);
       if (!card) return;
-      card.toggleDisabledButtons();
+      this.uiApi.toggleAllDisabledButtons();
       this.handleDeleteResponse(card);
     });
   }
@@ -149,7 +152,7 @@ class BasketPage {
         NotificationService.displayError(err.message);
       })
       .finally(() => {
-        card.toggleDisabledButtons();
+        this.uiApi.toggleAllDisabledButtons();
       });
   }
 
@@ -176,8 +179,8 @@ class BasketPage {
       })
       .catch((err) => {
         NotificationService.displayError(err.message);
-        card.toggleDisabledButtons();
-      });
+      })
+      .finally(() => this.uiApi.toggleAllDisabledButtons());
   }
 
   private async loadPage(): Promise<void> {

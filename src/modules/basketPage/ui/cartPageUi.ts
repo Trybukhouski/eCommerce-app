@@ -65,6 +65,13 @@ class CartPageUI {
     this.hideEmptyMessage();
   }
 
+  public toggleAllDisabledButtons(): void {
+    this.productSection?.cards.forEach((c) => c.toggleDisabledButtons());
+
+    const isDisabled = this.clearAllButton.disabled;
+    this.clearAllButton.disabled = !isDisabled;
+  }
+
   public hideRoot(): void {
     this.root.style.display = 'none';
   }
