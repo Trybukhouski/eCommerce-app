@@ -1,4 +1,5 @@
 import { CartService, NotificationService, ManageProductOptions } from '@services';
+import { Confirm } from '@shared';
 import { BusketCard, CartPageUI } from './ui';
 
 class BasketPage {
@@ -17,41 +18,55 @@ class BasketPage {
   }
 
   private addDeleteAllListener(): void {
-    type ManageAction = ManageProductOptions['actions'][number];
-
     this.uiApi.clearAllButton.addEventListener('click', (event) => {
-      const cards = this.uiApi.productSection?.cards;
-      if (!event.target || !cards || cards.length === 0) {
+      const busketCards = this.uiApi.productSection?.cards;
+      if (!event.target || !busketCards || busketCards.length === 0) {
         return;
       }
 
-      const ids = cards.map((c) => c.id);
-      const actions = ids.map(
-        (id): ManageAction => {
-          return {
-            action: 'remove',
-            options: {
-              lineItemId: id,
-            },
-          };
-        }
+      const callback = this.deleteAllCallback.bind(this, busketCards);
+
+      const confirm = new Confirm(
+        'Are you sure you want to remove all items from the shopping cart?',
+        callback
       );
-
-      const promise = CartService.manageProduct({ actions });
-
-      promise
-        .then((cart) => {
-          if (!cart) {
-            return;
-          }
-
-          this.uiApi.clearAllCards();
-          this.uiApi.updateTotalCost(cart);
-        })
-        .catch((err) => {
-          NotificationService.displayError(err.message);
-        });
+      document.body.append(confirm.container);
     });
+  }
+
+  private deleteAllCallback(cards: BusketCard[], isConfirmed: boolean): void {
+    type ManageAction = ManageProductOptions['actions'][number];
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    const ids = cards.map((c) => c.id);
+    const actions = ids.map(
+      (id): ManageAction => {
+        return {
+          action: 'remove',
+          options: {
+            lineItemId: id,
+          },
+        };
+      }
+    );
+
+    const promise = CartService.manageProduct({ actions });
+
+    promise
+      .then((cart) => {
+        if (!cart) {
+          return;
+        }
+
+        this.uiApi.clearAllCards();
+        this.uiApi.updateTotalCost(cart);
+      })
+      .catch((err) => {
+        NotificationService.displayError(err.message);
+      });
   }
 
   private addQuantityListener(): void {
