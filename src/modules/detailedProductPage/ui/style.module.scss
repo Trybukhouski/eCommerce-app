@@ -73,13 +73,21 @@
 }
 
 .slider-button {
+  width: 40px;
+  height: 40px;
   background-color: var(--white-200);
   border: none;
-  padding: 0.625rem;
+  padding: 0;
   cursor: pointer;
   z-index: 2;
   position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 .slider-button:first-child {
   left: 0;
 }
@@ -96,9 +104,10 @@
 }
 
 .thumbnails-wrapper img {
-  width: 45%;
+  width: 25%;
   margin-right: 2%;
   flex-shrink: 0;
+  color: red;
 }
 
 .thumbnail-images {
