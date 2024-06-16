@@ -14,4 +14,16 @@ export class LocalStorageService {
   public static setAuthorisedToken(token: string): void {
     localStorage.setItem('accessToken', token);
   }
+
+  public static clearAnonymousAuthorisedToken(): void {
+    localStorage.removeItem('accessAnonymousToken');
+  }
+
+  public static getAnonymousAuthorisedToken(): string | null {
+    return localStorage.getItem('accessAnonymousToken');
+  }
+
+  public static setAnonymousAuthorisedToken(token: string): void {
+    localStorage.setItem('accessAnonymousToken', token);
+  }
 }
