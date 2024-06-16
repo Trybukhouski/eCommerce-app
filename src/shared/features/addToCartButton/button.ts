@@ -37,6 +37,7 @@ class AddToCartButton extends Button {
 
   private addClickListener(): void {
     this.button.addEventListener('click', async () => {
+      this.button.disabled = true;
       const info = this.pageUI.getProductInfo();
       if (!this.inCart) {
         await CartService.manageProduct({
@@ -68,6 +69,7 @@ class AddToCartButton extends Button {
 
       this.inCart = !this.inCart;
       this.setButtonView();
+      this.button.disabled = false;
     });
   }
 }
