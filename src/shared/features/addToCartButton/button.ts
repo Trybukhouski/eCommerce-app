@@ -21,9 +21,9 @@ class AddToCartButton extends Button {
   }
 
   private addClickListener(): void {
-    this.button.addEventListener('click', async () => {
+    this.button.addEventListener('click', () => {
       const info = this.pageUI.getProductInfo();
-      await CartService.manageProduct({
+      CartService.manageProduct({
         actions: [
           {
             action: 'add',
@@ -31,7 +31,6 @@ class AddToCartButton extends Button {
           },
         ],
       });
-      this.button.dispatchEvent(new CustomEvent('changeCardsInBasket', { bubbles: true }));
     });
   }
 }

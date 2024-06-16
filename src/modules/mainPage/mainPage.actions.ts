@@ -10,14 +10,13 @@ export class MainPageActions extends MainPageView {
   }
 
   private updateCartWidget(): void {
-    this.elements.root.addEventListener('changeCardsInBasket', async () => {
+    document.addEventListener('changeCardsInBasket', (event) => {
       const { header } = this.components;
       const { nav } = header.components;
       const { cartWidget } = nav.components;
-      try {
-        await cartWidget.updateTotalItemsInCart();
-      } catch (error) {
-        throw new Error('Error updating total items in cart');
+
+      if (event instanceof CustomEvent) {
+        cartWidget.updateTotalItemsInCart(event.detail as number);
       }
     });
   }

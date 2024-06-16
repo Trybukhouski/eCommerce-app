@@ -120,9 +120,6 @@ class BasketPage {
         this.uiApi.removeCard(card);
         this.uiApi.updateTotalCost(cart);
       })
-      .then(() =>
-        this.elem.dispatchEvent(new CustomEvent('changeCardsInBasket', { bubbles: true }))
-      )
       .catch((err) => {
         NotificationService.displayError(err.message);
         card.toggleDisabledButtons();

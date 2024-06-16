@@ -9,7 +9,12 @@ export class CartWidgetState extends CartWidgetView {
     this.updateTotalItemsInCart();
   }
 
-  public async updateTotalItemsInCart() {
+  public async updateTotalItemsInCart(n?: number) {
+    if (n) {
+      this.reRender(n);
+      return;
+    }
+
     try {
       await this.services.cartService.getCarts().then((data) => {
         if (data) {
