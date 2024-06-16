@@ -13,24 +13,61 @@ interface PageUI {
 class AddToCartButton extends Button {
   private pageUI: PageUI;
 
+  private inCart = false;
+
+  private lineItem = '';
+
   constructor(buttonOptions: ButtonOptions, pageUI: PageUI) {
     super(buttonOptions);
     this.pageUI = pageUI;
+    this.setButtonView();
 
     this.addClickListener();
   }
 
+  private setButtonView(): void {
+    if (this.inCart) {
+      this.button.textContent = 'Remove from cart';
+      this.button.removeAttribute('data-customColor');
+    } else {
+      this.button.textContent = 'Add to cart';
+      this.button.setAttribute('data-customColor', 'blue');
+    }
+  }
+
   private addClickListener(): void {
-    this.button.addEventListener('click', () => {
+    this.button.addEventListener('click', async () => {
       const info = this.pageUI.getProductInfo();
-      CartService.manageProduct({
-        actions: [
-          {
-            action: 'add',
-            options: info,
-          },
-        ],
-      });
+      if (!this.inCart) {
+        await CartService.manageProduct({
+          actions: [
+            {
+              action: 'add',
+              options: info,
+            },
+          ],
+        }).then((data) => {
+          if (data) {
+            if (data.lineItems[0]) {
+              this.lineItem = data.lineItems[0].id;
+            }
+          }
+        });
+      } else {
+        await CartService.manageProduct({
+          actions: [
+            {
+              action: 'remove',
+              options: {
+                lineItemId: this.lineItem,
+              },
+            },
+          ],
+        });
+      }
+
+      this.inCart = !this.inCart;
+      this.setButtonView();
     });
   }
 }

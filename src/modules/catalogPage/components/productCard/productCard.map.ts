@@ -1,7 +1,7 @@
-import { Button } from '@shared';
+import { AddToCartButton } from '@shared';
 
 export class ProductCardMap {
   components = {
-    Button,
+    AddToCartButton,
   };
 }

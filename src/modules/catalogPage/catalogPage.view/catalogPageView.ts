@@ -1,5 +1,4 @@
 import { ProductDetailOptions } from '@services';
-import { AddToCartButton } from '@shared';
 import { catalogPageMap } from '../catalogPage.map';
 import * as styles from './styles.module.scss';
 
@@ -60,7 +59,6 @@ export class CatalogPageView extends catalogPageMap {
           })
         );
       });
-      cardEl.append(new AddToCartButton({}, component).button);
       catalog.append(cardEl);
     });
   }
