@@ -38,13 +38,13 @@ body {
 .handwrittenText {
   font-family: 'Permanent Marker', cursive;
   font-size: 2rem;
-  color: var(--orange-500);
+  color: var(--information-color);
   white-space: pre-wrap;
 }
 
 .hiddenText {
   font-family: 'Permanent Marker', cursive;
-  color: var(--orange-500);
+  color: var(--information-color);
   font-size: 1.7rem;
   display: none;
   white-space: pre-wrap;
@@ -55,17 +55,20 @@ body {
 .showLessLink {
   display: inline-block;
   cursor: pointer;
-  color: var(--information-color);
+  color: var(--orange-400);
   text-decoration: none;
   font-family: 'Permanent Marker', cursive;
   position: relative;
   float: right;
   top: 0;
+  margin-right: 2rem;
+  font-size: 1.7rem;
 }
 
 .showMoreLink:hover,
 .showLessLink:hover {
   text-decoration: underline;
+  color: var(--orange-500);
 }
 
 .cardsContainer {
@@ -102,13 +105,14 @@ body {
 }
 
 .mentorLink {
-  color: var(--information-color);
+  color: var(--orange-400);
   text-decoration: none;
   cursor: pointer;
 }
 
 .mentorLink:hover {
   text-decoration: underline;
+  color: var(--orange-500);
 }
 
 .mentorImage {
@@ -117,18 +121,19 @@ body {
 }
 
 .stationLink {
-  color: var(--information-color);
+  color: var(--orange-400);
   text-decoration: none;
   cursor: pointer;
 }
 
 .stationLink:hover {
   text-decoration: underline;
+  color: var(--orange-500);
 }
 
 .stationImage {
   max-width: 100%;
-  height: auto;
+  max-height: 100%;
 }
 
 .descriptionDiv {
@@ -218,4 +223,5 @@ body {
     margin: 2rem;
   }
 }
+
 
