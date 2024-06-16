@@ -1,3 +1,5 @@
+import * as style from './style.module.scss';
+
 class Confirm {
   public container: HTMLElement;
 
@@ -11,6 +13,7 @@ class Confirm {
     ok.textContent = 'ok';
     cancel.textContent = 'cancel';
     this.container.append(prompt);
+    this.container.classList.add(style['confirm']);
     prompt.append(paragraph, ok, cancel);
 
     const f = (event: Event) => {
