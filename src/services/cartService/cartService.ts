@@ -17,6 +17,8 @@ import { AnonymousService } from '../shared/services/anonymousService/AnonymousS
 class CartService extends BackendService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
 
+  private static recentCart?: Cart;
+
   public static async getCart(): Promise<Cart | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
     const authAnonimToken = await AnonymousService.getAnonymousToken();
@@ -35,6 +37,7 @@ class CartService extends BackendService {
     } else {
       cart = carts.results[0];
     }
+    CartService.recentCart = cart;
     return cart;
   }
 
@@ -64,7 +67,50 @@ class CartService extends BackendService {
       cartId: cart.id,
     };
 
-    return CartService.sentCartActions(newOptions);
+    const data = await CartService.sentCartActions(newOptions);
+
+    if (data) {
+      document.dispatchEvent(
+        new CustomEvent('changeCardsInBasket', {
+          bubbles: true,
+          detail: data.lineItems.length,
+        })
+      );
+    }
+
+    return data;
+  }
+
+  public static async getRecentCart(): Promise<Cart> {
+    let { recentCart } = CartService;
+    if (recentCart) {
+      return recentCart;
+    }
+
+    recentCart = await CartService.getCart();
+    if (!recentCart) {
+      throw new Error(`Can't get cart`);
+    }
+
+    return recentCart;
+  }
+
+  public static async checkIsCardInCart(id: string): Promise<boolean> {
+    const recentCart = await CartService.getRecentCart();
+
+    const ids = recentCart.lineItems.map((i) => i.productId);
+    return ids.includes(id);
+  }
+
+  public static async getCurrentLineItemId(id: string): Promise<string> {
+    const recentCart = await CartService.getRecentCart();
+
+    const lineItem = recentCart.lineItems.find((i) => i.productId === id);
+
+    if (!lineItem) {
+      throw new Error(`Can't find item in cart`);
+    }
+    return lineItem.id;
   }
 
   private static async getCarts(): Promise<Carts | undefined> {
@@ -121,6 +167,7 @@ class CartService extends BackendService {
     }
 
     const data: Cart = await handleResponse(response);
+    CartService.recentCart = data;
 
     return data;
   }

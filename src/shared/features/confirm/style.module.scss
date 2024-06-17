@@ -1,0 +1,56 @@
+@import '@assets/styles/fonts.scss';
+
+.confirm {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 5rem;
+  background-color: rgba(0, 0, 0, 0.471);
+
+  div {
+    display: grid;
+    justify-items: center;
+    background-color: white;
+    max-width: 80%;
+    padding: 1rem;
+    gap: 0.5rem;
+    grid-template-rows: repeat(2, min-content);
+    grid-template-columns: 1fr 1fr;
+    border-radius: 0.3125rem;
+
+    p {
+      grid-column: 1 / 3;
+      text-align: center;
+    }
+
+    button {
+      border: none;
+      padding: 0.2rem 0.8rem;
+      cursor: pointer;
+      border-radius: var(--small-border-radius);
+      transition: filter 0.3s;
+
+      &:hover {
+        filter: opacity(0.6);
+      }
+    }
+
+    button:nth-child(2) {
+      background-color: var(--correct-warning-color);
+    }
+
+    button:nth-child(3) {
+      background-color: var(--wrong-warning-color);
+    }
+  }
+
+  div p,
+  div button {
+    @include regularText();
+  }
+}

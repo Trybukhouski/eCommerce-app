@@ -161,6 +161,8 @@ body {
   background-image: url('@assets/images/grid-sheet.jpg');
   position: absolute;
   bottom: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .footer a {
