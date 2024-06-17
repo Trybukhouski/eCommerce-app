@@ -10,8 +10,8 @@ export class AnonymousService {
 
   private static anonymousAccessToken = LocalStorageService.getAnonymousAuthorisedToken();
 
-  static async getAnonymousToken(): Promise<string | undefined> {
-    if (this.anonymousAccessToken) {
+  static async getAnonymousToken(update = false): Promise<string | undefined> {
+    if (this.anonymousAccessToken && !update) {
       return this.anonymousAccessToken;
     }
 
