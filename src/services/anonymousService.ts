@@ -1,6 +1,6 @@
 import { clientCredentials } from '@root/config';
 import { getFormHeaders, handleResponse } from '@shared';
-import { LocalStorageService } from './shared';
+import { LocalStorageService, LoginResponse } from './shared';
 
 export class AnonymousService {
   private static url = `${clientCredentials.authUrl}/oauth/${clientCredentials.projectKey}/anonymous/token?grant_type=client_credentials`;
@@ -36,7 +36,7 @@ export class AnonymousService {
   static async getTokenFromPasswordFlow(
     username: string,
     password: string
-  ): Promise<string | undefined> {
+  ): Promise<LoginResponse> {
     const queryString = `?grant_type=password&username=${username}&password=${password}`;
 
     const response = await fetch(this.passwordUrl.concat(queryString), {
@@ -52,8 +52,7 @@ export class AnonymousService {
     const accessToken = data.access_token;
     if (typeof accessToken === 'string') {
       LocalStorageService.setAuthorisedToken(accessToken);
-      return accessToken;
     }
-    return undefined;
+    return data;
   }
 }
