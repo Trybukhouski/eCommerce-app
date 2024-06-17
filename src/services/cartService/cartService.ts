@@ -12,6 +12,7 @@ import {
   ManageProductOptions,
   Action,
 } from './interfaces';
+import { AnonymousService } from '../shared/services/anonymousService/AnonymousService';
 
 class CartService extends BackendService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
@@ -20,7 +21,8 @@ class CartService extends BackendService {
 
   public static async getCart(): Promise<Cart | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
+    const authAnonimToken = await AnonymousService.getAnonymousToken();
+    if (authToken === null && authAnonimToken === undefined) {
       return undefined;
     }
 
@@ -112,11 +114,6 @@ class CartService extends BackendService {
   }
 
   private static async getCarts(): Promise<Carts | undefined> {
-    const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
-      return undefined;
-    }
-
     const response = await fetch(this.cartsMeEndpoint, {
       method: 'GET',
       headers: getHeaders(),
@@ -133,11 +130,6 @@ class CartService extends BackendService {
   }
 
   private static async createCart(): Promise<Cart | undefined> {
-    const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
-      return undefined;
-    }
-
     const response = await fetch(this.cartsMeEndpoint, {
       method: 'POST',
       headers: getJsonHeaders(),
@@ -155,11 +147,6 @@ class CartService extends BackendService {
   }
 
   private static async sentCartActions(options: SentCartActionOptions): Promise<Cart | undefined> {
-    const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
-      return undefined;
-    }
-
     const { actionsArr, cartVersion, cartId } = options;
 
     const body = JSON.stringify({

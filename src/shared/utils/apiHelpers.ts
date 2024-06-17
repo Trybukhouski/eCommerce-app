@@ -2,7 +2,8 @@ import { clientCredentials } from '@root/config';
 import { LocalStorageService } from '@services';
 
 export function getHeaders(token?: string) {
-  const bearerToken = token ?? LocalStorageService.getAuthorisedToken();
+  let bearerToken = token ?? LocalStorageService.getAuthorisedToken();
+  bearerToken = bearerToken ?? LocalStorageService.getAnonymousAuthorisedToken();
   if (!bearerToken) {
     throw new Error('No access token found');
   }
@@ -11,7 +12,8 @@ export function getHeaders(token?: string) {
   };
 }
 export function getJsonHeaders(token?: string) {
-  const bearerToken = token ?? LocalStorageService.getAuthorisedToken();
+  let bearerToken = token ?? LocalStorageService.getAuthorisedToken();
+  bearerToken = bearerToken ?? LocalStorageService.getAnonymousAuthorisedToken();
   if (!bearerToken) {
     throw new Error('No access token found');
   }
