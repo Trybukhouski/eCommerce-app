@@ -61,8 +61,6 @@ class CartPageUI {
     this.productsGroupContainer.append(this.clearAllButton);
 
     this.addClasses();
-
-    this.hideEmptyMessage();
   }
 
   public toggleAllDisabledButtons(): void {
