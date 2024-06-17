@@ -1,5 +1,6 @@
 import { Cart } from '@services';
 import { Button } from '@shared';
+import trashCanIcon from '@assets/sprites/trash/trash-basket-svgrepo-com.svg';
 import { BusketCard } from './components';
 import * as style from './style.module.scss';
 
@@ -16,6 +17,8 @@ class CartPageUI {
     };
   };
 
+  public productsGroupContainer: HTMLElement;
+
   public productSection?: {
     container: HTMLElement;
     cards: BusketCard[];
@@ -28,10 +31,13 @@ class CartPageUI {
     value: number;
   };
 
+  public clearAllButton: HTMLButtonElement;
+
   constructor() {
     this.root = document.createElement('section');
 
     const { emptyGroupContainer, header, emptyMessage, goToCatalogButton } = this.init();
+    this.productsGroupContainer = document.createElement('section');
     this.emptyGroup = {
       container: emptyGroupContainer,
       elements: {
@@ -42,11 +48,45 @@ class CartPageUI {
     this.header = header;
     this.totalCartCost = this.addTotalCartCost();
 
-    this.root.append(this.header, this.emptyGroup.container);
+    this.clearAllButton = new Button({
+      text: 'Clear All',
+      icon: {
+        sprite: trashCanIcon,
+        towhere: 'end',
+      },
+      className: 'edit-icon',
+    }).button;
+
+    this.root.append(this.header, this.emptyGroup.container, this.productsGroupContainer);
+    this.productsGroupContainer.append(this.clearAllButton);
 
     this.addClasses();
 
-    this.showBasket();
+    this.hideEmptyMessage();
+  }
+
+  public toggleAllDisabledButtons(): void {
+    this.productSection?.cards.forEach((c) => c.toggleDisabledButtons());
+
+    const isDisabled = this.clearAllButton.disabled;
+    this.clearAllButton.disabled = !isDisabled;
+  }
+
+  public hideRoot(): void {
+    this.root.style.display = 'none';
+  }
+
+  public showRoot(): void {
+    this.root.style.display = '';
+  }
+
+  public clearAllCards(): void {
+    this.productSection?.cards.forEach((card) => {
+      card.card.remove();
+    });
+
+    this.productSection = undefined;
+    this.showEmptyMessage();
   }
 
   public createCards(cart: Cart): void {
@@ -59,11 +99,10 @@ class CartPageUI {
     };
 
     this.productSection.container.append(...this.productSection.cards.map((i) => i.card));
-    this.root.append(this.productSection.container);
     this.productSection.container.classList.add(style['products']);
 
     this.updateTotalCost(cart);
-    this.root.append(this.totalCartCost.container);
+    this.productsGroupContainer.append(this.productSection.container, this.totalCartCost.container);
   }
 
   public updateTotalCost(cart: Cart): void {
@@ -88,19 +127,11 @@ class CartPageUI {
   public showEmptyMessage(): void {
     const emptyDiv = this.emptyGroup.container;
     emptyDiv.style.display = '';
-    this.hideContent();
   }
 
-  public showBasket(): void {
+  public hideEmptyMessage(): void {
     const emptyDiv = this.emptyGroup.container;
     emptyDiv.style.display = 'none';
-  }
-
-  public hideContent(): void {
-    this.productSection?.container.remove();
-    this.productSection = undefined;
-
-    this.totalCartCost.container.remove();
   }
 
   private static formatPrice(n: number): string {
@@ -148,6 +179,8 @@ class CartPageUI {
       [this.root, style['basket']],
       [this.emptyGroup.container, style['empty']],
       [this.totalCartCost.container, 'total-cart-cost'],
+      [this.clearAllButton, 'clear-all'],
+      [this.productsGroupContainer, 'products-group'],
     ] as const).forEach(([element, className]) => {
       element.classList.add(className);
     });
