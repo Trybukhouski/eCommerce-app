@@ -1,6 +1,7 @@
 import { Routes } from '@routes';
 import { ProductService } from '@services';
 import { getDetailForProductCard } from '@root/services/productService/utils/getDetailForProductCard';
+import { AddToCartButton } from '@shared';
 import { MainPageMap } from './MainPage.map';
 import * as styles from './styles.module.scss';
 import { PagesElements } from './interfaces';
@@ -30,7 +31,6 @@ export class MainPageView extends MainPageMap {
   public async setContent(content: Routes): Promise<void> {
     const { mainContent } = this.elements;
     mainContent.childNodes.forEach((child) => child.remove());
-
     const key = `${content}Page`;
     const pageElement = this.elements[key as keyof PagesElements];
     if (pageElement) {
@@ -40,8 +40,6 @@ export class MainPageView extends MainPageMap {
       page.innerHTML = content;
       mainContent.append(page);
     }
-
-    // RENDER DETAILED PRODUCT CARD
     if (content === 'card') {
       const cardID = this.services.router.getHashParams()?.split('=')[1];
       if (cardID) {
@@ -59,11 +57,30 @@ export class MainPageView extends MainPageMap {
         if (mainImage) {
           mainImage.src = productDetail.urls.mainImage;
         }
+        const actionsSection = this.elements.cardPage?.querySelector('.cardActions') as HTMLElement;
+        if (actionsSection.querySelector('.addToCardButton')) {
+          actionsSection.querySelector('.addToCardButton')?.remove();
+        }
+        const addToCardButton = this.createAddToCartButtonForProductPage(cardID);
+        addToCardButton.classList.add('addToCardButton');
+        actionsSection.append(addToCardButton);
       }
     }
   }
 
   public inform(page: Routes): void {
     this.setContent(page);
+  }
+
+  private createAddToCartButtonForProductPage(cardID: string) {
+    return new AddToCartButton(
+      { text: 'Add to cart', customColor: 'blue' },
+      {
+        getProductInfo: () => ({
+          productId: cardID,
+          variantId: 1,
+        }),
+      }
+    ).button;
   }
 }
