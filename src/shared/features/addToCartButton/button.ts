@@ -15,11 +15,10 @@ class AddToCartButton extends Button {
 
   private inCart = false;
 
-  private lineItem = '';
-
   constructor(buttonOptions: ButtonOptions, pageUI: PageUI) {
     super(buttonOptions);
     this.pageUI = pageUI;
+    this.inCart = CartService.checkCardInLocalStorage(pageUI.getProductInfo().productId);
     this.setButtonView();
 
     this.addClickListener();
@@ -48,26 +47,29 @@ class AddToCartButton extends Button {
             },
           ],
         }).then((data) => {
-          if (data) {
-            if (data.lineItems[0]) {
-              this.lineItem = data.lineItems[0].id;
-            }
+          if (data?.lineItems) {
+            CartService.setCurrentLineItemIDToLocalStorage(
+              data.lineItems.filter(
+                (el) => el.productId === this.pageUI.getProductInfo().productId
+              )[0]?.id || ''
+            );
           }
         });
+        CartService.addCardToLocalStorage(this.pageUI.getProductInfo().productId);
       } else {
         await CartService.manageProduct({
           actions: [
             {
               action: 'remove',
               options: {
-                lineItemId: this.lineItem,
+                lineItemId: CartService.getCurrentLineItemIDToLocalStorage(),
               },
             },
           ],
         });
+        CartService.removeCardFromLocalStorage(this.pageUI.getProductInfo().productId);
       }
-
-      this.inCart = !this.inCart;
+      this.inCart = CartService.checkCardInLocalStorage(this.pageUI.getProductInfo().productId);
       this.setButtonView();
       this.button.disabled = false;
     });

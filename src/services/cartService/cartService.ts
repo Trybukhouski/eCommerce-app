@@ -16,6 +16,8 @@ import {
 class CartService extends BackendService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
 
+  private static storageKey = 'cards';
+
   public static async getCart(): Promise<Cart | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
     if (authToken === null) {
@@ -63,6 +65,36 @@ class CartService extends BackendService {
     };
 
     return CartService.sentCartActions(newOptions);
+  }
+
+  // Метод для проверки наличия карточки в localStorage
+  public static checkCardInLocalStorage(id: string): boolean {
+    const cards = this.getCardsFromLocalStorage();
+    return cards.includes(id);
+  }
+
+  // Метод для добавления карточки в localStorage
+  public static addCardToLocalStorage(id: string): void {
+    const cards = this.getCardsFromLocalStorage();
+    if (!cards.includes(id)) {
+      cards.push(id);
+      localStorage.setItem(this.storageKey, JSON.stringify(cards));
+    }
+  }
+
+  // Метод для удаления карточки из localStorage
+  public static removeCardFromLocalStorage(id: string): void {
+    let cards = this.getCardsFromLocalStorage();
+    cards = cards.filter((cardId) => cardId !== id);
+    localStorage.setItem(this.storageKey, JSON.stringify(cards));
+  }
+
+  public static setCurrentLineItemIDToLocalStorage(id: string): void {
+    localStorage.setItem('lineItemId', id);
+  }
+
+  public static getCurrentLineItemIDToLocalStorage(): string {
+    return localStorage.getItem('lineItemId') || '';
   }
 
   private static async getCarts(): Promise<Carts | undefined> {
@@ -176,6 +208,12 @@ class CartService extends BackendService {
     };
 
     return action;
+  }
+
+  // Вспомогательный метод для получения массива карточек из localStorage
+  private static getCardsFromLocalStorage(): string[] {
+    const cards = localStorage.getItem(this.storageKey);
+    return cards ? JSON.parse(cards) : [];
   }
 }
 
