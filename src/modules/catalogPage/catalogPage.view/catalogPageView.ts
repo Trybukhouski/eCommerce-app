@@ -1,5 +1,4 @@
 import { ProductDetailOptions, CartService } from '@services';
-import { AddToCartButton } from '@shared';
 import { catalogPageMap } from '../catalogPage.map';
 import * as styles from './styles.module.scss';
 
@@ -49,10 +48,10 @@ export class CatalogPageView extends catalogPageMap {
     }
     const { catalog } = this.elements;
     catalog.innerHTML = '';
+    const firstCardIndex = (this.components.pagination.current - 1) * this.cardsPerList;
+    const lastCardIndex = firstCardIndex + this.cardsPerList;
     CartService.getRecentCart().then(() =>
       cards.forEach((card, i) => {
-        const firstCardIndex = (this.components.pagination.current - 1) * this.cardsPerList;
-        const lastCardIndex = firstCardIndex + this.cardsPerList;
         if (i >= firstCardIndex && i < lastCardIndex) {
           const component = new this.components.ProductCard(card);
           const cardEl = component.root;
@@ -67,7 +66,6 @@ export class CatalogPageView extends catalogPageMap {
               })
             );
           });
-          cardEl.append(new AddToCartButton({}, component).button);
           catalog.append(cardEl);
         }
       })
