@@ -1,4 +1,5 @@
-import { CartService, NotificationService } from '@services';
+import { CartService, NotificationService, ManageProductOptions } from '@services';
+import { Confirm } from '@shared';
 import { BusketCard, CartPageUI } from './ui';
 
 class BasketPage {
@@ -13,6 +14,62 @@ class BasketPage {
     this.addHashChangeListener();
     this.addQuantityListener();
     this.addDeleteListener();
+    this.addDeleteAllListener();
+  }
+
+  private addDeleteAllListener(): void {
+    this.uiApi.clearAllButton.addEventListener('click', (event) => {
+      const busketCards = this.uiApi.productSection?.cards;
+      if (!event.target || !busketCards || busketCards.length === 0) {
+        return;
+      }
+
+      const callback = this.deleteAllCallback.bind(this, busketCards);
+
+      const confirm = new Confirm(
+        'Are you sure you want to remove all items from the shopping cart?',
+        callback
+      );
+      document.body.append(confirm.container);
+    });
+  }
+
+  private deleteAllCallback(cards: BusketCard[], isConfirmed: boolean): void {
+    type ManageAction = ManageProductOptions['actions'][number];
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    this.uiApi.toggleAllDisabledButtons();
+
+    const ids = cards.map((c) => c.id);
+    const actions = ids.map(
+      (id): ManageAction => {
+        return {
+          action: 'remove',
+          options: {
+            lineItemId: id,
+          },
+        };
+      }
+    );
+
+    const promise = CartService.manageProduct({ actions });
+
+    promise
+      .then((cart) => {
+        if (!cart) {
+          return;
+        }
+
+        this.uiApi.clearAllCards();
+        this.uiApi.updateTotalCost(cart);
+      })
+      .catch((err) => {
+        NotificationService.displayError(err.message);
+      })
+      .finally(() => this.uiApi.toggleAllDisabledButtons());
   }
 
   private addQuantityListener(): void {
@@ -30,7 +87,7 @@ class BasketPage {
       const card = allCards.find((c) => c.quantityModifiers.container === container);
       const quantity = card?.getQuantityAfterClick(button);
       if (!card || !quantity) return;
-      card.toggleDisabledButtons();
+      this.uiApi.toggleAllDisabledButtons();
       this.handleQuantityResponse(card, quantity);
     });
   }
@@ -39,7 +96,7 @@ class BasketPage {
     this.uiApi.root.addEventListener('click', (event) => {
       if (!event.target) return;
 
-      const button = (event.target as HTMLElement).closest('button');
+      const button = (event.target as HTMLElement).closest('button.delete');
       const allCards = this.uiApi.productSection?.cards;
 
       if (!allCards || !button) {
@@ -48,7 +105,7 @@ class BasketPage {
 
       const card = allCards.find((c) => c.deleteButton === button);
       if (!card) return;
-      card.toggleDisabledButtons();
+      this.uiApi.toggleAllDisabledButtons();
       this.handleDeleteResponse(card);
     });
   }
@@ -56,10 +113,10 @@ class BasketPage {
   private addHashChangeListener(): void {
     const func = () => {
       const idMatch = window.location.hash.includes('basket');
-      if (!idMatch) {
-        this.uiApi.hideContent();
-      } else {
+      if (idMatch) {
         this.loadPage();
+      } else {
+        this.uiApi.clearAllCards();
       }
     };
     window.addEventListener('hashchange', func);
@@ -89,12 +146,13 @@ class BasketPage {
 
         card.updateTotalPrice(lineItem.totalPrice.centAmount);
         card.modifyQuantity(lineItem.quantity);
+        this.uiApi.updateTotalCost(cart);
       })
       .catch((err) => {
         NotificationService.displayError(err.message);
       })
       .finally(() => {
-        card.toggleDisabledButtons();
+        this.uiApi.toggleAllDisabledButtons();
       });
   }
 
@@ -111,28 +169,33 @@ class BasketPage {
     });
 
     promise
-      .then(() => {
+      .then((cart) => {
+        if (!cart) {
+          return;
+        }
+
         this.uiApi.removeCard(card);
+        this.uiApi.updateTotalCost(cart);
       })
       .catch((err) => {
         NotificationService.displayError(err.message);
-        card.toggleDisabledButtons();
-      });
+      })
+      .finally(() => this.uiApi.toggleAllDisabledButtons());
   }
 
   private async loadPage(): Promise<void> {
-    this.uiApi.showBasket();
+    this.uiApi.hideRoot();
     const cart = await CartService.getCart();
 
     if (cart === undefined) {
       return;
     }
 
-    if (cart.lineItems.length === 0) {
-      this.uiApi.showEmptyMessage();
-    } else {
+    if (cart.lineItems.length !== 0) {
+      this.uiApi.hideEmptyMessage();
       this.uiApi.createCards(cart);
     }
+    this.uiApi.showRoot();
   }
 }
 

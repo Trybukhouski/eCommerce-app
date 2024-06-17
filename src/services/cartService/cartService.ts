@@ -65,7 +65,18 @@ class CartService extends BackendService {
       cartId: cart.id,
     };
 
-    return CartService.sentCartActions(newOptions);
+    const data = await CartService.sentCartActions(newOptions);
+
+    if (data) {
+      document.dispatchEvent(
+        new CustomEvent('changeCardsInBasket', {
+          bubbles: true,
+          detail: data.lineItems.length,
+        })
+      );
+    }
+
+    return data;
   }
 
   public static async getRecentCart(): Promise<Cart> {

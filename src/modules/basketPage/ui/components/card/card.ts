@@ -14,8 +14,6 @@ interface PriceElements {
 }
 
 class BusketCard {
-  public data: LineItem;
-
   public id: string;
 
   public card: HTMLElement;
@@ -59,7 +57,6 @@ class BusketCard {
   public deleteButton: HTMLButtonElement;
 
   constructor(lineItem: LineItem) {
-    this.data = lineItem;
     this.id = lineItem.id;
     this.id = lineItem.id;
     this.card = document.createElement('section');
@@ -75,14 +72,14 @@ class BusketCard {
 
     this.attributes = {
       container: document.createElement('div'),
-      elements: this.createAttributes(),
+      elements: this.createAttributes(lineItem),
     };
     this.attributes.container.append(...this.attributes.elements);
 
-    this.prices = this.addPrices();
-    this.totalPrice = this.addTotalPrice();
+    this.prices = this.addPrices(lineItem);
+    this.totalPrice = this.addTotalPrice(lineItem);
 
-    this.quantityModifiers = this.addQuantityModifiers();
+    this.quantityModifiers = this.addQuantityModifiers(lineItem);
 
     this.deleteButton = new Button({
       className: 'edit-icon',
@@ -123,12 +120,12 @@ class BusketCard {
   }
 
   public updateTotalPrice(centAmount: number): void {
-    const newPrice = this.formatPrice(centAmount);
+    const newPrice = BusketCard.formatPrice(centAmount);
     this.totalPrice.elements.price.textContent = newPrice;
     this.totalPrice.value = centAmount;
   }
 
-  private formatPrice(n: number): string {
+  public static formatPrice(n: number): string {
     return `${Math.trunc(n / 100)}${(n % 1).toPrecision(3).replace(/0/, '')}`;
   }
 
@@ -144,8 +141,8 @@ class BusketCard {
     );
   }
 
-  private createAttributes(): HTMLDivElement[] {
-    const attribs = this.data.variant.attributes.filter(
+  private createAttributes(lineItem: LineItem): HTMLDivElement[] {
+    const attribs = lineItem.variant.attributes.filter(
       (i) => i.name === 'brand' || i.name === 'material'
     );
     return attribs.map((i) => {
@@ -159,16 +156,16 @@ class BusketCard {
     });
   }
 
-  private addPrices(): typeof this.prices {
+  private addPrices(lineItem: LineItem): typeof this.prices {
     const container = document.createElement('div');
     const prices: [number, number?] = [
-      this.data.price.value.centAmount,
-      this.data.price.discounted?.value.centAmount,
+      lineItem.price.value.centAmount,
+      lineItem.price.discounted?.value.centAmount,
     ];
     const pricesElems = prices.map(
       (p): HTMLElement => {
         const priceElem = document.createElement('p');
-        priceElem.textContent = this.formatPrice(p ?? prices[0]);
+        priceElem.textContent = BusketCard.formatPrice(p ?? prices[0]);
         return priceElem;
       }
     ) as [HTMLElement, HTMLElement];
@@ -197,9 +194,9 @@ class BusketCard {
     return obj;
   }
 
-  private addTotalPrice(): typeof this.totalPrice {
-    const value = this.data.totalPrice.centAmount;
-    const priceText = this.formatPrice(value);
+  private addTotalPrice(lineItem: LineItem): typeof this.totalPrice {
+    const value = lineItem.totalPrice.centAmount;
+    const priceText = BusketCard.formatPrice(value);
     const price = document.createElement('span');
     price.textContent = priceText;
     const span = document.createElement('span');
@@ -218,8 +215,8 @@ class BusketCard {
     };
   }
 
-  private addQuantityModifiers(): typeof this.quantityModifiers {
-    const { quantity } = this.data;
+  private addQuantityModifiers(lineItem: LineItem): typeof this.quantityModifiers {
+    const { quantity } = lineItem;
     const container = document.createElement('div');
     const increase = new Button({
       className: 'edit-icon',
