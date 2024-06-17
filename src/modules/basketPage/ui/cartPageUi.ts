@@ -1,4 +1,4 @@
-import { Cart, CartService } from '@services';
+import { Cart } from '@services';
 import { Button } from '@shared';
 import { BusketCard } from './components';
 import * as style from './style.module.scss';
@@ -52,8 +52,6 @@ class CartPageUI {
     if (this.productSection.cards.length === 0) {
       this.showEmptyMessage();
     }
-
-    CartService.removeCardFromLocalStorage(card.data.productId);
   }
 
   public hideContent(): void {
@@ -98,6 +96,7 @@ class CartPageUI {
   public createCards(cart: Cart): void {
     const items = cart.lineItems;
     const cardMap = items.map((i) => new BusketCard(i));
+
     this.productSection = {
       container: document.createElement('section'),
       cards: cardMap,

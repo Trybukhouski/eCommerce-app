@@ -1,4 +1,4 @@
-import { CartService } from '@services';
+import { Cart, CartService, NotificationService } from '@services';
 import { Button, ButtonOptions } from '@shared';
 
 interface ProductInfo {
@@ -15,11 +15,18 @@ class AddToCartButton extends Button {
 
   private inCart = false;
 
+  private id: string;
+
   constructor(buttonOptions: ButtonOptions, pageUI: PageUI) {
     super(buttonOptions);
     this.pageUI = pageUI;
-    this.inCart = CartService.checkCardInLocalStorage(pageUI.getProductInfo().productId);
-    this.setButtonView();
+
+    this.id = this.pageUI.getProductInfo().productId;
+    CartService.checkIsCardInCart(this.id)
+      .then((isInCart) => {
+        this.inCart = isInCart;
+      })
+      .finally(() => this.setButtonView());
 
     this.addClickListener();
   }
@@ -34,44 +41,58 @@ class AddToCartButton extends Button {
     }
   }
 
-  private addClickListener(): void {
-    this.button.addEventListener('click', async () => {
+  private async addClickListener(): Promise<void> {
+    this.button.addEventListener('click', () => {
       this.button.disabled = true;
       const info = this.pageUI.getProductInfo();
-      if (!this.inCart) {
-        await CartService.manageProduct({
-          actions: [
-            {
-              action: 'add',
-              options: info,
-            },
-          ],
-        }).then((data) => {
-          if (data?.lineItems) {
-            CartService.setCurrentLineItemIDToLocalStorage(
-              data.lineItems.filter(
-                (el) => el.productId === this.pageUI.getProductInfo().productId
-              )[0]?.id || ''
-            );
+
+      const lineItemId = CartService.getCurrentLineItemId(info.productId);
+      lineItemId
+        .catch((err) => {
+          if (!this.inCart) {
+            return undefined;
           }
-        });
-        CartService.addCardToLocalStorage(this.pageUI.getProductInfo().productId);
-      } else {
-        await CartService.manageProduct({
-          actions: [
-            {
-              action: 'remove',
-              options: {
-                lineItemId: CartService.getCurrentLineItemIDToLocalStorage(),
-              },
-            },
-          ],
-        });
-        CartService.removeCardFromLocalStorage(this.pageUI.getProductInfo().productId);
-      }
-      this.inCart = CartService.checkCardInLocalStorage(this.pageUI.getProductInfo().productId);
-      this.setButtonView();
-      this.button.disabled = false;
+          throw err;
+        })
+        .then((id?: string) => {
+          return this.createRequest(info, id);
+        })
+        .then((cart: Cart | undefined) => {
+          if (!cart) {
+            throw new Error(`Сouldn't add the product to the cart`);
+          }
+          this.inCart = !this.inCart;
+          this.setButtonView();
+        })
+        .catch((err) =>
+          NotificationService.displayError(
+            err instanceof Error ? err.message : 'Error fetching customer version'
+          )
+        )
+        .finally(() => (this.button.disabled = false));
+    });
+  }
+
+  private createRequest(productInfo: ProductInfo, productId?: string): Promise<Cart | undefined> {
+    if (!this.inCart) {
+      return CartService.manageProduct({
+        actions: [
+          {
+            action: 'add',
+            options: productInfo,
+          },
+        ],
+      });
+    }
+    return CartService.manageProduct({
+      actions: [
+        {
+          action: 'remove',
+          options: {
+            lineItemId: productId ?? '',
+          },
+        },
+      ],
     });
   }
 }

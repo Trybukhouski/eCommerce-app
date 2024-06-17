@@ -1,6 +1,5 @@
 import { ProductDetailOptions } from '@root/services/productService';
 import { AddToCartButton } from '@shared';
-import { LocalStorageService } from '@services';
 import { ProductCardMap } from '../productCard.map';
 import * as styles from './styles.module.scss';
 
@@ -46,19 +45,17 @@ export class ProductCardView extends ProductCardMap {
     regularPrice.innerHTML = `$${detail.priceInfo.regularPrice}`;
     price.append(regularPrice);
     root.append(imageFrame, title, description, price);
-    if (LocalStorageService.isUserAuthorised()) {
-      root.append(
-        new AddToCartButton(
-          { text: 'Add to cart', customColor: 'blue' },
-          {
-            getProductInfo: () => ({
-              productId: detail.id,
-              variantId: 1,
-            }),
-          }
-        ).button
-      );
-    }
+    root.append(
+      new AddToCartButton(
+        { text: 'Add to cart', customColor: 'blue' },
+        {
+          getProductInfo: () => ({
+            productId: detail.id,
+            variantId: 1,
+          }),
+        }
+      ).button
+    );
     return this;
   }
 }

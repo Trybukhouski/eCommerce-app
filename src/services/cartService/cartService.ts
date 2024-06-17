@@ -16,7 +16,7 @@ import {
 class CartService extends BackendService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
 
-  private static storageKey = 'cards';
+  private static recentCart?: Cart;
 
   public static async getCart(): Promise<Cart | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
@@ -35,6 +35,7 @@ class CartService extends BackendService {
     } else {
       cart = carts.results[0];
     }
+    CartService.recentCart = cart;
     return cart;
   }
 
@@ -67,34 +68,36 @@ class CartService extends BackendService {
     return CartService.sentCartActions(newOptions);
   }
 
-  // Метод для проверки наличия карточки в localStorage
-  public static checkCardInLocalStorage(id: string): boolean {
-    const cards = this.getCardsFromLocalStorage();
-    return cards.includes(id);
-  }
-
-  // Метод для добавления карточки в localStorage
-  public static addCardToLocalStorage(id: string): void {
-    const cards = this.getCardsFromLocalStorage();
-    if (!cards.includes(id)) {
-      cards.push(id);
-      localStorage.setItem(this.storageKey, JSON.stringify(cards));
+  public static async getRecentCart(): Promise<Cart> {
+    let { recentCart } = CartService;
+    if (recentCart) {
+      return recentCart;
     }
+
+    recentCart = await CartService.getCart();
+    if (!recentCart) {
+      throw new Error(`Can't get cart`);
+    }
+
+    return recentCart;
   }
 
-  // Метод для удаления карточки из localStorage
-  public static removeCardFromLocalStorage(id: string): void {
-    let cards = this.getCardsFromLocalStorage();
-    cards = cards.filter((cardId) => cardId !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(cards));
+  public static async checkIsCardInCart(id: string): Promise<boolean> {
+    const recentCart = await CartService.getRecentCart();
+
+    const ids = recentCart.lineItems.map((i) => i.productId);
+    return ids.includes(id);
   }
 
-  public static setCurrentLineItemIDToLocalStorage(id: string): void {
-    localStorage.setItem('lineItemId', id);
-  }
+  public static async getCurrentLineItemId(id: string): Promise<string> {
+    const recentCart = await CartService.getRecentCart();
 
-  public static getCurrentLineItemIDToLocalStorage(): string {
-    return localStorage.getItem('lineItemId') || '';
+    const lineItem = recentCart.lineItems.find((i) => i.productId === id);
+
+    if (!lineItem) {
+      throw new Error(`Can't find item in cart`);
+    }
+    return lineItem.id;
   }
 
   private static async getCarts(): Promise<Carts | undefined> {
@@ -166,6 +169,7 @@ class CartService extends BackendService {
     }
 
     const data: Cart = await handleResponse(response);
+    CartService.recentCart = data;
 
     return data;
   }
@@ -208,12 +212,6 @@ class CartService extends BackendService {
     };
 
     return action;
-  }
-
-  // Вспомогательный метод для получения массива карточек из localStorage
-  private static getCardsFromLocalStorage(): string[] {
-    const cards = localStorage.getItem(this.storageKey);
-    return cards ? JSON.parse(cards) : [];
   }
 }
 
