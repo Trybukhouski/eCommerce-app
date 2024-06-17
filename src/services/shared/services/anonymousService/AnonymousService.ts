@@ -1,6 +1,7 @@
 import { clientCredentials } from '@root/config';
 import { getFormHeaders, handleResponse } from '@shared';
-import { LocalStorageService, LoginResponse } from './shared';
+import { LocalStorageService } from '../localStorageService';
+import { LoginResponse } from './loginResponseInterface';
 
 export class AnonymousService {
   private static url = `${clientCredentials.authUrl}/oauth/${clientCredentials.projectKey}/anonymous/token?grant_type=client_credentials`;

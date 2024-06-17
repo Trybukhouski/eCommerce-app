@@ -8,8 +8,8 @@ import {
   UserData,
   AddressAction,
   CustomerSignInResult,
+  AnonymousService,
 } from './shared';
-import { AnonymousService } from './anonymousService';
 
 export class AuthService {
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
@@ -57,34 +57,6 @@ export class AuthService {
     return data;
   }
 
-  private static async anonymousLogin(email: string, password: string): Promise<LoginResponse> {
-    const token = LocalStorageService.getAnonymousAuthorisedToken() as string;
-    const url = this.authMeEndpoint;
-
-    const body = JSON.stringify({
-      email,
-      password,
-    });
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: getJsonHeaders(token),
-      body,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      const errorJson = JSON.parse(errorText);
-      throw new Error(errorJson.message || 'Registration failed');
-    }
-
-    await handleResponse(response);
-    LocalStorageService.clearAnonymousAuthorisedToken();
-    const loginResponse = await AnonymousService.getTokenFromPasswordFlow(email, password);
-
-    return loginResponse;
-  }
-
   public static async authenticateCustomer(
     email: string,
     password: string
@@ -118,15 +90,11 @@ export class AuthService {
   public static async register(userData: UserData): Promise<RegistrationResponse> {
     const body = JSON.stringify(userData);
 
-    let url: string;
-    let token: string | undefined;
+    const token = await BackendService.getToken();
+    const url = this.registerUrl;
     const anonymousToken = LocalStorageService.getAnonymousAuthorisedToken();
-    if (!anonymousToken) {
-      token = await BackendService.getToken();
-      url = this.registerUrl;
-    } else {
-      token = anonymousToken;
-      url = this.registerMeEndpoint;
+    if (anonymousToken) {
+      return AuthService.anonymousRegister(userData);
     }
 
     if (!token) {
@@ -147,12 +115,6 @@ export class AuthService {
 
     const handlingResponse: RegistrationResponse = await handleResponse(response);
     LocalStorageService.clearAnonymousAuthorisedToken();
-    if (anonymousToken) {
-      await AnonymousService.getTokenFromPasswordFlow(
-        userData.email as string,
-        userData.password as string
-      );
-    }
     return handlingResponse;
   }
 
@@ -206,5 +168,60 @@ export class AuthService {
       throw new Error(errorJson.message || 'The addresses could not be set');
     }
     return handleResponse(response);
+  }
+
+  private static async anonymousRegister(userData: UserData): Promise<RegistrationResponse> {
+    const body = JSON.stringify(userData);
+
+    const token = LocalStorageService.getAnonymousAuthorisedToken() as string;
+    const url = this.registerMeEndpoint;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: getJsonHeaders(token),
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'Registration failed');
+    }
+
+    const handlingResponse: RegistrationResponse = await handleResponse(response);
+    LocalStorageService.clearAnonymousAuthorisedToken();
+    await AnonymousService.getTokenFromPasswordFlow(
+      userData.email as string,
+      userData.password as string
+    );
+    return handlingResponse;
+  }
+
+  private static async anonymousLogin(email: string, password: string): Promise<LoginResponse> {
+    const token = LocalStorageService.getAnonymousAuthorisedToken() as string;
+    const url = this.authMeEndpoint;
+
+    const body = JSON.stringify({
+      email,
+      password,
+    });
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: getJsonHeaders(token),
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'Authorisation failed');
+    }
+
+    await handleResponse(response);
+    LocalStorageService.clearAnonymousAuthorisedToken();
+    const loginResponse = await AnonymousService.getTokenFromPasswordFlow(email, password);
+
+    return loginResponse;
   }
 }

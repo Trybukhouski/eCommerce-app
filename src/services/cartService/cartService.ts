@@ -12,7 +12,7 @@ import {
   ManageProductOptions,
   Action,
 } from './interfaces';
-import { AnonymousService } from '../anonymousService';
+import { AnonymousService } from '../shared/services/anonymousService/AnonymousService';
 
 class CartService extends BackendService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
