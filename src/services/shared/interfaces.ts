@@ -224,6 +224,7 @@ export interface Cart {
     centAmount: number;
     fractionDigits: number;
   };
+  totalLineItemQuantity: number;
   type: string;
   version: number;
   versionModifiedAt: string;
