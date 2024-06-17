@@ -65,6 +65,8 @@ export class Application {
         const promise = new Promise((resolve) => {
           if (!event.detail.logined) {
             resolve(BackendService.getToken(true));
+          } else {
+            resolve(BackendService.getToken(false));
           }
         });
         promise
