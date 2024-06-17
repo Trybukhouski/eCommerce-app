@@ -1,5 +1,5 @@
 import { pagesData, PagesDataModifier, Router, Routes } from '@routes';
-import { LocalStorageService } from '@services';
+import { BackendService, LocalStorageService } from '@services';
 import {
   CatalogPage,
   DetailedProductPage,
@@ -56,6 +56,7 @@ export class Application {
       if (event instanceof CustomEvent) {
         if (!event.detail.logined) {
           LocalStorageService.clearAuthorisedToken();
+          BackendService.getToken(true);
           this.router.setHash('main');
         }
         this.pagesCollection.setBlockedPagesAccordingUserStatus(event.detail.logined);
