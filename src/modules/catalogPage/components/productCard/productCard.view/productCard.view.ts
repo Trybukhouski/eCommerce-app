@@ -1,4 +1,5 @@
 import { ProductDetailOptions } from '@root/services/productService';
+import { AddToCartButton } from '@shared';
 import { ProductCardMap } from '../productCard.map';
 import * as styles from './styles.module.scss';
 
@@ -10,7 +11,6 @@ export class ProductCardView extends ProductCardMap {
     image: document.createElement('img'),
     regularPrice: document.createElement('p'),
     discontPrice: document.createElement('p'),
-    button: new this.components.Button({ text: 'Add to cart', customColor: 'blue' }).button,
   };
 
   public get root(): HTMLElement {
@@ -23,7 +23,7 @@ export class ProductCardView extends ProductCardMap {
   }
 
   public create(detail: ProductDetailOptions): ProductCardView {
-    const { root, title, description, image, regularPrice, discontPrice, button } = this.elements;
+    const { root, title, description, image, regularPrice, discontPrice } = this.elements;
     this.root.classList.add(styles.root);
     this.root.id = detail.id;
     image.classList.add(styles.image);
@@ -44,8 +44,18 @@ export class ProductCardView extends ProductCardMap {
     }
     regularPrice.innerHTML = `$${detail.priceInfo.regularPrice}`;
     price.append(regularPrice);
-    root.append(imageFrame, title, description, price, button);
-
+    root.append(imageFrame, title, description, price);
+    root.append(
+      new AddToCartButton(
+        { text: 'Add to cart', customColor: 'blue' },
+        {
+          getProductInfo: () => ({
+            productId: detail.id,
+            variantId: 1,
+          }),
+        }
+      ).button
+    );
     return this;
   }
 }

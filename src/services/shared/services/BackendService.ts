@@ -6,8 +6,8 @@ export class BackendService {
 
   private static accessToken?: string;
 
-  static async getToken(): Promise<string | undefined> {
-    if (this.accessToken) {
+  static async getToken(update = false): Promise<string | undefined> {
+    if (this.accessToken && !update) {
       return this.accessToken;
     }
 

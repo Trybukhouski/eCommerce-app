@@ -1,6 +1,6 @@
 import { clientCredentials } from '@root/config';
 import { getHeaders, getJsonHeaders, handleResponse } from '@shared';
-import { BackendService, LocalStorageService, Cart, Carts } from '../shared';
+import { LocalStorageService, Cart, Carts } from '../shared';
 import {
   AddProductToCartAction,
   RemoveProductFromCartAction,
@@ -12,13 +12,26 @@ import {
   ManageProductOptions,
   Action,
 } from './interfaces';
+import { AnonymousService } from '../shared/services/anonymousService/AnonymousService';
 
-class CartService extends BackendService {
+class CartService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
 
-  public static async getCart(): Promise<Cart | undefined> {
+  private static recentCart?: Cart;
+
+  public static createChangeCountItemsSignal(cart: Cart) {
+    document.dispatchEvent(
+      new CustomEvent('changeCardsInBasket', {
+        bubbles: true,
+        detail: cart.lineItems.length,
+      })
+    );
+  }
+
+  public static async getCart(update = false): Promise<Cart | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
+    const authAnonimToken = await AnonymousService.getAnonymousToken(update);
+    if (authToken === null && authAnonimToken === undefined) {
       return undefined;
     }
 
@@ -33,6 +46,7 @@ class CartService extends BackendService {
     } else {
       cart = carts.results[0];
     }
+    CartService.recentCart = cart;
     return cart;
   }
 
@@ -65,23 +79,45 @@ class CartService extends BackendService {
     const data = await CartService.sentCartActions(newOptions);
 
     if (data) {
-      document.dispatchEvent(
-        new CustomEvent('changeCardsInBasket', {
-          bubbles: true,
-          detail: data.lineItems.length,
-        })
-      );
+      CartService.createChangeCountItemsSignal(data);
     }
 
     return data;
   }
 
-  private static async getCarts(): Promise<Carts | undefined> {
-    const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
-      return undefined;
+  public static async getRecentCart(): Promise<Cart> {
+    let { recentCart } = CartService;
+    if (recentCart) {
+      return recentCart;
     }
 
+    recentCart = await CartService.getCart();
+    if (!recentCart) {
+      throw new Error(`Can't get cart`);
+    }
+
+    return recentCart;
+  }
+
+  public static async checkIsCardInCart(id: string): Promise<boolean> {
+    const recentCart = await CartService.getRecentCart();
+
+    const ids = recentCart.lineItems.map((i) => i.productId);
+    return ids.includes(id);
+  }
+
+  public static async getCurrentLineItemId(id: string): Promise<string> {
+    const recentCart = await CartService.getRecentCart();
+
+    const lineItem = recentCart.lineItems.find((i) => i.productId === id);
+
+    if (!lineItem) {
+      throw new Error(`Can't find item in cart`);
+    }
+    return lineItem.id;
+  }
+
+  private static async getCarts(): Promise<Carts | undefined> {
     const response = await fetch(this.cartsMeEndpoint, {
       method: 'GET',
       headers: getHeaders(),
@@ -98,11 +134,6 @@ class CartService extends BackendService {
   }
 
   private static async createCart(): Promise<Cart | undefined> {
-    const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
-      return undefined;
-    }
-
     const response = await fetch(this.cartsMeEndpoint, {
       method: 'POST',
       headers: getJsonHeaders(),
@@ -120,11 +151,6 @@ class CartService extends BackendService {
   }
 
   private static async sentCartActions(options: SentCartActionOptions): Promise<Cart | undefined> {
-    const authToken = LocalStorageService.getAuthorisedToken();
-    if (authToken === null) {
-      return undefined;
-    }
-
     const { actionsArr, cartVersion, cartId } = options;
 
     const body = JSON.stringify({
@@ -145,6 +171,7 @@ class CartService extends BackendService {
     }
 
     const data: Cart = await handleResponse(response);
+    CartService.recentCart = data;
 
     return data;
   }
