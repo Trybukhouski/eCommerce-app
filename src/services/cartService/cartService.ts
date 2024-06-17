@@ -76,7 +76,7 @@ class CartService extends BackendService {
     return data;
   }
 
-  public static async getCarts(): Promise<Carts | undefined> {
+  private static async getCarts(): Promise<Carts | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
     if (authToken === null) {
       return undefined;

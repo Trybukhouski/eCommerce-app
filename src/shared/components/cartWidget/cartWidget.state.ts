@@ -16,12 +16,10 @@ export class CartWidgetState extends CartWidgetView {
     }
 
     try {
-      await this.services.cartService.getCarts().then((data) => {
-        if (data) {
-          if (data.results[0]) {
-            this.totalItemsInCart = data.results[0].lineItems.length || 0;
-            this.reRender(this.totalItemsInCart);
-          }
+      await this.services.cartService.getCart().then((cart) => {
+        if (cart) {
+          this.totalItemsInCart = cart.lineItems.length || 0;
+          this.reRender(this.totalItemsInCart);
         }
       });
     } catch (error) {
