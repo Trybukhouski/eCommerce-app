@@ -114,7 +114,7 @@ export class AuthService {
     }
 
     const handlingResponse: RegistrationResponse = await handleResponse(response);
-    LocalStorageService.clearAnonymousAuthorisedToken();
+    LocalStorageService.setAuthorisedToken(token);
     return handlingResponse;
   }
 

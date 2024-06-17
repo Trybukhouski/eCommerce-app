@@ -38,11 +38,16 @@ export class AnonymousService {
     username: string,
     password: string
   ): Promise<LoginResponse> {
-    const queryString = `?grant_type=password&username=${username}&password=${password}`;
+    const body = new URLSearchParams({
+      grant_type: 'password',
+      username,
+      password,
+    }).toString();
 
-    const response = await fetch(this.passwordUrl.concat(queryString), {
+    const response = await fetch(this.passwordUrl, {
       method: 'POST',
       headers: getFormHeaders(),
+      body,
     });
 
     if (!response.ok) {
