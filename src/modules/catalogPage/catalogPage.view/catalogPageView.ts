@@ -1,4 +1,4 @@
-import { CartService, ProductDetailOptions } from '@services';
+import { ProductDetailOptions, CartService } from '@services';
 import { catalogPageMap } from '../catalogPage.map';
 import * as styles from './styles.module.scss';
 
@@ -9,10 +9,13 @@ export class CatalogPageView extends catalogPageMap {
     filter: this.components.filter.root,
     sortWidget: this.components.sortWidget.root,
     catalog: document.createElement('div'),
+    pagination: this.components.pagination.root,
   };
 
+  protected cardsPerList = 4;
+
   protected draw(): void {
-    const { filter, sortWidget, catalog } = this.elements;
+    const { filter, sortWidget, catalog, pagination } = this.elements;
     this.root.classList.add(styles.root);
 
     const title = document.createElement('h2');
@@ -24,7 +27,7 @@ export class CatalogPageView extends catalogPageMap {
 
     const controls = document.createElement('div');
     controls.classList.add(styles.controls);
-    controls.append(sortWidget);
+    controls.append(sortWidget, pagination);
 
     const grid = document.createElement('div');
     grid.classList.add(styles.grid);
@@ -45,23 +48,28 @@ export class CatalogPageView extends catalogPageMap {
     }
     const { catalog } = this.elements;
     catalog.innerHTML = '';
+    const firstCardIndex = (this.components.pagination.current - 1) * this.cardsPerList;
+    const lastCardIndex = firstCardIndex + this.cardsPerList;
     CartService.getRecentCart().then(() =>
-      cards.forEach((card) => {
-        const component = new this.components.ProductCard(card);
-        const cardEl = component.root;
-        cardEl.addEventListener('click', (event) => {
-          cardEl.dispatchEvent(
-            new CustomEvent('clickOnCard', {
-              bubbles: true,
-              detail: {
-                id: cardEl.getAttribute('id'),
-                target: event.target,
-              },
-            })
-          );
-        });
-        catalog.append(cardEl);
+      cards.forEach((card, i) => {
+        if (i >= firstCardIndex && i < lastCardIndex) {
+          const component = new this.components.ProductCard(card);
+          const cardEl = component.root;
+          cardEl.addEventListener('click', (event) => {
+            cardEl.dispatchEvent(
+              new CustomEvent('clickOnCard', {
+                bubbles: true,
+                detail: {
+                  id: cardEl.getAttribute('id'),
+                  target: event.target,
+                },
+              })
+            );
+          });
+          catalog.append(cardEl);
+        }
       })
     );
+    this.components.pagination.updateQuantity(Math.ceil(cards.length / this.cardsPerList));
   }
 }
