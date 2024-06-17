@@ -1,6 +1,6 @@
 import { clientCredentials } from '@root/config';
 import { getHeaders, getJsonHeaders, handleResponse } from '@shared';
-import { BackendService, LocalStorageService, Cart, Carts } from '../shared';
+import { LocalStorageService, Cart, Carts } from '../shared';
 import {
   AddProductToCartAction,
   RemoveProductFromCartAction,
@@ -14,14 +14,23 @@ import {
 } from './interfaces';
 import { AnonymousService } from '../shared/services/anonymousService/AnonymousService';
 
-class CartService extends BackendService {
+class CartService {
   private static cartsMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/carts`;
 
   private static recentCart?: Cart;
 
-  public static async getCart(): Promise<Cart | undefined> {
+  public static createChangeCountItemsSignal(cart: Cart) {
+    document.dispatchEvent(
+      new CustomEvent('changeCardsInBasket', {
+        bubbles: true,
+        detail: cart.lineItems.length,
+      })
+    );
+  }
+
+  public static async getCart(update = false): Promise<Cart | undefined> {
     const authToken = LocalStorageService.getAuthorisedToken();
-    const authAnonimToken = await AnonymousService.getAnonymousToken();
+    const authAnonimToken = await AnonymousService.getAnonymousToken(update);
     if (authToken === null && authAnonimToken === undefined) {
       return undefined;
     }
@@ -70,12 +79,7 @@ class CartService extends BackendService {
     const data = await CartService.sentCartActions(newOptions);
 
     if (data) {
-      document.dispatchEvent(
-        new CustomEvent('changeCardsInBasket', {
-          bubbles: true,
-          detail: data.lineItems.length,
-        })
-      );
+      CartService.createChangeCountItemsSignal(data);
     }
 
     return data;

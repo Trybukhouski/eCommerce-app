@@ -1,5 +1,5 @@
 import { pagesData, PagesDataModifier, Router, Routes } from '@routes';
-import { BackendService, LocalStorageService } from '@services';
+import { BackendService, CartService, LocalStorageService } from '@services';
 import {
   CatalogPage,
   DetailedProductPage,
@@ -52,17 +52,30 @@ export class Application {
   }
 
   private addLoggedInListener(): void {
-    this.mainPage.elements.root.addEventListener('logined', (event) => {
+    this.mainPage.elements.root.addEventListener('logined', async (event) => {
       if (event instanceof CustomEvent) {
         if (!event.detail.logined) {
           LocalStorageService.clearAuthorisedToken();
-          BackendService.getToken(true);
           this.router.setHash('main');
         }
         this.pagesCollection.setBlockedPagesAccordingUserStatus(event.detail.logined);
         const { header } = this.mainPage.components;
         const { nav } = header.components;
         nav.createLinks(this.pagesCollection.getAvailableLinks());
+        const promise = new Promise((resolve) => {
+          if (!event.detail.logined) {
+            resolve(BackendService.getToken(true));
+          }
+        });
+        promise
+          .then(() => {
+            return CartService.getCart(true);
+          })
+          .then((cart) => {
+            if (cart) {
+              CartService.createChangeCountItemsSignal(cart);
+            }
+          });
       }
     });
   }
