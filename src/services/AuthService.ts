@@ -9,6 +9,7 @@ import {
   AddressAction,
   CustomerSignInResult,
 } from './shared';
+import { AnonymousService } from './anonymousService';
 
 export class AuthService {
   private static baseUrl = `${clientCredentials.authUrl}/oauth/ecommerce2024/customers`;
@@ -16,6 +17,10 @@ export class AuthService {
   private static registerUrl = `${clientCredentials.apiUrl}/ecommerce2024/customers`;
 
   private static authUrl = `${clientCredentials.apiUrl}/{projectKey}/login`;
+
+  private static registerMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/signup`;
+
+  // private static authMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/login`;
 
   public static async login(username: string, password: string): Promise<LoginResponse> {
     const url = `${this.baseUrl}/token`;
@@ -80,12 +85,22 @@ export class AuthService {
   public static async register(userData: UserData): Promise<RegistrationResponse> {
     const body = JSON.stringify(userData);
 
-    const token = await BackendService.getToken();
+    let url: string;
+    let token: string | undefined;
+    const anonymousToken = LocalStorageService.getAnonymousAuthorisedToken();
+    if (!anonymousToken) {
+      token = await BackendService.getToken();
+      url = this.registerUrl;
+    } else {
+      token = anonymousToken;
+      url = this.registerMeEndpoint;
+    }
+
     if (!token) {
       throw new Error('No access token found');
     }
 
-    const response = await fetch(this.registerUrl, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: getJsonHeaders(token),
       body,
@@ -98,7 +113,13 @@ export class AuthService {
     }
 
     const handlingResponse: RegistrationResponse = await handleResponse(response);
-    LocalStorageService.setAuthorisedToken(token);
+    LocalStorageService.clearAnonymousAuthorisedToken();
+    if (anonymousToken) {
+      await AnonymousService.getTokenFromPasswordFlow(
+        userData.email as string,
+        userData.password as string
+      );
+    }
     return handlingResponse;
   }
 
