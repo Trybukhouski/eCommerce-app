@@ -157,7 +157,7 @@ class AboutUsPageUI {
     const githubLink = document.createElement('a');
     githubLink.href = member.github;
     githubLink.textContent = 'GitHub Profile';
-    githubLink.target = '_blank';
+    // githubLink.target = '_blank';
     githubLink.className = 'githubLink';
 
     githubLink.style.textDecoration = 'none';
@@ -184,7 +184,7 @@ class AboutUsPageUI {
 
     const footerLink = document.createElement('a');
     footerLink.href = 'https://rs.school/';
-    footerLink.target = '_blank';
+    // footerLink.target = '_blank';
 
     const footerImg = document.createElement('img');
     footerImg.src = <string>(<unknown>footerImage);
