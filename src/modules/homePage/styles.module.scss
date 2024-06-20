@@ -1,0 +1,19 @@
+@import '~@root/style';
+
+.title {
+  @include title;
+  text-align: center;
+}
+
+.root {
+  width: var(--contentDesktopLarge);
+  margin: 1.875rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.description {
+  @include regularText;
+  text-align: center;
+}

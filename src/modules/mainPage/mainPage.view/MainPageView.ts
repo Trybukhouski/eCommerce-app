@@ -32,7 +32,8 @@ export class MainPageView extends MainPageMap {
   public async setContent(content: Routes): Promise<void> {
     const { mainContent } = this.elements;
     mainContent.childNodes.forEach((child) => child.remove());
-    const key = `${content}Page`;
+    let key = `${content}Page`;
+    if (key === 'mainPage') key = 'homePage';
     let pageElement = this.elements[key as keyof PagesElements];
     if (content === 'catalog') {
       pageElement = new CatalogPage().root;

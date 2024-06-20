@@ -10,6 +10,7 @@ import {
   RegistrPage,
   BasketPage,
   AboutUsPage,
+  HomePage,
 } from './modules';
 
 export class Application {
@@ -49,6 +50,7 @@ export class Application {
       ['cardPage', new DetailedProductPage().elem],
       ['basketPage', new BasketPage().elem],
       ['aboutPage', new AboutUsPage().elem],
+      ['homePage', new HomePage().root],
     ]);
   }
 
