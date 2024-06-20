@@ -30,6 +30,7 @@ export class Application {
     this.createMainPage();
     this.addLoggedInListener();
     this.routerStaff(); // TODO: add correct name to this method
+    this.router.setHash('main');
   }
 
   private blockPages(): void {
