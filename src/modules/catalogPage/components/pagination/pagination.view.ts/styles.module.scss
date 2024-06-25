@@ -1,0 +1,28 @@
+@import '~@root/style';
+
+.root {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.item {
+  @include textRegular;
+  padding-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  border: 1px solid var(--grey-100);
+}
+
+.item:hover {
+  cursor: pointer;
+  background-color: var(--grey-100);
+}
+
+.item[data-current='true'] {
+  cursor: default;
+  background-color: var(--grey-100);
+}

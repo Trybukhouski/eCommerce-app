@@ -1,5 +1,5 @@
 import { pagesData, PagesDataModifier, Router, Routes } from '@routes';
-import { LocalStorageService } from '@services';
+import { BackendService, CartService, LocalStorageService } from '@services';
 import {
   CatalogPage,
   DetailedProductPage,
@@ -8,6 +8,8 @@ import {
   MainPageActions as MainPage,
   ProfilePage,
   RegistrPage,
+  BasketPage,
+  AboutUsPage,
 } from './modules';
 
 export class Application {
@@ -44,11 +46,13 @@ export class Application {
       ['errorPage', new ErrorPage().create().elements.root],
       ['catalogPage', new CatalogPage().root],
       ['cardPage', new DetailedProductPage().elem],
+      ['basketPage', new BasketPage().elem],
+      ['aboutPage', new AboutUsPage().elem],
     ]);
   }
 
   private addLoggedInListener(): void {
-    this.mainPage.elements.root.addEventListener('logined', (event) => {
+    this.mainPage.elements.root.addEventListener('logined', async (event) => {
       if (event instanceof CustomEvent) {
         if (!event.detail.logined) {
           LocalStorageService.clearAuthorisedToken();
@@ -58,6 +62,22 @@ export class Application {
         const { header } = this.mainPage.components;
         const { nav } = header.components;
         nav.createLinks(this.pagesCollection.getAvailableLinks());
+        const promise = new Promise((resolve) => {
+          if (!event.detail.logined) {
+            resolve(BackendService.getToken(true));
+          } else {
+            resolve(BackendService.getToken(false));
+          }
+        });
+        promise
+          .then(() => {
+            return CartService.getCart(true);
+          })
+          .then((cart) => {
+            if (cart) {
+              CartService.createChangeCountItemsSignal(cart);
+            }
+          });
       }
     });
   }

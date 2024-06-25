@@ -11,4 +11,14 @@ export class ProductCardModel extends ProductCardView {
     this.id = detail.id;
     this.key = detail.key;
   }
+
+  public getProductInfo(): {
+    productId: string;
+    variantId: number;
+  } {
+    return {
+      productId: this.id,
+      variantId: 1,
+    };
+  }
 }

@@ -8,6 +8,7 @@ import {
   UserData,
   AddressAction,
   CustomerSignInResult,
+  AnonymousService,
 } from './shared';
 
 export class AuthService {
@@ -17,8 +18,17 @@ export class AuthService {
 
   private static authUrl = `${clientCredentials.apiUrl}/{projectKey}/login`;
 
+  private static registerMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/signup`;
+
+  private static authMeEndpoint = `${clientCredentials.apiUrl}/${clientCredentials.projectKey}/me/login`;
+
   public static async login(username: string, password: string): Promise<LoginResponse> {
     const url = `${this.baseUrl}/token`;
+    const anonymousToken = LocalStorageService.getAnonymousAuthorisedToken();
+    if (anonymousToken) {
+      return AuthService.anonymousLogin(username, password);
+    }
+
     const body = new URLSearchParams({
       grant_type: 'password',
       username,
@@ -36,11 +46,15 @@ export class AuthService {
       throw new Error(`Failed to authenticate customer: ${errorText}`);
     }
 
-    LocalStorageService.setAuthorisedToken((response as LoginResponse)['access_token']);
-    const authResponse = await AuthService.authenticateCustomer(username, password);
-    LocalStorageService.setUserId(authResponse.customer.id);
+    const data = await handleResponse(response);
 
-    return handleResponse(response);
+    if (data.access_token) {
+      LocalStorageService.setAuthorisedToken(data.access_token);
+    }
+
+    await AuthService.authenticateCustomer(username, password);
+
+    return data;
   }
 
   public static async authenticateCustomer(
@@ -77,11 +91,17 @@ export class AuthService {
     const body = JSON.stringify(userData);
 
     const token = await BackendService.getToken();
+    const url = this.registerUrl;
+    const anonymousToken = LocalStorageService.getAnonymousAuthorisedToken();
+    if (anonymousToken) {
+      return AuthService.anonymousRegister(userData);
+    }
+
     if (!token) {
       throw new Error('No access token found');
     }
 
-    const response = await fetch(this.registerUrl, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: getJsonHeaders(token),
       body,
@@ -95,7 +115,6 @@ export class AuthService {
 
     const handlingResponse: RegistrationResponse = await handleResponse(response);
     LocalStorageService.setAuthorisedToken(token);
-    LocalStorageService.setUserId(handlingResponse.customer.id);
     return handlingResponse;
   }
 
@@ -149,5 +168,60 @@ export class AuthService {
       throw new Error(errorJson.message || 'The addresses could not be set');
     }
     return handleResponse(response);
+  }
+
+  private static async anonymousRegister(userData: UserData): Promise<RegistrationResponse> {
+    const body = JSON.stringify(userData);
+
+    const token = LocalStorageService.getAnonymousAuthorisedToken() as string;
+    const url = this.registerMeEndpoint;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: getJsonHeaders(token),
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'Registration failed');
+    }
+
+    const handlingResponse: RegistrationResponse = await handleResponse(response);
+    LocalStorageService.clearAnonymousAuthorisedToken();
+    await AnonymousService.getTokenFromPasswordFlow(
+      userData.email as string,
+      userData.password as string
+    );
+    return handlingResponse;
+  }
+
+  private static async anonymousLogin(email: string, password: string): Promise<LoginResponse> {
+    const token = LocalStorageService.getAnonymousAuthorisedToken() as string;
+    const url = this.authMeEndpoint;
+
+    const body = JSON.stringify({
+      email,
+      password,
+    });
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: getJsonHeaders(token),
+      body,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || 'Authorisation failed');
+    }
+
+    await handleResponse(response);
+    LocalStorageService.clearAnonymousAuthorisedToken();
+    const loginResponse = await AnonymousService.getTokenFromPasswordFlow(email, password);
+
+    return loginResponse;
   }
 }

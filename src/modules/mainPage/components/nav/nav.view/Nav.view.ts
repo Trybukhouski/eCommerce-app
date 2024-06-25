@@ -28,13 +28,18 @@ class NavView extends NavMap {
     Array.from(this.elements.navByAccount.children).forEach((el) => el.remove());
     Array.from(this.elements.navByShop.children).forEach((el) => el.remove());
     linksObject.forEach((linkObject) => {
-      const link = document.createElement('a');
-      link.innerHTML = `${linkObject.name[0]?.toUpperCase()}${linkObject.name
-        .slice(1)
-        .toLowerCase()}`;
+      let link: HTMLElement;
+      if (linkObject.name === 'basket') {
+        link = this.components.cartWidget.root;
+      } else {
+        link = document.createElement('a');
+        link.innerHTML = `${linkObject.name[0]?.toUpperCase()}${linkObject.name
+          .slice(1)
+          .toLowerCase()}`;
+        link.classList.add(styles.link);
+      }
       link.setAttribute('data-name', linkObject.hash as Routes);
       link.setAttribute('data-current', 'false');
-      link.classList.add(styles.link);
       switch (linkObject.type) {
         case 'shop':
           this.elements.navByShop.append(link);

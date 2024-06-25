@@ -5,7 +5,20 @@ export class MainPageActions extends MainPageView {
     super.create();
     this.updateHashAccordingClickInNavLink();
     this.updateParamsOfCatalogURL();
+    this.updateCartWidget();
     return this;
+  }
+
+  private updateCartWidget(): void {
+    document.addEventListener('changeCardsInBasket', (event) => {
+      const { header } = this.components;
+      const { nav } = header.components;
+      const { cartWidget } = nav.components;
+
+      if (event instanceof CustomEvent) {
+        cartWidget.updateTotalItemsInCart(event.detail as number);
+      }
+    });
   }
 
   private updateHashAccordingClickInNavLink(): void {
@@ -31,6 +44,9 @@ export class MainPageActions extends MainPageView {
   private updateParamsOfCatalogURL(): void {
     this.elements.root.addEventListener('clickOnCard', (event) => {
       if (event instanceof CustomEvent) {
+        if (event.detail.target && (event.detail.target as HTMLElement).closest('button')) {
+          return;
+        }
         const { router } = this.services;
         router.setHash('card', { id: event.detail.id });
       }

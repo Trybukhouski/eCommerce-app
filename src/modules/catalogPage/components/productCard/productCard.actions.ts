@@ -8,7 +8,10 @@ export class ProductCardActions extends ProductCardModel {
   }
 
   private createSignalThatCardIsSelected(): void {
-    this.root.addEventListener('click', () => {
+    this.root.addEventListener('click', (event) => {
+      if (event.target && (event.target as HTMLElement).closest('button')) {
+        return;
+      }
       this.root.dispatchEvent(
         new CustomEvent('productIDs', { bubbles: true, detail: { key: this.key, id: this.id } })
       );

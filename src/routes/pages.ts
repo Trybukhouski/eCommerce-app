@@ -6,6 +6,7 @@ export const pages = [
   'catalogPage',
   'aboutPage',
   'cardPage',
+  'basketPage',
 ] as const;
 
 export type Pages = typeof pages[number];

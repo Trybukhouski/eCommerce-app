@@ -1,4 +1,4 @@
-import { Button, ButtonOptions } from '@shared';
+import { AddToCartButton } from '@shared';
 import { Slider } from '@root/shared/utils/slider';
 import { Modal } from '@root/shared/utils/modal';
 import * as styles from './style.module.scss';
@@ -17,8 +17,6 @@ export class DetailedProductPageUI {
   private productDescription: HTMLElement;
 
   private priceContainer: HTMLElement;
-
-  private addToCartButton: HTMLElement;
 
   private modal: Modal;
 
@@ -46,7 +44,6 @@ export class DetailedProductPageUI {
 
     this.productDescription = this.createDescription();
     this.priceContainer = this.createPriceContainer();
-    this.addToCartButton = this.createAddToCartButton();
 
     this.assembleUI();
 
@@ -89,6 +86,20 @@ export class DetailedProductPageUI {
     if (images.length > 0) {
       this.updateMainImage(images[0]);
     }
+  }
+
+  public createAddToCardButton(cardID: string): void {
+    const addToCartButton = new AddToCartButton(
+      { text: 'Add to cart', customColor: 'blue' },
+      {
+        getProductInfo: () => ({
+          productId: cardID,
+          variantId: 1,
+        }),
+      }
+    ).button;
+
+    this.elem.append(addToCartButton);
   }
 
   private updateMainImage(imageUrl: string | undefined): void {
@@ -135,7 +146,8 @@ export class DetailedProductPageUI {
   private createDetailsColumn(): HTMLElement {
     const column = document.createElement('div');
     column.className = `${styles.column} ${styles['cart-column']}`;
-    column.append(this.priceContainer, this.addToCartButton);
+    column.classList.add('cardActions');
+    column.append(this.priceContainer);
     return column;
   }
 
@@ -145,22 +157,6 @@ export class DetailedProductPageUI {
     priceContainer.innerHTML = `<span class="${styles['current-price']}">$80.00</span>
       <span class="${styles['original-price']}">$100.00</span>`;
     return priceContainer;
-  }
-
-  private createAddToCartButton(): HTMLElement {
-    const buttonOptions: ButtonOptions = {
-      text: 'Add to Cart',
-      type: 'button',
-      isLink: false,
-      disabled: false,
-      icon: {
-        sprite: undefined,
-        towhere: 'start',
-      },
-    };
-    const { button } = new Button(buttonOptions);
-    button.className = styles['add-to-cart'];
-    return button;
   }
 
   private openModal(): void {
